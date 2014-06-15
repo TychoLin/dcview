@@ -4,7 +4,7 @@ class DB {
 
 	private function __construct() {
 		try {
-			self::$_db = new PDO('mysql:host=localhost;dbname=dcview', 'tycho', '0731');
+			self::$_db = new PDO('mysql:host=localhost;dbname=dcview', 'root', '9999');
 			self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		} catch (PDOException $e) {
 			echo 'Connection failed: '.$e->getMessage();
@@ -37,6 +37,7 @@ class RecordModel {
 		$named_params = implode(',', array_keys($params));
 
 		try {
+			var_dump($params);
 			$ps = DB::getPDO()->prepare("INSERT INTO {$this->_tableName}($fields) VALUES($named_params)");
 			$ps->execute($params);
 		} catch (PDOException $e) {
@@ -52,12 +53,13 @@ class RecordModel {
 			$cond = " LIMIT $limit OFFSET $offset";
 		}
 
-		$sql = "SELECT  FROM {$this->_tableName}".$cond;
+		$sql = "SELECT * FROM {$this->_tableName}".$cond;
 		try {
 			$ps = db::getPDO()->query($sql);
 			return $ps->fetchAll(PDO::FETCH_ASSOC);
 		} catch (PDOException $e) {
 			echo $e->getMessage();
+		}
 		
 	}
 }
@@ -68,14 +70,18 @@ class tblArticle extends RecordModel {
 	}
 }
 
-class test {
-	public $test = 'hello world';
+$record = array(
+	"user_id" => 1,
+	"category_id" => 1,
+	"article_title" => "this is article title",
+	"article_content" => "this is article content",
+	"article_sh_trade_status" => 1,
+	"article_sh_price" => 10000,
+	"article_sh_area" => 1,
+	"article_create_time" => 'NOW()',
+	"article_update_time" => 'NOW()'
+);
 
-	public function test() {
-		echo "{this->test}";
-	}
-}
-
-$t = test();
-$t->test();
+$ta = new tblArticle();
+$ta->create($record);
 ?>
