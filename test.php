@@ -36,26 +36,32 @@ class RecordModel {
 		}
 		$named_params = implode(',', array_keys($params));
 
+		$sql = "INSERT INTO {$this->_tableName}($fields) VALUES($named_params)";
 		try {
-			var_dump($params);
-			$ps = DB::getPDO()->prepare("INSERT INTO {$this->_tableName}($fields) VALUES($named_params)");
+			$ps = DB::getPDO()->prepare($sql);
 			$ps->execute($params);
 		} catch (PDOException $e) {
 			echo $e->getMessage();
 		}
 	}
 
-	public function read($id = -1, $limit = '', $offset = '') {
-		$cond = '';
-		if ($id != -1)
-			$cond = " WHERE {$this->_primaryKeyName}=".(int)$id;
-		if (($limit !== '') && ($offset !== '')) {
-			$cond = " LIMIT $limit OFFSET $offset";
+	public function read($cond, $limit = '', $offset = '') {
+		$cond_clause = '';
+		if (is_array($cond) && count($cond) > 0) {
+			$cond_clause = 'WHERE '.implode(' AND ', array_keys($cond));
 		}
 
-		$sql = "SELECT * FROM {$this->_tableName}".$cond;
+		$limit_clause = '';
+		if ($limit !== '' && $offset !== '') {
+			$limit = (int)$limit;
+			$offset = (int)$offset;
+			$limit_clause = "LIMIT $limit OFFSET $offset";
+		}
+
+		$sql = "SELECT * FROM {$this->_tableName} $cond_clause $limit_clause";
 		try {
-			$ps = db::getPDO()->query($sql);
+			$ps = DB::getPDO()->prepare($sql);
+			$ps->execute(array_values($cond));
 			return $ps->fetchAll(PDO::FETCH_ASSOC);
 		} catch (PDOException $e) {
 			echo $e->getMessage();
@@ -64,24 +70,39 @@ class RecordModel {
 	}
 }
 
-class tblArticle extends RecordModel {
+class TblArticle extends RecordModel {
 	public function __construct() {
 		parent::__construct('tblArticle', 'article_id');
 	}
 }
 
-$record = array(
-	"user_id" => 1,
-	"category_id" => 1,
-	"article_title" => "this is article title",
-	"article_content" => "this is article content",
-	"article_sh_trade_status" => 1,
-	"article_sh_price" => 10000,
-	"article_sh_area" => 1,
-	"article_create_time" => 'NOW()',
-	"article_update_time" => 'NOW()'
+$ta = new TblArticle();
+
+/*
+for ($i = 0; $i < 100; $i++) {
+	$record = array(
+		"user_id" => 1,
+		"category_id" => 1,
+		"article_title" => "this is article title",
+		"article_content" => "this is article content",
+		"article_sh_trade_status" => 1,
+		"article_sh_price" => 10000,
+		"article_sh_area" => 1,
+		"article_create_time" => date('Y-m-d', mktime(0, 0, 0, mt_rand(1, 12), mt_rand(1, 20), mt_rand(2010, 2013))),
+		"article_update_time" => date('Y-m-d', mktime(0, 0, 0, mt_rand(1, 12), mt_rand(1, 20), mt_rand(2010, 2013))),
+	);
+
+	$ta->create($record);
+}
+*/
+$d1 = date('Y-m-d H:i:s', mktime(0, 0, 0, mt_rand(1, 12), mt_rand(1, 20), mt_rand(2010, 2013)));
+$d2 = date('Y-m-d H:i:s', mktime(0, 0, 0, mt_rand(1, 12), mt_rand(1, 20), mt_rand(2010, 2013)));
+$cond = array(
+	"article_id > ?" => 10,
+	"article_id < ?" => 60,
+	"article_create_time > ?" => $d1,
+	"article_update_time > ?" => $d2,
 );
 
-$ta = new tblArticle();
-$ta->create($record);
+var_dump($ta->read($cond));
 ?>

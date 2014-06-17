@@ -1,0 +1,76 @@
+@charset "utf-8";
+@import url("reset.css");
+/* CSS Document */
+
+/* form.html */
+.block01{margin-top:20px; letter-spacing:1px;}
+.block01 .padd{ margin-right:10px;}
+.block01 .po_right{ float:right; color:#000;}
+.block01 span{ font:15px/15px Arial, Helvetica, sans-serif; color:#dc0000;}
+.block01 span.page{ font:15px/15px Arial, Helvetica, sans-serif; color:#999; float:left;}
+.block01 span.respond{ font:15px/15px Arial, Helvetica, sans-serif; color:#09F; padding:0 20px; }
+.block01 span.respond a{  color:#09F; text-decoration:none; }
+.block01 span.respond a:hover{ color:#03F;  }
+.sortable{margin-top:10px;}
+/* form.html end */
+
+
+/* form1.html */
+.p_content{  margin-top:20px;}
+.p_content ul.title{  height:30px; background-color:#16ADA6; color:#FFF; font:15px/30px "微軟正黑體", Arial, Helvetica, sans-serif; margin-bottom:8px; }
+.p_content ul.title span.symbo2{color:#0b8c86; padding:0 15px; }
+.p_content ul.title li{ float:left;  }
+
+
+.p_content .title01{  height:35px; margin-top:4px;  border-bottom:1px #CCCCCC dashed;}
+.p_content .title01 ul { height:30px;}
+.p_content .title01 ul li{ float:left; height:30px; font:15px/30px "微軟正黑體", Arial, Helvetica, sans-serif; }
+.p_content .title01 ul li.po{  width:100px; height:30px;   background-color:#666; color:#FFF; text-align:center; margin-right:5px;}
+.p_content .title01 ul li span.symbol{ color:#CCC; padding:0 5px;}
+
+
+.p_content .title01_1{  height:35px; margin-top:4px; }
+.p_content .title01_1 ul { height:30px;}
+.p_content .title01_1 ul li{ float:left; height:30px; font:15px/30px "微軟正黑體", Arial, Helvetica, sans-serif; }
+.p_content .title01_1 ul li.po{  width:100px; height:30px;   background-color:#666; color:#FFF; text-align:center; margin-right:5px;}
+.p_content .title01_1 ul li span.symbol{ color:#CCC; padding:0 5px;}
+
+.p_content .title02{ margin-top:4px; border:1px solid #999; height:200px; padding:10px 10px;}
+.p_content .title02 p{ font:15px/30px "微軟正黑體", Arial, Helvetica, sans-serif; }
+
+.p_content .title03{ margin-top:30px; padding:10px 10px; color:#c61553; background-color:#f8f8f8; border:2px dotted #0caec6;}
+.p_content .title03 p{ font:15px/30px "微軟正黑體", Arial, Helvetica, sans-serif; }
+
+.p_content .title04{margin-top:30px; padding:10px 10px; border-top:2px solid #16ADA6;}
+.p_content .title04 ul{height:auto; margin-top:20px; background-color:#EFEFEF; padding:20px 20px;}
+.p_content .title04 ul li.first{  padding-bottom:20px;color:#666; }
+.p_content .title04 ul li{ color:#4468BD; }
+.p_content .title04 ul li span{ color:#666; padding-left:5px; }
+
+.button_style{ margin-top:20px;}
+/* form1.html end */
+
+
+/* form2.html */
+.p_content .rule{  margin-top:4px; height:auto; padding:10px 10px; background-color:#666;}
+.p_content .rule p{ font:15px/30px "微軟正黑體", Arial, Helvetica, sans-serif; color:#FFF;}
+.p_content .rule span{ font:13px/30px "微軟正黑體", Arial, Helvetica, sans-serif; color:#2DACA9; }
+
+.block01 ul{ margin-top:15px; padding-bottom:15px; }
+.block01 ul li{ display:inline-block; color:#39F; padding-right:20px;}
+
+.p_content .title05{  margin-top:20px; margin-bottom:20px; padding:10px 10px; color:#c61553; background-color:#f8f8f8; border:2px dotted #0caec6;font:15px/30px "微軟正黑體", Arial, Helvetica, sans-serif;color:#000;}
+.p_content .title05 p{ color:#c61553; }
+
+span.color{ color:#999;font:13px/30px "微軟正黑體", Arial, Helvetica, sans-serif;}
+
+.block01 span.color{ color:#999; font:13px/30px "微軟正黑體", Arial, Helvetica, sans-serif; }
+
+.block01_1{ margin-top:10px; letter-spacing:1px; border-bottom:1px dashed #999999; padding-bottom:15px;}
+
+.block02{ margin-top:20px; letter-spacing:1px;  font:15px/30px "微軟正黑體", Arial, Helvetica, sans-serif; color:#000;}
+.block02 span{  font:15px/30px "微軟正黑體", Arial, Helvetica, sans-serif; color:#000;}
+
+.block03{ margin-top:20px; letter-spacing:1px;  font:15px/30px "微軟正黑體", Arial, Helvetica, sans-serif; color:#000;}
+.block03 span{  font:13px/30px "微軟正黑體", Arial, Helvetica, sans-serif; color:#2DACA9;}
+span.in_put{  font:15px/30px "微軟正黑體", Arial, Helvetica, sans-serif; color:#000; vertical-align:middle;}/* form2.html end */
