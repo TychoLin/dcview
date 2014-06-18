@@ -5,8 +5,10 @@ require_once("shdb.inc.php");
 
 $area_names = array(1 => "北部", 2 => "中部", 3 => "南部", 4 => "花東", 5 => "離島", 9 => "其他");
 $trade_status_names = array(1 => "售", 2 => "徵", 3 => "交換", 4 => "團購");
+$sort_names = array(1 => "按最新回應時間", 2 => "按刊登時間");
+$period_names = array(1 => 250, 2 => 30, 3 => 90);
 
-$fields = array("area", "trade_status", "keyword", "period");
+$fields = array("area", "trade_status", "keyword", "sort", "period", "page");
 $get_data = array_intersect_key($_GET, array_fill_keys($fields, null));
 
 $cond = array();
@@ -14,19 +16,29 @@ if (count($get_data) > 0) {
 	foreach ($get_data as $key => $value) {
 		if ($key == "area" && in_array($value, array_keys($area_names))) {
 			$cond["article_sh_area = ?"] = $value;
-		} else if ($key == "trade_status" && in_array($value, array(1, 2, 3, 4))) {
+		} else if ($key == "trade_status" && in_array($value, array_keys($trade_status_names))) {
 			$cond["article_sh_trade_status = ?"] = $value;
 		} else if ($key == "keyword") {
 			$cond["article_title LIKE ?"] = "%$value%";
-		} else if ($key == "period") {
+		} else if ($key == "sort" && in_array($value, array_keys($sort_names))) {
+			// ...
+		} else if ($key == "period" && in_array($value, array_keys($period_names))) {
 			$now = date("Y-m-d H:i:s");
-			$cond["DATEDIFF('$now', article_create_time) <= ?"] = 250;
+			// $cond["DATEDIFF('$now', article_create_time) <= ?"] = $period_names[$value];
 		}
 	}
 }
 
 $ta = new TblArticle();
-$list = $ta->read($cond, 10, 0);
+define("LIMIT", 10);
+$page = isset($get_data["page"]) ? (int)$get_data["page"] : 1;
+$page = ($page > 0) ? $page : 1;
+$offset = LIMIT * ($page - 1);
+$fields = array("*");
+$list = $ta->read($fields, $cond, LIMIT, $offset);
+$fields = array("COUNT(*) AS total_record_number");
+$total_record_number = $ta->read($fields, $cond)[0]["total_record_number"];
+$total_page_number = ceil($total_record_number / LIMIT);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -41,7 +53,7 @@ $list = $ta->read($cond, 10, 0);
 
 <body>
 
-<form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="get">
+<form id="sh_list_form" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="get">
 <!--類別-->
 <div class="block01">
 
@@ -115,15 +127,15 @@ $list = $ta->read($cond, 10, 0);
 <label for="page">跳頁:</label>
 <select id="page" name="page">
 <option value="0">- 頁數 -</option>
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="3">4</option>
-<option value="4">5</option>
-<option value="3">6</option>
+<?php for ($i = 1; $i <= $total_page_number; $i++) {
+echo <<<EOT
+<option value="$i">$i</option>
+EOT;
+}
+?>
 </select>
 </div>
-<button class="small blue style02"><i class="icon-star"></i>刊登物品</button>
+<button type="button" class="small blue style02"><i class="icon-star"></i>刊登物品</button>
 </div>
 <!--排序及頁數 end-->
 
@@ -164,27 +176,48 @@ $list = $ta->read($cond, 10, 0);
 
 
 <!--刊登-->
-<button class="small blue style02"><i class="icon-star"></i>刊登物品</button>
+<button type="button" class="small blue style02"><i class="icon-star"></i>刊登物品</button>
 <!--刊登 end-->
 
 <!--頁數-->
 <div class="block01">
-<span class="page"><span>第 1 頁</span> / 共 68 頁， 1360 則文章</span>
+<?php echo<<<EOT
+<span class="page"><span>第 $page 頁</span> / 共 $total_page_number 頁， $total_record_number 則文章</span>
+EOT;
+?>
 <!-- Select -->
 <div class="po_right">
-<label for="page">跳頁:</label>
-<select id="page" name="page">
-<option value="0">- 頁數 -</option>
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="3">4</option>
-<option value="4">5</option>
-<option value="3">6</option>
+<label>跳頁:</label>
+<select id="fake_page">
 </select>
 </div>
 </div>
 <!--頁數 end-->
 </form>
+<script type="text/javascript">
+$(window).load(function () {
+	$.getScript("js/URI.js", function () {
+		var search = URI.parseQuery(window.location.search);
+		for (var name in search) {
+			if (name == "keyword") {
+				$("#" + name).val(search[name]);
+			} else {
+				$("#" + name + " option[value=" + search[name] + "]").prop("selected", true);
+			}
+		}
+
+		$("#fake_page").append($("#page option").clone());
+		$("#fake_page option[value=" + search.page + "]").prop("selected", true);
+	});
+
+	$("[id*='page']").change(function () {
+		$("#sh_list_form").submit();
+	});
+
+	$("button[type='button']").click(function () {
+		window.location = "sh_post.php";
+	});
+});
+</script>
 </body>
 </html>

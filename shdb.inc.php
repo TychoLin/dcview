@@ -45,7 +45,13 @@ class RecordModel {
 		}
 	}
 
-	public function read($cond, $limit = "", $offset = "") {
+	public function read($fields, $cond, $limit = "", $offset = "") {
+		if (is_array($fields) && count($fields) > 0) {
+			$fields = implode(",", $fields);
+		} else {
+			$fields = "*";
+		}
+
 		$cond_clause = "";
 		if (is_array($cond) && count($cond) > 0) {
 			$cond_clause = "WHERE ".implode(" AND ", array_keys($cond));
@@ -58,7 +64,7 @@ class RecordModel {
 			$limit_clause = "LIMIT $limit OFFSET $offset";
 		}
 
-		$sql = "SELECT * FROM {$this->_tableName} $cond_clause $limit_clause";
+		$sql = "SELECT $fields FROM {$this->_tableName} $cond_clause $limit_clause";
 		try {
 			$ps = DB::getPDO()->prepare($sql);
 			$ps->execute(array_values($cond));
@@ -66,7 +72,6 @@ class RecordModel {
 		} catch (PDOException $e) {
 			echo $e->getMessage();
 		}
-		
 	}
 }
 
