@@ -211,6 +211,9 @@ $(window).load(function () {
 	});
 
 	$("[id*='page']").change(function () {
+		if ($(this).is("[id='fake_page']")) {
+			$("#page option[value=" + $("option:selected", this).val() + "]").prop("selected", true);
+		}
 		$("#sh_list_form").submit();
 	});
 
