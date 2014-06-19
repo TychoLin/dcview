@@ -25,7 +25,7 @@ if (count($post_data) == count($fields) && verify_article_data($post_data)) {
 	$now = date("Y-m-d H:i:s");
 	$record = array(
 		"user_id" => 1,
-		"category_id" => $post_data["sub_category"],
+		"sh_sub_category_id" => $post_data["sub_category"],
 		"article_title" => htmlentities($post_data["title"]),
 		"article_content" => htmlentities($post_data["content"]),
 		"article_sh_trade_status" => $post_data["trade_status"],
