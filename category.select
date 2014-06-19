@@ -1,0 +1,129 @@
+﻿<select name="ptype">
+	<option value=""> - 所有物品 - </option>
+    <optgroup label="數位相機">
+	   
+          <option value="0A04">Canon</option>
+	   
+          <option value="0A14">Canon SLR</option>
+	   
+          <option value="0A07">Fujifilm</option>
+	   
+          <option value="0A20">Fujifilm SLR</option>
+	   
+          <option value="0A16">Konica Minolta</option>
+	   
+          <option value="0A31">Konica Minolta SLR</option>
+	   
+          <option value="0A01">Nikon</option>
+	   
+          <option value="0A15">Nikon SLR</option>
+	   
+          <option value="0A02">Olympus</option>
+	   
+          <option value="0A29">Olympus SLR</option>
+	   
+          <option value="0A18">Pentax</option>
+	   
+          <option value="0A30">Pentax SLR</option>
+	   
+          <option value="0A03">Sony</option>
+	   
+          <option value="0A33">Sony DSLR</option>
+	   
+          <option value="0A27">BenQ</option>
+	   
+          <option value="0A05">Casio</option>
+	   
+          <option value="0A28">Contax</option>
+	   
+          <option value="0A08">Epson</option>
+	   
+          <option value="0A35">GE</option>
+	   
+          <option value="0A06">Kodak</option>
+	   
+          <option value="0A25">Kyocera</option>
+	   
+          <option value="0A22">Leica</option>
+	   
+          <option value="0A19">Panasonic</option>
+	   
+          <option value="0A34">Panasonic DSLR</option>
+	   
+          <option value="0A26">Premier</option>
+	   
+          <option value="0A09">Ricoh</option>
+	   
+          <option value="0A10">Toshiba</option>
+	   
+          <option value="0A23">Samsung</option>
+	   
+          <option value="0A17">Sanyo</option>
+	   
+          <option value="0A21">Sigma</option>
+	   
+          <option value="0A12">傳統相機</option>
+	   
+          <option value="0A13">其他相機</option>
+	   
+    </optgroup><optgroup label="其他產品">
+	   
+          <option value="1">鏡頭</option>
+	   
+          <option value="2">列印設備</option>
+	   
+          <option value="3">閃光燈</option>
+	   
+          <option value="4">記憶/儲存</option>
+	   
+          <option value="5">電池</option>
+	   
+          <option value="6">腳架</option>
+	   
+          <option value="7">電源充電</option>
+	   
+          <option value="8">背包皮套</option>
+	   
+          <option value="9">讀卡機</option>
+	   
+	</optgroup></select>
+
+<div class="dropdownlist manu hidden">
+        	<ul>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=Acer&amp;class=1" title="Acer">Acer <span class="count">(30)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=Alcatel&amp;class=1" title="Alcatel">Alcatel <span class="count">(54)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=Apple&amp;class=1" title="Apple">Apple <span class="count">(21)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=ASUS&amp;class=1" title="ASUS">ASUS <span class="count">(67)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=bara&amp;class=1" title="bara">bara <span class="count">(1)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=BenQ&amp;class=1" title="BenQ">BenQ <span class="count">(52)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=BlackBerry&amp;class=1" title="BlackBerry">BlackBerry <span class="count">(15)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=BungBungame&amp;class=1" title="BungBungame">BungBungame <span class="count">(1)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=FET&amp;class=1" title="FET">FET <span class="count">(3)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=GPLUS&amp;class=1" title="GPLUS">GPLUS <span class="count">(88)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=HTC&amp;class=1" title="HTC">HTC <span class="count">(108)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=HUAWEI&amp;class=1" title="HUAWEI">HUAWEI <span class="count">(44)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=InFocus&amp;class=1" title="InFocus">InFocus <span class="count">(8)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=Inhon&amp;class=1" title="Inhon">Inhon <span class="count">(1)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=LG&amp;class=1" title="LG">LG <span class="count">(213)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=Motorola&amp;class=1" title="Motorola">Motorola <span class="count">(249)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=Nokia&amp;class=1" title="Nokia">Nokia <span class="count">(336)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=nubia&amp;class=1" title="nubia">nubia <span class="count">(5)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=OnePlus&amp;class=1" title="OnePlus">OnePlus <span class="count">(1)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=OPPO&amp;class=1" title="OPPO">OPPO <span class="count">(5)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=Pantech&amp;class=1" title="Pantech">Pantech <span class="count">(34)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=Samsung&amp;class=1" title="Samsung">Samsung <span class="count">(366)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=Sharp&amp;class=1" title="Sharp">Sharp <span class="count">(64)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=SONY&amp;class=1" title="SONY">SONY <span class="count">(39)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=TWM&amp;class=1" title="TWM">TWM <span class="count">(10)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=vivo&amp;class=1" title="vivo">vivo <span class="count">(2)</span></a></li>
+			<li><a class="manu" href="http://www.eprice.com.tw/mobile/buyerguide/?manu=Xiaomi&amp;class=1" title="小米">小米 <span class="count">(7)</span></a></li>
+        <li class="sepline"><hr></li>
+    	<li><a class="manu" href="/mobile/buyerguide/?class=39" title="4G 搶先用">4G 搶先用  <span class="count">(102)</span></a></li>
+    	<li><a class="manu" href="/mobile/buyerguide/?class=41" title="防水機超讚">防水機超讚  <span class="count">(28)</span></a></li>
+    	<li><a class="manu" href="/mobile/buyerguide/?class=44" title="高畫素自拍">高畫素自拍  <span class="count">(28)</span></a></li>
+    	<li><a class="manu" href="/mobile/buyerguide/?class=40" title="6 吋大螢幕">6 吋大螢幕  <span class="count">(18)</span></a></li>
+    	<li><a class="manu" href="/mobile/buyerguide/?class=43" title="雙卡雙待">雙卡雙待  <span class="count">(97)</span></a></li>
+    	<li><a class="manu" href="/mobile/buyerguide/?class=45" title="大容量換電">大容量換電  <span class="count">(23)</span></a></li>
+    	<li><a class="manu" href="/mobile/buyerguide/?class=46" title="5 千有找">5 千有找  <span class="count">(586)</span></a></li>
+		</ul>
+</div>

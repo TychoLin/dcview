@@ -29,13 +29,14 @@ if (count($get_data) > 0) {
 	}
 }
 
+// init article list
 $ta = new TblArticle();
 define("LIMIT", 10);
 $page = isset($get_data["page"]) ? (int)$get_data["page"] : 1;
 $page = ($page > 0) ? $page : 1;
 $offset = LIMIT * ($page - 1);
 $fields = array("*");
-$list = $ta->read($fields, $cond, LIMIT, $offset);
+$article_list = $ta->read($fields, $cond, LIMIT, $offset);
 $fields = array("COUNT(*) AS total_record_number");
 $total_record_number = $ta->read($fields, $cond)[0]["total_record_number"];
 $total_page_number = ceil($total_record_number / LIMIT);
@@ -60,19 +61,56 @@ $total_page_number = ceil($total_record_number / LIMIT);
 <!-- Select -->
 <label for="main_category">主類別:</label>
 <select id="main_category" name="main_category">
-<option value="0">數位相機</option>
-<option value="1">手機相關</option>
-<option value="2">其他</option>
+<?php
+$tsmc = new TblSHMainCategory();
+$fields = array("sh_main_category_id", "sh_main_category_name");
+$main_category_list = $tsmc->read($fields);
+foreach ($main_category_list as $value) {
+echo <<<EOT
+<option value="{$value["sh_main_category_id"]}">{$value["sh_main_category_name"]}</option>
+EOT;
+}
+?>
 </select>
 
 <!-- Select -->
 <label for="sub_category">類別:</label>
 <select id="sub_category" name="sub_category">
-<option value="0">Option 0</option>
-<option value="1">Option 1</option>
-<option value="2">Option 2</option>
-<option value="3">Option 3</option>
 </select>
+</div>
+<div>
+<optgroup id="sub_category_1">
+<?php
+$tssc = new TblSHSubCategory();
+$fields = array("sh_sub_category_id", "sh_sub_category_name");
+$sub_category_list = $tssc->read($fields, array("sh_main_category_id = ?" => 1));
+foreach ($sub_category_list as $value) {
+echo <<<EOT
+<option value="{$value["sh_sub_category_id"]}">{$value["sh_sub_category_name"]}</option>
+EOT;
+}
+?>
+</optgroup>
+<optgroup id="sub_category_2">
+<?php
+$sub_category_list = $tssc->read($fields, array("sh_main_category_id = ?" => 2));
+foreach ($sub_category_list as $value) {
+echo <<<EOT
+<option value="{$value["sh_sub_category_id"]}">{$value["sh_sub_category_name"]}</option>
+EOT;
+}
+?>
+</optgroup>
+<optgroup id="sub_category_3">
+<?php
+$sub_category_list = $tssc->read($fields, array("sh_main_category_id = ?" => 3));
+foreach ($sub_category_list as $value) {
+echo <<<EOT
+<option value="{$value["sh_sub_category_id"]}">{$value["sh_sub_category_name"]}</option>
+EOT;
+}
+?>
+</optgroup>
 </div>
 <!--類別 end-->
 
@@ -127,7 +165,8 @@ $total_page_number = ceil($total_record_number / LIMIT);
 <label for="page">跳頁:</label>
 <select id="page" name="page">
 <option value="0">- 頁數 -</option>
-<?php for ($i = 1; $i <= $total_page_number; $i++) {
+<?php
+for ($i = 1; $i <= $total_page_number; $i++) {
 echo <<<EOT
 <option value="$i">$i</option>
 EOT;
@@ -158,7 +197,7 @@ EOT;
 <tr class="sub">
 	<td colspan="7">系統公告:DCView二手市場重要公告</td>
 </tr>
-<?php foreach ($list as $record) { ?>
+<?php foreach ($article_list as $record) { ?>
 <tr>
 	<td><span class="time_text"><?php echo $record["article_create_time"]; ?></span></td>
 	<td><a href="#">MonkeyLi</a></td>
@@ -210,6 +249,7 @@ $(window).load(function () {
 		$("#fake_page option[value=" + search.page + "]").prop("selected", true);
 	});
 
+	// fix page in excess of total pages
 	$("[id*='page']").change(function () {
 		if ($(this).is("[id='fake_page']")) {
 			$("#page option[value=" + $("option:selected", this).val() + "]").prop("selected", true);
@@ -219,6 +259,12 @@ $(window).load(function () {
 
 	$("button[type='button']").click(function () {
 		window.location = "sh_post.php";
+	});
+
+	$("#sub_category").append($("#sub_category_1 option").clone());
+	$("#main_category").change(function () {
+		var suffix = $("option:selected", this).val();
+		$("#sub_category").empty().append($("#sub_category_" + suffix + " option").clone());
 	});
 });
 </script>

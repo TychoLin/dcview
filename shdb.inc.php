@@ -4,7 +4,7 @@ class DB {
 
 	private function __construct() {
 		try {
-			self::$_db = new PDO("mysql:host=localhost;dbname=dcview", "root", "9999");
+			self::$_db = new PDO("mysql:host=localhost;dbname=dcview;charset=UTF8", "root", "9999");
 			self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		} catch (PDOException $e) {
 			echo "Connection failed: ".$e->getMessage();
@@ -45,7 +45,7 @@ class RecordModel {
 		}
 	}
 
-	public function read($fields, $cond, $limit = "", $offset = "") {
+	public function read($fields, $cond = array(), $limit = "", $offset = "") {
 		if (is_array($fields) && count($fields) > 0) {
 			$fields = implode(",", $fields);
 		} else {
@@ -78,6 +78,18 @@ class RecordModel {
 class TblArticle extends RecordModel {
 	public function __construct() {
 		parent::__construct("tblArticle", "article_id");
+	}
+}
+
+class TblSHMainCategory extends RecordModel {
+	public function __construct() {
+		parent::__construct("tblSHMainCategory", "sh_main_category_id");
+	}
+}
+
+class TblSHSubCategory extends RecordModel {
+	public function __construct() {
+		parent::__construct("tblSHSubCategory", "sh_sub_category_id");
 	}
 }
 ?>
