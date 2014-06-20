@@ -20,6 +20,8 @@ for ($i = 0; $i < 100; $i++) {
 	$ta->create($record);
 }
 */
+
+/*
 $d1 = date('Y-m-d H:i:s', mktime(0, 0, 0, mt_rand(1, 12), mt_rand(1, 20), mt_rand(2010, 2013)));
 $d2 = date('Y-m-d H:i:s', mktime(0, 0, 0, mt_rand(1, 12), mt_rand(1, 20), mt_rand(2010, 2013)));
 $cond = array(
@@ -30,4 +32,19 @@ $cond = array(
 );
 
 var_dump($ta->read($cond));
+*/
+
+$tr = new TblReply();
+
+for ($i = 0; $i < 100; $i++) {
+	$record = array(
+		"article_id" => mt_rand(1, 20),
+		"user_id" => 1,
+		"reply_content" => "我有興趣",
+		"reply_create_time" => date('Y-m-d', mktime(0, 0, 0, mt_rand(1, 12), mt_rand(1, 20), mt_rand(2010, 2013))),
+		"reply_update_time" => date('Y-m-d', mktime(0, 0, 0, mt_rand(1, 12), mt_rand(1, 20), mt_rand(2010, 2013))),
+	);
+
+	$tr->create($record);
+}
 ?>

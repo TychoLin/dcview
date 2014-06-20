@@ -1,12 +1,7 @@
 <?php
-require_once("shdb.inc.php");
+require_once("common.inc.php");
 
 // check if login
-
-$area_names = array(1 => "北部", 2 => "中部", 3 => "南部", 4 => "花東", 5 => "離島", 9 => "其他");
-$trade_status_names = array(1 => "售", 2 => "徵", 3 => "交換", 4 => "團購");
-$sort_names = array(1 => "按最新回應時間", 2 => "按刊登時間");
-$period_names = array(1 => 250, 2 => 30, 3 => 90);
 
 $fields = array("area", "trade_status", "keyword", "sort", "period", "page");
 $get_data = array_intersect_key($_GET, array_fill_keys($fields, null));
@@ -56,62 +51,7 @@ $total_page_number = ceil($total_record_number / LIMIT);
 
 <form id="sh_list_form" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="get">
 <!--類別-->
-<div class="block01">
-
-<!-- Select -->
-<label for="main_category">主類別:</label>
-<select id="main_category" name="main_category">
-<?php
-$tsmc = new TblSHMainCategory();
-$fields = array("sh_main_category_id", "sh_main_category_name");
-$main_category_list = $tsmc->read($fields);
-foreach ($main_category_list as $value) {
-echo <<<EOT
-<option value="{$value["sh_main_category_id"]}">{$value["sh_main_category_name"]}</option>
-EOT;
-}
-?>
-</select>
-
-<!-- Select -->
-<label for="sub_category">類別:</label>
-<select id="sub_category" name="sub_category">
-</select>
-</div>
-<div>
-<optgroup id="sub_category_1">
-<?php
-$tssc = new TblSHSubCategory();
-$fields = array("sh_sub_category_id", "sh_sub_category_name");
-$sub_category_list = $tssc->read($fields, array("sh_main_category_id = ?" => 1));
-foreach ($sub_category_list as $value) {
-echo <<<EOT
-<option value="{$value["sh_sub_category_id"]}">{$value["sh_sub_category_name"]}</option>
-EOT;
-}
-?>
-</optgroup>
-<optgroup id="sub_category_2">
-<?php
-$sub_category_list = $tssc->read($fields, array("sh_main_category_id = ?" => 2));
-foreach ($sub_category_list as $value) {
-echo <<<EOT
-<option value="{$value["sh_sub_category_id"]}">{$value["sh_sub_category_name"]}</option>
-EOT;
-}
-?>
-</optgroup>
-<optgroup id="sub_category_3">
-<?php
-$sub_category_list = $tssc->read($fields, array("sh_main_category_id = ?" => 3));
-foreach ($sub_category_list as $value) {
-echo <<<EOT
-<option value="{$value["sh_sub_category_id"]}">{$value["sh_sub_category_name"]}</option>
-EOT;
-}
-?>
-</optgroup>
-</div>
+<?php require_once("templates/category.tpl.php"); ?>
 <!--類別 end-->
 
 <!--買賣地區-->
@@ -202,10 +142,10 @@ EOT;
 	<td><span class="time_text"><?php echo $record["article_create_time"]; ?></span></td>
 	<td><a href="#">MonkeyLi</a></td>
 	<td><span><?php echo $record["article_sh_trade_status"]; ?></span></td>
-    <td><a href="#"><?php echo $record["article_title"]; ?><span>(1)</span></a></td>
-	<td><span class="time_text">$<?php echo $record["article_sh_price"]; ?></span></td>
+    <td><a href="sh_article.php?article_id=<?php echo $record["article_id"]; ?>" target="_blank"><?php echo $record["article_title"]; ?><span>(1)</span></a></td>
+	<td><span class="time_text">$<?php echo number_format($record["article_sh_price"]); ?></span></td>
 	<td><a href="#">Nikon</a></td>
-    <td><a href="#"><?php echo $record["article_sh_area"]; ?></a></td>
+    <td><a href="#"><?php echo $area_names[$record["article_sh_area"]]; ?></a></td>
 </tr>
 <?php } ?>
 </tbody>

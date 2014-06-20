@@ -62,7 +62,7 @@
 .p_content .title05{  margin-top:20px; margin-bottom:20px; padding:10px 10px; color:#c61553; background-color:#f8f8f8; border:2px dotted #0caec6;font:15px/30px "微軟正黑體", Arial, Helvetica, sans-serif;color:#000;}
 .p_content .title05 p{ color:#c61553; }
 
-span.color{ color:#999;font:13px/30px "微軟正黑體", Arial, Helvetica, sans-serif;}
+
 
 .block01 span.color{ color:#999; font:13px/30px "微軟正黑體", Arial, Helvetica, sans-serif; }
 
@@ -74,3 +74,9 @@ span.color{ color:#999;font:13px/30px "微軟正黑體", Arial, Helvetica, sans-
 .block03{ margin-top:20px; letter-spacing:1px;  font:15px/30px "微軟正黑體", Arial, Helvetica, sans-serif; color:#000;}
 .block03 span{  font:13px/30px "微軟正黑體", Arial, Helvetica, sans-serif; color:#2DACA9;}
 span.in_put{  font:15px/30px "微軟正黑體", Arial, Helvetica, sans-serif; color:#000; vertical-align:middle;}/* form2.html end */
+
+
+
+.respond_text{ display:block;  font:16px/30px "微軟正黑體", Arial, Helvetica, sans-serif; color:#000; letter-spacing:1px;}
+.respond_text1{  font:16px/30px "微軟正黑體", Arial, Helvetica, sans-serif; color:#000; letter-spacing:1px;}
+span.color{ color:#999;font:16px/30px "微軟正黑體", Arial, Helvetica, sans-serif;}

@@ -81,6 +81,12 @@ class TblArticle extends RecordModel {
 	}
 }
 
+class TblReply extends RecordModel {
+	public function __construct() {
+		parent::__construct("tblReply", "reply_id");
+	}
+}
+
 class TblSHMainCategory extends RecordModel {
 	public function __construct() {
 		parent::__construct("tblSHMainCategory", "sh_main_category_id");

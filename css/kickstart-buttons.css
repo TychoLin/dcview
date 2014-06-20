@@ -9,7 +9,7 @@
 /*---------------------------------
 	BUTTONS
 -----------------------------------*/
-button.style01{ display:block; width:100px; height:40px; margin:10px;}
+button.style01{ display:block; width:100px; height:40px; margin:10px; font:15px/20px "微軟正黑體", Arial, Helvetica, sans-serif; color:#000;}
 button.style02{ display:block; width:200px; height:40px; margin:10px;}
 
 

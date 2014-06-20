@@ -1,5 +1,5 @@
 <?php
-require_once("shdb.inc.php");
+require_once("common.inc.php");
 function verify_article_data($data) {
 	if (!in_array($data["trade_status"], array_keys($GLOBALS["trade_status_names"]))) {
 		return false;
@@ -42,9 +42,6 @@ if (count($post_data) == count($fields) && verify_article_data($post_data)) {
 	$ta = new TblArticle();
 	$ta->create($record);
 }
-
-// init html data
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -65,7 +62,7 @@ if (count($post_data) == count($fields) && verify_article_data($post_data)) {
 <br>1.	本版純屬交流，不歡迎打廣告<span>（含已經刊登於其他拍賣者）</span>，未依規定發表之刊登與留言將一律刪除，恕不另行通知。
 <br>2.	本站無法稽核二手買賣商品內容之真實性，網友請自行負責承擔風險，盡可能當面交易點清，切勿貿然匯款或郵寄商品給陌生人。
 <br>3.	本區謝絕任何形式廣告，包括水貨商、跑單幫者、清庫存促銷、或是任何特賣活動。
-<br>4.	發起團購者，請於十二小時內將您的姓名、身分證字號、服務單位、聯絡電話、地址通知站方 備查，否則將一律刪除。
+<br>4.	發起團購者，請於十二小時內將您的姓名、身分證字號、服務單位、聯絡電話、地址通知站方備查，否則將一律刪除。
 <br>5.	同物品一週內若重複刊登，我們將會全數刪除，並將該會員帳號停權處理！
 <br>6.	刊登物品請詳述您的物件內容，否則將予以刪除！
 <br>7.	會員每次刊登僅一則為限，之後間隔30分鐘可再次刊登<span>（內容不得重複）</span>。
@@ -76,27 +73,11 @@ if (count($post_data) == count($fields) && verify_article_data($post_data)) {
 <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
 <!--類別-->
 <div class="block01">
-
 <ul>
 <li>刊登人：m=0=m</li>
 <li>刊登在數位相機二手市場</li>
 </ul>
-
-<!-- Select -->
-<label for="main_category">主類別:</label>
-<select id="main_category">
-<option value="1">數位相機</option>
-<option value="2">手機相關</option>
-<option value="3">其他</option>
-</select>
-
-<!-- Select -->
-<label for="sub_category">類別:</label>
-<select id="sub_category" name="sub_category">
-<option value="1">Option 1</option>
-<option value="2">Option 2</option>
-<option value="3">Option 3</option>
-</select>
+<?php require_once("templates/category.tpl.php"); ?>
 </div>
 <div class="block01_1">
 <!-- Select -->
@@ -171,5 +152,14 @@ if (count($post_data) == count($fields) && verify_article_data($post_data)) {
 </form>
 
 </div>
+<script type="text/javascript">
+$(window).load(function () {
+	$("#sub_category").append($("#sub_category_1 option").clone());
+	$("#main_category").change(function () {
+		var suffix = $("option:selected", this).val();
+		$("#sub_category").empty().append($("#sub_category_" + suffix + " option").clone());
+	});
+});
+</script>
 </body>
 </html>
