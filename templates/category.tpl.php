@@ -6,7 +6,8 @@
 <?php
 $tsmc = new TblSHMainCategory();
 $fields = array("sh_main_category_id", "sh_main_category_name");
-$main_category_list = $tsmc->read($fields);
+$tsmc->initReadSQL($fields);
+$main_category_list = $tsmc->read();
 foreach ($main_category_list as $value) {
 echo <<<EOT
 <option value="{$value["sh_main_category_id"]}">{$value["sh_main_category_name"]}</option>
@@ -25,7 +26,8 @@ EOT;
 <?php
 $tssc = new TblSHSubCategory();
 $fields = array("sh_sub_category_id", "sh_sub_category_name");
-$sub_category_list = $tssc->read($fields, array("sh_main_category_id = ?" => 1));
+$tssc->initReadSQL($fields, array("sh_main_category_id = ?" => 1));
+$sub_category_list = $tssc->read();
 foreach ($sub_category_list as $value) {
 echo <<<EOT
 <option value="{$value["sh_sub_category_id"]}">{$value["sh_sub_category_name"]}</option>
@@ -35,7 +37,8 @@ EOT;
 </select>
 <select id="sub_category_2">
 <?php
-$sub_category_list = $tssc->read($fields, array("sh_main_category_id = ?" => 2));
+$tssc->initReadSQL($fields, array("sh_main_category_id = ?" => 2));
+$sub_category_list = $tssc->read();
 foreach ($sub_category_list as $value) {
 echo <<<EOT
 <option value="{$value["sh_sub_category_id"]}">{$value["sh_sub_category_name"]}</option>
@@ -45,7 +48,8 @@ EOT;
 </select>
 <select id="sub_category_3">
 <?php
-$sub_category_list = $tssc->read($fields, array("sh_main_category_id = ?" => 3));
+$tssc->initReadSQL($fields, array("sh_main_category_id = ?" => 3));
+$sub_category_list = $tssc->read();
 foreach ($sub_category_list as $value) {
 echo <<<EOT
 <option value="{$value["sh_sub_category_id"]}">{$value["sh_sub_category_name"]}</option>

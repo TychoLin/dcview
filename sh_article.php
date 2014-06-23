@@ -5,13 +5,16 @@ if (isset($_GET["article_id"])) {
 	$article_id = (int)$_GET["article_id"];
 	$ta = new TblArticle();
 	$fields = array("*");
-	$cond = array("article_id = ?" => $article_id);
-	$article_record = $ta->read($fields, $cond);
+	$where_cond = array("article_id = ?" => $article_id);
+	$ta->initReadSQL($fields, $where_cond);
+	$article_record = $ta->read();
 	if (count($article_record) == 1) {
 		$article_record = $article_record[0];
 	} else {
 		exit();
 	}
+} else {
+	exit();
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -23,6 +26,17 @@ if (isset($_GET["article_id"])) {
 <script src="js/kickstart.js"></script> <!-- KICKSTART -->
 <link rel="stylesheet" href="css/kickstart.css" media="all" /> <!-- KICKSTART -->
 <link rel="stylesheet" href="css/form_style.css" media="all" /> <!-- KICKSTART -->
+<link rel="stylesheet" href="css/magnific-popup.css"> <!-- magnific-popup -->
+<style type="text/css">
+.white-popup {
+	position: relative;
+	background: #FFF;
+	padding: 20px;
+	width: auto;
+	max-width: 500px;
+	margin: 20px auto;
+}
+</style>
 </head>
 
 <body>
@@ -100,23 +114,37 @@ if (isset($_GET["article_id"])) {
 <?php
 $tr = new TblReply();
 $fields = array("user_id", "reply_content", "reply_create_time");
-$cond = array("article_id = ?" => $article_id);
-$reply_list = $tr->read($fields, $cond);
+$where_cond = array("article_id = ?" => $article_id);
+$tr->initReadSQL($fields, $where_cond);
+$reply_list = $tr->read();
 foreach ($reply_list as $value) {
-echo <<<EOT
+?>
 <ul>
-<li class="first">{$value["reply_content"]}</li>
-<li>小夫唷<span>[{$value["reply_create_time"]}]</span></li>
+<li class="first"><?php echo $value["reply_content"]; ?></li>
+<li>小夫唷<span>[<?php echo nl2br($value["reply_create_time"]); ?>]</span></li>
 </ul>
-EOT;
+<?php
 }
 ?>
 <!--回應 end-->
 
 </div>
+<div id="test-popup" class="white-popup mfp-hide">
+hello world
+</div>
+<a href="#test-popup" class="open-popup-link">Show inline popup</a>
 <script type="text/javascript">
 $(window).load(function () {
-	window.open("sh_test.php");
+	$(".button-bar li:nth-last-child(2)").click(function () {
+		// var test = window.open("sh_test.php", "_blank", "width=400,height=300");
+	});
+
+	$.getScript("js/jquery.magnific-popup.js", function () {
+		$(".open-popup-link").magnificPopup({
+			type: "inline",
+			midClick: true // Allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source in href.
+		});
+	});
 });
 </script>
 </body>

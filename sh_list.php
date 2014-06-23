@@ -3,23 +3,33 @@ require_once("common.inc.php");
 
 // check if login
 
-$fields = array("area", "trade_status", "keyword", "sort", "period", "page");
+$fields = array("sub_category", "area", "trade_status", "keyword", "sort", "period", "page");
 $get_data = array_intersect_key($_GET, array_fill_keys($fields, null));
 
-$cond = array();
+$where_cond = array();
+$order_by_clause = "c.sort_time DESC";
 if (count($get_data) > 0) {
 	foreach ($get_data as $key => $value) {
-		if ($key == "area" && in_array($value, array_keys($area_names))) {
-			$cond["article_sh_area = ?"] = $value;
+		if ($key == "sub_category") {
+			$where_cond["c.sh_sub_category_id = ?"] = $value;
+		} else if ($key == "area" && in_array($value, array_keys($area_names))) {
+			$where_cond["c.article_sh_area = ?"] = $value;
 		} else if ($key == "trade_status" && in_array($value, array_keys($trade_status_names))) {
-			$cond["article_sh_trade_status = ?"] = $value;
+			$where_cond["c.article_sh_trade_status = ?"] = $value;
 		} else if ($key == "keyword") {
-			$cond["article_title LIKE ?"] = "%$value%";
+			$where_cond["c.article_title LIKE ?"] = "%$value%";
 		} else if ($key == "sort" && in_array($value, array_keys($sort_names))) {
-			// ...
+			switch ($value) {
+				case 1:
+					$order_by_clause = "c.sort_time DESC";
+					break;
+				case 2:
+					$order_by_clause = "c.article_create_time DESC";
+					break;
+			}
 		} else if ($key == "period" && in_array($value, array_keys($period_names))) {
 			$now = date("Y-m-d H:i:s");
-			// $cond["DATEDIFF('$now', article_create_time) <= ?"] = $period_names[$value];
+			// $where_cond["DATEDIFF('$now', c.article_create_time) <= ?"] = $period_names[$value];
 		}
 	}
 }
@@ -30,10 +40,19 @@ define("LIMIT", 10);
 $page = isset($get_data["page"]) ? (int)$get_data["page"] : 1;
 $page = ($page > 0) ? $page : 1;
 $offset = LIMIT * ($page - 1);
-$fields = array("*");
-$article_list = $ta->read($fields, $cond, LIMIT, $offset);
+
+// SELECT c.*, (SELECT COUNT(*) FROM tblReply AS d WHERE d.article_id = c.article_id) AS reply_amount, d.sh_sub_category_name
+// FROM (SELECT a.*, MAX(b.reply_create_time) AS sort_time FROM tblArticle AS a NATURAL LEFT JOIN tblReply AS b GROUP BY a.article_id) AS c
+// NATURAL JOIN tblSHSubCategory AS d
+// ORDER BY c.sort_time DESC
+$fields = array("c.*", "(SELECT COUNT(*) FROM tblReply AS d WHERE d.article_id = c.article_id) AS reply_amount", "d.sh_sub_category_name");
+$table_reference = "(SELECT a.*, MAX(b.reply_create_time) AS sort_time FROM tblArticle AS a NATURAL LEFT JOIN tblReply AS b GROUP BY a.article_id) AS c NATURAL JOIN tblSHSubCategory AS d";
+$ta->initReadSQL($fields, $where_cond, $table_reference, $order_by_clause, LIMIT, $offset);
+$article_list = $ta->read();
+
 $fields = array("COUNT(*) AS total_record_number");
-$total_record_number = $ta->read($fields, $cond)[0]["total_record_number"];
+$ta->initReadSQL($fields, $where_cond, $table_reference);
+$total_record_number = $ta->read()[0]["total_record_number"];
 $total_page_number = ceil($total_record_number / LIMIT);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -46,7 +65,6 @@ $total_page_number = ceil($total_record_number / LIMIT);
 <link rel="stylesheet" href="css/kickstart.css" media="all" /> <!-- KICKSTART -->
 <link rel="stylesheet" href="css/form_style.css" media="all" /> <!-- KICKSTART -->
 </head>
-
 <body>
 
 <form id="sh_list_form" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="get">
@@ -141,10 +159,10 @@ EOT;
 <tr>
 	<td><span class="time_text"><?php echo $record["article_create_time"]; ?></span></td>
 	<td><a href="#">MonkeyLi</a></td>
-	<td><span><?php echo $record["article_sh_trade_status"]; ?></span></td>
-    <td><a href="sh_article.php?article_id=<?php echo $record["article_id"]; ?>" target="_blank"><?php echo $record["article_title"]; ?><span>(1)</span></a></td>
+	<td><span><?php echo $trade_status_names[$record["article_sh_trade_status"]]; ?></span></td>
+    <td><a href="sh_article.php?article_id=<?php echo $record["article_id"]; ?>" target="_blank"><?php echo $record["article_title"]; ?><span>(<?php echo $record["reply_amount"]; ?>)</span></a></td>
 	<td><span class="time_text">$<?php echo number_format($record["article_sh_price"]); ?></span></td>
-	<td><a href="#">Nikon</a></td>
+	<td><a href="#"><?php echo $record["sh_sub_category_name"]; ?></a></td>
     <td><a href="#"><?php echo $area_names[$record["article_sh_area"]]; ?></a></td>
 </tr>
 <?php } ?>
