@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `tblArticle` (
   PRIMARY KEY (`article_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=107 DEFAULT CHARSET=utf8;
 
--- Dumping data for table dcview.tblArticle: ~103 rows (approximately)
+-- Dumping data for table dcview.tblArticle: ~105 rows (approximately)
 DELETE FROM `tblArticle`;
 /*!40000 ALTER TABLE `tblArticle` DISABLE KEYS */;
 INSERT INTO `tblArticle` (`article_id`, `user_id`, `sh_sub_category_id`, `article_title`, `article_content`, `article_sh_trade_status`, `article_sh_price`, `article_sh_area`, `article_email`, `article_phone_number`, `article_img_url1`, `article_img_url2`, `article_create_time`, `article_update_time`) VALUES
@@ -138,7 +138,7 @@ INSERT INTO `tblArticle` (`article_id`, `user_id`, `sh_sub_category_id`, `articl
 	(103, 1, 1, '中文測試', '中文測試', 1, 0, 1, '', '', '', '', '2014-06-19 16:14:29', '2014-06-19 16:14:29'),
 	(104, 1, 1, '本版純屬交流', '本版純屬交流，不歡迎打廣告(含已經刊登於其他拍賣者) 同物品一週內若重複刊登，我們將會全數刪除! 請詳述您的物件內容，否則將予以刪除!', 1, 999999999, 1, '', '', '', '', '2014-06-20 10:55:04', '2014-06-20 10:55:04'),
 	(105, 1, 10, '&lt;span&gt;test&lt;/span&gt;', '本版純屬交流，不歡迎打廣告(含已經刊登於其他拍賣者) 同物品一週內若重複刊登，我們將會全數刪除! 請詳述您的物件內容，否則將予以刪除!', 2, 888888, 2, 'test1@example.com', '', '', '', '2014-06-20 12:06:01', '2014-06-20 12:06:01'),
-	(106, 1, 1, 'android flash rom', 'http://kakasi5555.pixnet.net/blog/post/46482206-htc-desire-%E5%BF%AB%E9%80%9F%E5%88%B7rom%E6%95%99%E5%AD%B8-(%E8%A7%A3%E6%B1%BA%E5%85%A7%E5%AD%98%E4%B8%8D%E8%B6%B3%E5%95%8F%E9%A1%8C)\r\n\r\nhttp://forum.xda-developers.com/showthread.php?t=2070704&amp;highlight=lock+screen', 1, 777777, 1, '', '', '', '', '2014-06-20 14:55:44', '2014-06-20 14:55:44');
+	(106, 1, 1, 'android flash rom', 'http://kakasi5555.pixnet.net/blog/post/46482206-htc-desire-%E5%BF%AB%E9%80%9F%E5%88%B7rom%E6%95%99%E5%AD%B8-(%E8%A7%A3%E6%B1%BA%E5%85%A7%E5%AD%98%E4%B8%8D%E8%B6%B3%E5%95%8F%E9%A1%8C)\r\n\r\nhttp://forum.xda-developers.com/showthread.php?t=2070704&amp;highlight=lock+screen\r\n\r\n\r\nwtf', 1, 777777, 1, '', '', '', '', '2014-06-20 14:55:44', '2014-06-24 15:23:07');
 /*!40000 ALTER TABLE `tblArticle` ENABLE KEYS */;
 
 
@@ -152,9 +152,9 @@ CREATE TABLE IF NOT EXISTS `tblReply` (
   `reply_create_time` datetime NOT NULL,
   `reply_update_time` datetime NOT NULL,
   PRIMARY KEY (`reply_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8;
 
--- Dumping data for table dcview.tblReply: ~0 rows (approximately)
+-- Dumping data for table dcview.tblReply: ~103 rows (approximately)
 DELETE FROM `tblReply`;
 /*!40000 ALTER TABLE `tblReply` DISABLE KEYS */;
 INSERT INTO `tblReply` (`reply_id`, `article_id`, `user_id`, `reply_content`, `reply_create_time`, `reply_update_time`) VALUES
@@ -257,7 +257,10 @@ INSERT INTO `tblReply` (`reply_id`, `article_id`, `user_id`, `reply_content`, `r
 	(97, 7, 1, '我有興趣', '2011-05-13 00:00:00', '2010-12-09 00:00:00'),
 	(98, 1, 1, '我有興趣', '2013-08-19 00:00:00', '2011-12-15 00:00:00'),
 	(99, 8, 1, '我有興趣', '2011-11-03 00:00:00', '2010-07-11 00:00:00'),
-	(100, 18, 1, '我有興趣', '2013-02-11 00:00:00', '2012-08-02 00:00:00');
+	(100, 18, 1, '我有興趣', '2013-02-11 00:00:00', '2012-08-02 00:00:00'),
+	(101, 106, 1, 'magnific popup', '2014-06-24 11:56:29', '2014-06-24 11:56:29'),
+	(102, 106, 1, 'yo yo yo yo man', '2014-06-24 12:10:10', '2014-06-24 12:10:10'),
+	(103, 106, 1, 'abc', '2014-06-24 15:25:35', '2014-06-24 15:25:35');
 /*!40000 ALTER TABLE `tblReply` ENABLE KEYS */;
 
 
@@ -267,12 +270,15 @@ CREATE TABLE IF NOT EXISTS `tblReport` (
   `article_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
   `report_comment` varchar(120) NOT NULL,
+  `report_create_time` datetime NOT NULL,
   PRIMARY KEY (`article_id`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='report article';
 
 -- Dumping data for table dcview.tblReport: ~0 rows (approximately)
 DELETE FROM `tblReport`;
 /*!40000 ALTER TABLE `tblReport` DISABLE KEYS */;
+INSERT INTO `tblReport` (`article_id`, `user_id`, `report_comment`, `report_create_time`) VALUES
+	(106, 1, 'test', '2014-06-24 16:17:07');
 /*!40000 ALTER TABLE `tblReport` ENABLE KEYS */;
 
 
