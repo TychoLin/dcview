@@ -1,6 +1,11 @@
 <?php
 require_once("common.inc.php");
 
+// check if login
+
+$fields = array("article_id", "content", "submit");
+$post_data = array_intersect_key($_POST, array_fill_keys($fields, null));
+
 if (isset($_GET["article_id"])) {
 	$article_id = (int)$_GET["article_id"];
 	$ta = new TblArticle();
@@ -13,6 +18,46 @@ if (isset($_GET["article_id"])) {
 	} else {
 		exit();
 	}
+} else if (count($post_data) == count($fields)) {
+	$article_id = (int)$post_data["article_id"];
+	$now = date("Y-m-d H:i:s");
+
+	if ($post_data["submit"] == "reply") {
+		$record = array(
+			"article_id" => $article_id,
+			"user_id" => 1,
+			"reply_content" => htmlentities(str_replace("<br>", "\n", $post_data["content"])),
+			"reply_create_time" => $now,
+			"reply_update_time" => $now,
+		);
+
+		$tr = new TblReply();
+		$tr->create($record);
+	} else if ($post_data["submit"] == "edit") {
+		$record = array(
+			"article_content" => htmlentities(str_replace("<br>", "\n", $post_data["content"])),
+			"article_update_time" => $now,
+		);
+
+		$where_cond = array("article_id = ?" => $article_id);
+		$ta = new TblArticle();
+		$ta->update($record, $where_cond);
+	} else if ($post_data["submit"] == "report") {
+		$record = array(
+			"article_id" => $article_id,
+			"user_id" => 1,
+			"report_comment" => htmlentities($post_data["content"]),
+			"report_create_time" => $now,
+		);
+
+		$tr = new TblReport();
+		$tr->create($record);
+	} else {
+		// ...
+	}
+
+	header("Location: {$_SERVER["PHP_SELF"]}?article_id=$article_id");
+	exit();
 } else {
 	exit();
 }
@@ -33,7 +78,7 @@ if (isset($_GET["article_id"])) {
 	background: #FFF;
 	padding: 20px;
 	width: auto;
-	max-width: 500px;
+	max-width: 700px;
 	margin: 20px auto;
 }
 </style>
@@ -45,9 +90,9 @@ if (isset($_GET["article_id"])) {
 <!-- Button Bar w/icons -->
 <ul class="button-bar">
 <li><a href="<?php echo (isset($_SERVER["HTTP_REFERER"])) ? $_SERVER["HTTP_REFERER"]: "sh_list.php"; ?>"><i class="icon-reply"></i>回前頁</a></li>
-<li><a href=""><i class="icon-comment"></i>回應</a></li>
-<li><a href=""><i class="icon-pencil"></i>編輯文章</a></li>
-<li><a href=""><i class=" icon-minus-sign"></i>檢舉文章</a></li>
+<li><a href="#reply-popup" class="open-reply-popup-link"><i class="icon-comment"></i>回應</a></li>
+<li><a href="#edit-popup" class="open-edit-popup-link"><i class="icon-pencil"></i>編輯文章</a></li>
+<li><a href="#report-popup" class="open-report-popup-link"><i class=" icon-minus-sign"></i>檢舉文章</a></li>
 <li class="last"><a href="sh_post.php"><i class="icon-plus-sign"></i>刊登物品</a></li>
 </ul>
 </div>
@@ -79,19 +124,18 @@ if (isset($_GET["article_id"])) {
 </div>
 
 <div class="title02">
-<p><?php echo nl2br($article_record["article_content"]); ?></p>
+<p><?php echo str_replace("\n", "<br>", $article_record["article_content"]); ?></p>
 </div>
 <!--刊登內容 end-->
-
 
 <!--button bar-->
 <div class="button_style">
 <!-- Button Bar w/icons -->
 <ul class="button-bar">
 <li><a href="<?php echo (isset($_SERVER["HTTP_REFERER"])) ? $_SERVER["HTTP_REFERER"]: "sh_list.php"; ?>"><i class="icon-reply"></i>回前頁</a></li>
-<li><a href=""><i class="icon-comment"></i>回應</a></li>
-<li><a href=""><i class="icon-pencil"></i>編輯文章</a></li>
-<li><a href=""><i class=" icon-minus-sign"></i>檢舉文章</a></li>
+<li><a href="#reply-popup" class="open-reply-popup-link"><i class="icon-comment"></i>回應</a></li>
+<li><a href="#edit-popup" class="open-edit-popup-link"><i class="icon-pencil"></i>編輯文章</a></li>
+<li><a href="#report-popup" class="open-report-popup-link"><i class=" icon-minus-sign"></i>檢舉文章</a></li>
 <li class="last"><a href="sh_post.php"><i class="icon-plus-sign"></i>刊登物品</a></li>
 </ul>
 </div>
@@ -120,8 +164,8 @@ $reply_list = $tr->read();
 foreach ($reply_list as $value) {
 ?>
 <ul>
-<li class="first"><?php echo $value["reply_content"]; ?></li>
-<li>小夫唷<span>[<?php echo nl2br($value["reply_create_time"]); ?>]</span></li>
+<li class="first"><?php echo str_replace("\n", "<br>", $value["reply_content"]); ?></li>
+<li>小夫唷<span>[<?php echo $value["reply_create_time"]; ?>]</span></li>
 </ul>
 <?php
 }
@@ -129,18 +173,45 @@ foreach ($reply_list as $value) {
 <!--回應 end-->
 
 </div>
-<div id="test-popup" class="white-popup mfp-hide">
-hello world
 </div>
-<a href="#test-popup" class="open-popup-link">Show inline popup</a>
+
+<div id="reply-popup" class="white-popup mfp-hide">
+<form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
+標題：Re：<?php echo $article_record["article_title"]; ?>
+<textarea class="style02" name="content" placeholder=""></textarea>
+<input type="hidden" id="article_id" name="article_id" value="<?php echo $article_id; ?>">
+<button type="submit" name="submit" value="reply">送出</button>
+</form>
+</div>
+
+<div id="edit-popup" class="white-popup mfp-hide">
+<form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
+標題：<?php echo $article_record["article_title"]; ?>
+<textarea class="style02" name="content" placeholder=""></textarea>
+<input type="hidden" id="article_id" name="article_id" value="<?php echo $article_id; ?>">
+<button type="submit" name="submit" value="edit">送出</button>
+</form>
+</div>
+
+<div id="report-popup" class="white-popup mfp-hide">
+<form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
+<p>請簡單填寫您檢舉此篇的理由，以方便我們處理, thanks a lot!</p>
+<input type="text" name="content"><br>
+<input type="hidden" id="article_id" name="article_id" value="<?php echo $article_id; ?>">
+(請勿超過 40字) <button type="submit" name="submit" value="report">送出</button>
+</form>
+</div>
+
 <script type="text/javascript">
 $(window).load(function () {
 	$(".button-bar li:nth-last-child(2)").click(function () {
 		// var test = window.open("sh_test.php", "_blank", "width=400,height=300");
 	});
 
+	$("#edit-popup textarea").empty().append($(".title02 p").contents().clone());
+
 	$.getScript("js/jquery.magnific-popup.js", function () {
-		$(".open-popup-link").magnificPopup({
+		$(".open-reply-popup-link,.open-edit-popup-link,.open-report-popup-link").magnificPopup({
 			type: "inline",
 			midClick: true // Allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source in href.
 		});

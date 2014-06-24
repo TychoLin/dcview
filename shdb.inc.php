@@ -28,16 +28,15 @@ class RecordModel {
 	private $_offset = "";
 	private $_primaryKeyName = "";
 
-	public function __construct($table_name, $primary_key_name) {
+	public function __construct($table_name) {
 		$this->_tableReference = $table_name;
-		$this->_primaryKeyName = $primary_key_name;
 	}
 
 	public function create($record) {
 		$fields = implode(",", array_keys($record));
 		$params = array();
-		foreach ($record as $k => $v) {
-			$params[":$k"] = $v;
+		foreach ($record as $key => $value) {
+			$params[":$key"] = $value;
 		}
 		$named_params = implode(",", array_keys($params));
 
@@ -94,29 +93,60 @@ class RecordModel {
 		$this->_limit = $limit;
 		$this->_offset = $offset;
 	}
+
+	public function update($record, $where_cond) {
+		$set_clause = $params = array();
+		foreach ($record as $key => $value) {
+			array_push($set_clause, "$key=?");
+			array_push($params, $value);
+		}
+		$set_clause = implode(',', $set_clause);
+
+		$where_clause = "1 = 1";
+		if (is_array($where_cond) && count($where_cond) > 0) {
+			$where_clause = implode(" AND ", array_keys($where_cond));
+			$params = array_merge($params, array_values($where_cond));
+		}
+
+		$sql = array();
+		array_push($sql, "UPDATE", $this->_tableReference, "SET", $set_clause, "WHERE", $where_clause);
+
+		try {
+			$ps = db::getPDO()->prepare(implode(" ", $sql));
+			$ps->execute($params);
+		} catch (PDOException $e) {
+			echo $e->getMessage();
+		}
+	}
 }
 
 class TblArticle extends RecordModel {
 	public function __construct() {
-		parent::__construct("tblArticle", "article_id");
+		parent::__construct("tblArticle");
 	}
 }
 
 class TblReply extends RecordModel {
 	public function __construct() {
-		parent::__construct("tblReply", "reply_id");
+		parent::__construct("tblReply");
+	}
+}
+
+class TblReport extends RecordModel {
+	public function __construct() {
+		parent::__construct("tblReport");
 	}
 }
 
 class TblSHMainCategory extends RecordModel {
 	public function __construct() {
-		parent::__construct("tblSHMainCategory", "sh_main_category_id");
+		parent::__construct("tblSHMainCategory");
 	}
 }
 
 class TblSHSubCategory extends RecordModel {
 	public function __construct() {
-		parent::__construct("tblSHSubCategory", "sh_sub_category_id");
+		parent::__construct("tblSHSubCategory");
 	}
 }
 ?>

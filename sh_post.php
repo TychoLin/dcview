@@ -14,9 +14,6 @@ function verify_article_data($data) {
 
 // check if login
 
-$area_names = array(1 => "北部", 2 => "中部", 3 => "南部", 4 => "花東", 5 => "離島", 9 => "其他");
-$trade_status_names = array(1 => "售", 2 => "徵", 3 => "交換", 4 => "團購");
-
 $fields = array("sub_category", "title", "content", "trade_status", "price", "area", "email", "phone_number", "img_url1", "img_url2");
 $post_data = array_intersect_key($_POST, array_fill_keys($fields, null));
 
