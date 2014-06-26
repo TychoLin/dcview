@@ -34,6 +34,7 @@ $cond = array(
 var_dump($ta->read($cond));
 */
 
+/*
 $tr = new TblReply();
 
 for ($i = 0; $i < 100; $i++) {
@@ -47,4 +48,6 @@ for ($i = 0; $i < 100; $i++) {
 
 	$tr->create($record);
 }
+*/
+phpinfo();
 ?>

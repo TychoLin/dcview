@@ -41,12 +41,12 @@ $page = isset($get_data["page"]) ? (int)$get_data["page"] : 1;
 $page = ($page > 0) ? $page : 1;
 $offset = LIMIT * ($page - 1);
 
-// SELECT c.*, (SELECT COUNT(*) FROM tblReply AS d WHERE d.article_id = c.article_id) AS reply_amount, d.sh_sub_category_name
+// SELECT c.*, (SELECT COUNT(*) FROM tblReply AS d WHERE d.article_id = c.article_id) AS reply_amount, e.sh_sub_category_name
 // FROM (SELECT a.*, MAX(b.reply_create_time) AS sort_time FROM tblArticle AS a NATURAL LEFT JOIN tblReply AS b GROUP BY a.article_id) AS c
-// NATURAL JOIN tblSHSubCategory AS d
+// NATURAL JOIN tblSHSubCategory AS e
 // ORDER BY c.sort_time DESC
-$fields = array("c.*", "(SELECT COUNT(*) FROM tblReply AS d WHERE d.article_id = c.article_id) AS reply_amount", "d.sh_sub_category_name");
-$table_reference = "(SELECT a.*, MAX(b.reply_create_time) AS sort_time FROM tblArticle AS a NATURAL LEFT JOIN tblReply AS b GROUP BY a.article_id) AS c NATURAL JOIN tblSHSubCategory AS d";
+$fields = array("c.*", "(SELECT COUNT(*) FROM tblReply AS d WHERE d.article_id = c.article_id) AS reply_amount", "e.sh_sub_category_name");
+$table_reference = "(SELECT a.*, MAX(b.reply_create_time) AS sort_time FROM tblArticle AS a NATURAL LEFT JOIN tblReply AS b GROUP BY a.article_id) AS c NATURAL JOIN tblSHSubCategory AS e";
 $ta->initReadSQL($fields, $where_cond, $table_reference, $order_by_clause, LIMIT, $offset);
 $article_list = $ta->read();
 

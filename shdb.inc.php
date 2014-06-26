@@ -1,25 +1,38 @@
 <?php
 class DB {
 	private static $_db;
+	private $_dbStores = array(
+		"dcviewSH" => array(
+			"dsn" => "mysql:host=localhost;dbname=dcview",
+			"username" => "root",
+			"password" => "9999",
+			"options" => array(
+				PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
+			),
+		),
+	);
 
-	private function __construct() {
+	private function __construct($database) {
 		try {
-			self::$_db = new PDO("mysql:host=localhost;dbname=dcview;charset=UTF8", "root", "9999");
+			$reflectionObj = new ReflectionClass("PDO");
+			self::$_db = $reflectionObj->newInstanceArgs($this->_dbStores[$database]);
 			self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		} catch (PDOException $e) {
 			echo "Connection failed: ".$e->getMessage();
 		}
 	}
 
-	public static function getPDO() {
+	public static function getPDO($database) {
 		if (is_null(self::$_db)) {
-			new self();
+			new self($database);
 		}
 		return self::$_db;
 	}
 }
 
 class RecordModel {
+	private $_dbHandler;
+
 	private $_fields = array();
 	private $_tableReference = "";
 	private $_whereCond = "";
@@ -28,8 +41,9 @@ class RecordModel {
 	private $_offset = "";
 	private $_primaryKeyName = "";
 
-	public function __construct($table_name) {
-		$this->_tableReference = $table_name;
+	public function __construct($database, $table_reference) {
+		$this->_dbHandler = DB::getPDO($database);
+		$this->_tableReference = $table_reference;
 	}
 
 	public function create($record) {
@@ -42,7 +56,7 @@ class RecordModel {
 
 		$sql = "INSERT INTO {$this->_tableReference}($fields) VALUES($named_params)";
 		try {
-			$ps = DB::getPDO()->prepare($sql);
+			$ps = $this->_dbHandler->prepare($sql);
 			$ps->execute($params);
 		} catch (PDOException $e) {
 			echo $e->getMessage();
@@ -73,7 +87,7 @@ class RecordModel {
 		}
 
 		try {
-			$ps = DB::getPDO()->prepare(implode(" ", $sql));
+			$ps = $this->_dbHandler->prepare(implode(" ", $sql));
 			$ps->execute(array_values($this->_whereCond));
 			return $ps->fetchAll(PDO::FETCH_ASSOC);
 		} catch (PDOException $e) {
@@ -112,7 +126,7 @@ class RecordModel {
 		array_push($sql, "UPDATE", $this->_tableReference, "SET", $set_clause, "WHERE", $where_clause);
 
 		try {
-			$ps = db::getPDO()->prepare(implode(" ", $sql));
+			$ps = $this->_dbHandler->prepare(implode(" ", $sql));
 			$ps->execute($params);
 		} catch (PDOException $e) {
 			echo $e->getMessage();
@@ -122,31 +136,31 @@ class RecordModel {
 
 class TblArticle extends RecordModel {
 	public function __construct() {
-		parent::__construct("tblArticle");
+		parent::__construct("dcviewSH", "tblArticle");
 	}
 }
 
 class TblReply extends RecordModel {
 	public function __construct() {
-		parent::__construct("tblReply");
+		parent::__construct("dcviewSH", "tblReply");
 	}
 }
 
 class TblReport extends RecordModel {
 	public function __construct() {
-		parent::__construct("tblReport");
+		parent::__construct("dcviewSH", "tblReport");
 	}
 }
 
 class TblSHMainCategory extends RecordModel {
 	public function __construct() {
-		parent::__construct("tblSHMainCategory");
+		parent::__construct("dcviewSH", "tblSHMainCategory");
 	}
 }
 
 class TblSHSubCategory extends RecordModel {
 	public function __construct() {
-		parent::__construct("tblSHSubCategory");
+		parent::__construct("dcviewSH", "tblSHSubCategory");
 	}
 }
 ?>
