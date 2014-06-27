@@ -63,7 +63,7 @@ class RecordModel {
 		}
 	}
 
-	public function read() {
+	public function read($fetch_style = PDO::FETCH_ASSOC) {
 		if (is_array($this->_fields) && count($this->_fields) > 0) {
 			$fields = implode(",", $this->_fields);
 		} else {
@@ -86,10 +86,19 @@ class RecordModel {
 			array_push($sql, "LIMIT", $this->_limit, "OFFSET", $this->_offset);
 		}
 
+		$params = array();
+		foreach (array_values($this->_whereCond) as $value) {
+			if (is_array($value)) {
+				$params = array_merge($params, $value);
+			} else {
+				array_push($params, $value);
+			}
+		}
+
 		try {
 			$ps = $this->_dbHandler->prepare(implode(" ", $sql));
-			$ps->execute(array_values($this->_whereCond));
-			return $ps->fetchAll(PDO::FETCH_ASSOC);
+			$ps->execute($params);
+			return $ps->fetchAll($fetch_style);
 		} catch (PDOException $e) {
 			echo $e->getMessage();
 		}
@@ -111,7 +120,7 @@ class RecordModel {
 	public function update($record, $where_cond) {
 		$set_clause = $params = array();
 		foreach ($record as $key => $value) {
-			array_push($set_clause, "$key=?");
+			array_push($set_clause, "$key = ?");
 			array_push($params, $value);
 		}
 		$set_clause = implode(',', $set_clause);
@@ -134,33 +143,39 @@ class RecordModel {
 	}
 }
 
-class TblArticle extends RecordModel {
-	public function __construct() {
-		parent::__construct("dcviewSH", "tblArticle");
+class DcviewSHRecordModel extends RecordModel {
+	public function __construct($table_reference) {
+		parent::__construct("dcviewSH", $table_reference);
 	}
 }
 
-class TblReply extends RecordModel {
+class TblArticle extends DcviewSHRecordModel {
 	public function __construct() {
-		parent::__construct("dcviewSH", "tblReply");
+		parent::__construct("tblArticle");
 	}
 }
 
-class TblReport extends RecordModel {
+class TblReply extends DcviewSHRecordModel {
 	public function __construct() {
-		parent::__construct("dcviewSH", "tblReport");
+		parent::__construct("tblReply");
 	}
 }
 
-class TblSHMainCategory extends RecordModel {
+class TblReport extends DcviewSHRecordModel {
 	public function __construct() {
-		parent::__construct("dcviewSH", "tblSHMainCategory");
+		parent::__construct("tblReport");
 	}
 }
 
-class TblSHSubCategory extends RecordModel {
+class TblSHMainCategory extends DcviewSHRecordModel {
 	public function __construct() {
-		parent::__construct("dcviewSH", "tblSHSubCategory");
+		parent::__construct("tblSHMainCategory");
+	}
+}
+
+class TblSHSubCategory extends DcviewSHRecordModel {
+	public function __construct() {
+		parent::__construct("tblSHSubCategory");
 	}
 }
 ?>

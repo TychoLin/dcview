@@ -29,7 +29,7 @@ if (count($get_data) > 0) {
 			}
 		} else if ($key == "period" && in_array($value, array_keys($period_names))) {
 			$now = date("Y-m-d H:i:s");
-			// $where_cond["DATEDIFF('$now', c.article_create_time) <= ?"] = $period_names[$value];
+			$where_cond["DATEDIFF('$now', c.article_create_time) <= ?"] = $period_names[$value];
 		}
 	}
 }
@@ -178,7 +178,7 @@ EOT;
 
 <!--頁數-->
 <div class="block01">
-<?php echo<<<EOT
+<?php echo <<<EOT
 <span class="page"><span>第 $page 頁</span> / 共 $total_page_number 頁， $total_record_number 則文章</span>
 EOT;
 ?>
