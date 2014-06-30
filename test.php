@@ -4,17 +4,17 @@ require_once("shdb.inc.php");
 $ta = new TblArticle();
 
 /*
-for ($i = 0; $i < 100; $i++) {
+for ($i = 0; $i < 20000; $i++) {
 	$record = array(
-		"user_id" => 1,
-		"category_id" => 1,
+		"user_id" => mt_rand(1, 100),
+		"sh_sub_category_id" => mt_rand(1, 50),
 		"article_title" => "this is article title",
 		"article_content" => "this is article content",
-		"article_sh_trade_status" => 1,
-		"article_sh_price" => 10000,
-		"article_sh_area" => 1,
-		"article_create_time" => date('Y-m-d', mktime(0, 0, 0, mt_rand(1, 12), mt_rand(1, 20), mt_rand(2010, 2013))),
-		"article_update_time" => date('Y-m-d', mktime(0, 0, 0, mt_rand(1, 12), mt_rand(1, 20), mt_rand(2010, 2013))),
+		"article_sh_trade_status" => mt_rand(1, 4),
+		"article_sh_price" => mt_rand(1000, 100000),
+		"article_sh_area" => mt_rand(1, 5),
+		"article_create_time" => date('Y-m-d', mktime(0, 0, 0, mt_rand(1, 5), mt_rand(1, 20), mt_rand(2010, 2014))),
+		"article_update_time" => date('Y-m-d', mktime(0, 0, 0, mt_rand(1, 5), mt_rand(1, 20), mt_rand(2010, 2014))),
 	);
 
 	$ta->create($record);
@@ -49,5 +49,4 @@ for ($i = 0; $i < 100; $i++) {
 	$tr->create($record);
 }
 */
-phpinfo();
 ?>
