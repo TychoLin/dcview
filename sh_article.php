@@ -50,8 +50,10 @@ if (isset($_GET["article_id"])) {
 			"report_create_time" => $now,
 		);
 
+		$duplicate_clause = array("report_comment = ?" => htmlentities($post_data["content"]));
+
 		$tr = new TblReport();
-		$tr->create($record);
+		$result = $tr->create($record, $duplicate_clause);
 	} else {
 		// ...
 	}

@@ -46,17 +46,21 @@ class RecordModel {
 		$this->_tableReference = $table_reference;
 	}
 
-	public function create($record) {
+	public function create($record, $duplicate_clause = array()) {
 		$fields = implode(",", array_keys($record));
-		$params = array();
-		foreach ($record as $key => $value) {
-			$params[":$key"] = $value;
-		}
-		$named_params = implode(",", array_keys($params));
+		$place_holders = implode(",", array_fill(0, count($record), "?"));
 
-		$sql = "INSERT INTO {$this->_tableReference}($fields) VALUES($named_params)";
+		$sql = array();
+		array_push($sql, "INSERT INTO", $this->_tableReference, "($fields)", "VALUES", "($place_holders)");
+
+		if (is_array($duplicate_clause) && count($duplicate_clause) > 0) {
+			array_push($sql, "ON DUPLICATE KEY UPDATE", implode(",", array_keys($duplicate_clause)));
+		}
+
+		$params = array_merge(array_values($record), array_values($duplicate_clause));
+
 		try {
-			$ps = $this->_dbHandler->prepare($sql);
+			$ps = $this->_dbHandler->prepare(implode(" ", $sql));
 			$ps->execute($params);
 		} catch (PDOException $e) {
 			echo $e->getMessage();
