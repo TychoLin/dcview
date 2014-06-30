@@ -49,5 +49,12 @@ for ($i = 0; $i < 100; $i++) {
 	$tr->create($record);
 }
 */
-phpinfo();
+
+$tr = new TblReport();
+for ($i = 2; $i < 20; $i++) {
+	$now = date("Y-m-d H:i:s");
+	$record = array("article_id" => 1, "user_id" => $i, "report_comment" => "hello", "report_create_time" => $now);
+
+	$tr->create($record);
+}
 ?>
