@@ -6,7 +6,7 @@ require_once("common.inc.php");
 $fields = array("sub_category", "area", "trade_status", "keyword", "sort", "period", "page");
 $get_data = array_intersect_key($_GET, array_fill_keys($fields, null));
 
-$where_cond = array();
+$where_cond = array("article_status = ?" => 1); // 1: show; 2: hide
 $order_by_clause = "c.sort_time DESC";
 if (count($get_data) > 0) {
 	foreach ($get_data as $key => $value) {

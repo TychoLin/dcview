@@ -1,7 +1,20 @@
 <?php
-require_once("../common.inc.php");
+require_once("common.inc.php");
 
 // check if admin
+session_name("dcview");
+session_start();
+if (!is_logined()) {
+	header("Location: index.php");
+	exit();
+}
+
+if (isset($_POST["article_id"])) {
+	$ta = new TblArticle();
+	$record = array("article_status" => 2); // 1: show; 2: hide
+	$where_cond = array("article_id = ?" => (int)$_POST["article_id"]);
+	$ta->update($record, $where_cond);
+}
 
 define("LIMIT", 10);
 $page = isset($_GET["page"]) ? (int)$_GET["page"] : 1;
@@ -29,36 +42,59 @@ $total_page_number = ceil($total_record_number / LIMIT);
 <style type="text/css">
 table {
 	border-collapse: collapse;
-	width: 50%;
 }
 
 table, td, th {
 	border: 1px solid black;
 	padding: 0.5em;
 }
+
+.container {
+	width: 50%;
+	margin: auto;
+}
+
+.list {
+	float: left;
+	width: 80%;
+}
+
+#page {
+	float: left;
+}
 </style>
 </head>
 <body>
-	<form id="report_list_form" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="get">
-		<select id="page" name="page">
-		<?php
-		for ($i = 1; $i <= $total_page_number; $i++) {
-			echo "<option value=\"$i\">$i</option>";
-		}
-		?>
-		</select>
-	</form>
-	<table>
-		<tr><th>刊登人</th><th>標題</th><th>檢舉內容</th><th>檢舉時間</th></tr>
-		<?php foreach ($report_list as $value) { ?>
-		<tr>
-			<td><?php echo $value["user_id"]; ?></td>
-			<td><a href="../sh_article.php?article_id=<?php echo $value["article_id"]; ?>" target="_blank"><?php echo $value["article_title"]; ?></a></td>
-			<td><?php echo $value["report_comment"]; ?></td>
-			<td><?php echo $value["report_create_time"]; ?></td>
-		</tr>
-		<?php } ?>
-	</table>
+	<div class="container">
+		<div><a href="logout.php">logout</a></div>
+		<table class="list">
+			<tr><th>刊登人</th><th>標題</th><th>檢舉內容</th><th>檢舉時間</th></tr>
+			<?php foreach ($report_list as $value) { ?>
+			<tr>
+				<td><?php echo $value["user_id"]; ?></td>
+				<td>
+					<a href="../sh_article.php?article_id=<?php echo $value["article_id"]; ?>" target="_blank"><?php echo $value["article_title"]; ?></a>
+					<button type="button" value="delete">delete</button>
+				</td>
+				<td><?php echo $value["report_comment"]; ?></td>
+				<td><?php echo $value["report_create_time"]; ?></td>
+			</tr>
+			<?php } ?>
+		</table>
+		<form id="report_list_form" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="get">
+			<select id="page" name="page">
+			<?php
+			for ($i = 1; $i <= $total_page_number; $i++) {
+				echo "<option value=\"$i\">$i</option>";
+			}
+			?>
+			</select>
+		</form>
+		<form id="handle_article_form" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
+			<input type="hidden" id="article_id" name="article_id" value="">
+		</form>
+		<span style="display: block; clear: both;"></span>
+	</div>
 <script type="text/javascript">
 $(window).load(function () {
 	$.getScript("../js/URI.js", function () {
@@ -70,6 +106,12 @@ $(window).load(function () {
 
 	$("#page").change(function () {
 		$("#report_list_form").submit();
+	});
+
+	$(".list button[value=delete]").click(function () {
+		var uri = new URI($(this).prevAll("a").prop("href"));
+		$("#article_id").prop("value", URI.parseQuery(uri.search()).article_id);
+		$("#handle_article_form").submit();
 	});
 });
 </script>
