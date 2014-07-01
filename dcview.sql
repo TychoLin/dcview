@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS `tblArticle` (
   `article_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `sh_sub_category_id` int(10) unsigned NOT NULL,
+  `article_status` int(10) unsigned NOT NULL DEFAULT '1',
   `article_title` varchar(128) DEFAULT NULL,
   `article_content` text,
   `article_sh_trade_status` int(10) unsigned NOT NULL,
@@ -30,16 +31,16 @@ CREATE TABLE IF NOT EXISTS `tblArticle` (
   PRIMARY KEY (`article_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
--- Dumping data for table dcview.tblArticle: ~4 rows (approximately)
+-- Dumping data for table dcview.tblArticle: ~6 rows (approximately)
 DELETE FROM `tblArticle`;
 /*!40000 ALTER TABLE `tblArticle` DISABLE KEYS */;
-INSERT INTO `tblArticle` (`article_id`, `user_id`, `sh_sub_category_id`, `article_title`, `article_content`, `article_sh_trade_status`, `article_sh_price`, `article_sh_area`, `article_email`, `article_phone_number`, `article_img_url1`, `article_img_url2`, `article_create_time`, `article_update_time`) VALUES
-	(1, 1, 1, '', '', 1, 0, 1, '', '', '', '', '2014-06-26 17:44:25', '2014-06-26 17:44:25'),
-	(2, 1, 1, '', '', 1, 0, 1, '', '', '', '', '2014-06-26 17:44:42', '2014-06-26 17:44:42'),
-	(3, 1, 1, '', '', 1, 222222, 1, '', '', '', '', '2014-06-26 17:44:56', '2014-06-26 17:44:56'),
-	(4, 1, 1, 'test', 'test', 1, 333333, 1, '', '', '', '', '2014-06-27 11:29:14', '2014-06-27 11:29:14'),
-	(5, 1, 1, '', '', 1, 0, 1, '', '', '', '', '2014-06-30 15:41:13', '2014-06-30 15:41:13'),
-	(6, 1, 1, 'new post', '', 1, 0, 1, '', '', '', '', '2014-06-30 16:55:56', '2014-06-30 16:55:56');
+INSERT INTO `tblArticle` (`article_id`, `user_id`, `sh_sub_category_id`, `article_status`, `article_title`, `article_content`, `article_sh_trade_status`, `article_sh_price`, `article_sh_area`, `article_email`, `article_phone_number`, `article_img_url1`, `article_img_url2`, `article_create_time`, `article_update_time`) VALUES
+	(1, 1, 1, 1, '', '', 1, 0, 1, '', '', '', '', '2014-06-26 17:44:25', '2014-06-26 17:44:25'),
+	(2, 1, 1, 1, '', '', 1, 0, 1, '', '', '', '', '2014-06-26 17:44:42', '2014-06-26 17:44:42'),
+	(3, 1, 1, 1, '', '', 1, 222222, 1, '', '', '', '', '2014-06-26 17:44:56', '2014-06-26 17:44:56'),
+	(4, 1, 1, 2, 'test', 'test', 1, 333333, 1, '', '', '', '', '2014-06-27 11:29:14', '2014-06-27 11:29:14'),
+	(5, 1, 1, 1, '', '', 1, 0, 1, '', '', '', '', '2014-06-30 15:41:13', '2014-06-30 15:41:13'),
+	(6, 1, 1, 1, 'new post', '', 1, 0, 1, '', '', '', '', '2014-06-30 16:55:56', '2014-06-30 16:55:56');
 /*!40000 ALTER TABLE `tblArticle` ENABLE KEYS */;
 
 
@@ -55,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `tblReply` (
   PRIMARY KEY (`reply_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table dcview.tblReply: ~0 rows (approximately)
+-- Dumping data for table dcview.tblReply: ~1 rows (approximately)
 DELETE FROM `tblReply`;
 /*!40000 ALTER TABLE `tblReply` DISABLE KEYS */;
 INSERT INTO `tblReply` (`reply_id`, `article_id`, `user_id`, `reply_content`, `reply_create_time`, `reply_update_time`) VALUES
@@ -73,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `tblReport` (
   PRIMARY KEY (`article_id`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='report article';
 
--- Dumping data for table dcview.tblReport: ~0 rows (approximately)
+-- Dumping data for table dcview.tblReport: ~19 rows (approximately)
 DELETE FROM `tblReport`;
 /*!40000 ALTER TABLE `tblReport` DISABLE KEYS */;
 INSERT INTO `tblReport` (`article_id`, `user_id`, `report_comment`, `report_create_time`) VALUES
@@ -95,7 +96,7 @@ INSERT INTO `tblReport` (`article_id`, `user_id`, `report_comment`, `report_crea
 	(4, 16, 'hello', '2014-06-30 17:14:42'),
 	(4, 17, 'hello', '2014-06-30 17:14:42'),
 	(4, 18, 'hello', '2014-06-30 17:14:42'),
-	(4, 19, 'hello', '2014-06-30 17:14:42');
+	(4, 19, 'hello world hello world hello world hello world', '2014-06-30 17:14:42');
 /*!40000 ALTER TABLE `tblReport` ENABLE KEYS */;
 
 
