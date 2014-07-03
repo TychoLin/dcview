@@ -145,6 +145,10 @@ class RecordModel {
 			echo $e->getMessage();
 		}
 	}
+
+	public function getLastInsertID() {
+		return $this->_dbHandler->lastInsertId();
+	}
 }
 
 class DcviewSHRecordModel extends RecordModel {

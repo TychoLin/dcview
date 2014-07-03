@@ -151,6 +151,7 @@ if (count($post_data) == count($fields) && verify_article_data($post_data)) {
 </div>
 <script type="text/javascript">
 $(window).load(function () {
+	$("select option[value=0]").remove();
 	$("#sub_category").append($("#sub_category_1 option").clone());
 	$("#main_category").change(function () {
 		var suffix = $("option:selected", this).val();

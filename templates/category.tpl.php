@@ -23,6 +23,7 @@ EOT;
 </div>
 <div style="display: none;">
 <select id="sub_category_1">
+<option value="0">全部</option>
 <?php
 $tssc = new TblSHSubCategory();
 $fields = array("sh_sub_category_id", "sh_sub_category_name");
@@ -36,6 +37,7 @@ EOT;
 ?>
 </select>
 <select id="sub_category_2">
+<option value="0">全部</option>
 <?php
 $tssc->initReadSQL($fields, array("sh_main_category_id = ?" => 2));
 $sub_category_list = $tssc->read();
@@ -47,6 +49,7 @@ EOT;
 ?>
 </select>
 <select id="sub_category_3">
+<option value="0">全部</option>
 <?php
 $tssc->initReadSQL($fields, array("sh_main_category_id = ?" => 3));
 $sub_category_list = $tssc->read();

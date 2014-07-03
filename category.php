@@ -3,6 +3,7 @@ require_once("shdb.inc.php");
 $file = file_get_contents("category.select");
 $tssc = new TblSHSubCategory();
 
+// <option value="0A04">Canon</option>
 // preg_match_all("|<[^>]+0A[^>]+>(.*)</[^>]+>|", $file, $matches);
 // $sub_category_list = $matches[1];
 
@@ -58,5 +59,5 @@ $tssc->initReadSQL(array("sh_sub_category_id", "sh_sub_category_name"), array("s
 $new_category = array_flip($tssc->read(PDO::FETCH_COLUMN|PDO::FETCH_UNIQUE));
 var_dump($new_category);
 
-var_dump($new_category[$old_category["0A29"]])
+var_dump($new_category[$old_category["0A29"]]);
 ?>

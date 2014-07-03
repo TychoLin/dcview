@@ -10,13 +10,13 @@ $where_cond = array("article_status = ?" => 1); // 1: show; 2: hide
 $order_by_clause = "c.sort_time DESC";
 if (count($get_data) > 0) {
 	foreach ($get_data as $key => $value) {
-		if ($key == "sub_category") {
+		if ($key == "sub_category" && !empty($value)) {
 			$where_cond["c.sh_sub_category_id = ?"] = $value;
-		} else if ($key == "area" && in_array($value, array_keys($area_names))) {
+		} else if ($key == "area" && in_array($value, array_keys($area_names)) && !empty($value)) {
 			$where_cond["c.article_sh_area = ?"] = $value;
 		} else if ($key == "trade_status" && in_array($value, array_keys($trade_status_names))) {
 			$where_cond["c.article_sh_trade_status = ?"] = $value;
-		} else if ($key == "keyword") {
+		} else if ($key == "keyword" && !empty($value)) {
 			$where_cond["c.article_title LIKE ?"] = "%$value%";
 		} else if ($key == "sort" && in_array($value, array_keys($sort_names))) {
 			switch ($value) {
@@ -43,10 +43,10 @@ $offset = LIMIT * ($page - 1);
 
 // SELECT c.*, (SELECT COUNT(*) FROM tblReply AS d WHERE d.article_id = c.article_id) AS reply_amount, e.sh_sub_category_name
 // FROM (SELECT a.*, MAX(b.reply_create_time) AS sort_time FROM tblArticle AS a NATURAL LEFT JOIN tblReply AS b GROUP BY a.article_id) AS c
-// NATURAL JOIN tblSHSubCategory AS e
+// NATURAL LEFT JOIN tblSHSubCategory AS e
 // ORDER BY c.sort_time DESC
 $fields = array("c.*", "(SELECT COUNT(*) FROM tblReply AS d WHERE d.article_id = c.article_id) AS reply_amount", "e.sh_sub_category_name");
-$table_reference = "(SELECT a.*, MAX(b.reply_create_time) AS sort_time FROM tblArticle AS a NATURAL LEFT JOIN tblReply AS b GROUP BY a.article_id) AS c NATURAL JOIN tblSHSubCategory AS e";
+$table_reference = "(SELECT a.*, MAX(b.reply_create_time) AS sort_time FROM tblArticle AS a NATURAL LEFT JOIN tblReply AS b GROUP BY a.article_id) AS c NATURAL LEFT JOIN tblSHSubCategory AS e";
 $ta->initReadSQL($fields, $where_cond, $table_reference, $order_by_clause, LIMIT, $offset);
 $article_list = $ta->read();
 
@@ -77,6 +77,7 @@ $total_page_number = ceil($total_record_number / LIMIT);
 <!-- Select -->
 <label for="trade_status">買或賣:</label>
 <select id="trade_status" name="trade_status">
+<option value="0">全部</option>
 <option value="1">售</option>
 <option value="2">徵</option>
 <option value="3">交換</option>
@@ -86,6 +87,7 @@ $total_page_number = ceil($total_record_number / LIMIT);
 <!-- Select -->
 <label for="area">地區:</label>
 <select id="area" name="area">
+<option value="0">全部</option>
 <option value="1">北部</option>
 <option value="2">中部</option>
 <option value="3">南部</option>
@@ -158,11 +160,11 @@ EOT;
 <?php foreach ($article_list as $record) { ?>
 <tr>
 	<td><span class="time_text"><?php echo $record["article_create_time"]; ?></span></td>
-	<td><a href="#">MonkeyLi</a></td>
+	<td><a href="#"><?php echo $record["user_account"]; ?></a></td>
 	<td><span><?php echo $trade_status_names[$record["article_sh_trade_status"]]; ?></span></td>
     <td><a href="sh_article.php?article_id=<?php echo $record["article_id"]; ?>" target="_blank"><?php echo $record["article_title"]; ?><span>(<?php echo $record["reply_amount"]; ?>)</span></a></td>
 	<td><span class="time_text">$<?php echo number_format($record["article_sh_price"]); ?></span></td>
-	<td><a href="#"><?php echo $record["sh_sub_category_name"]; ?></a></td>
+	<td><a href="#"><?php echo (empty($record["sh_sub_category_name"])) ? "" : $record["sh_sub_category_name"]; ?></a></td>
     <td><a href="#"><?php echo $area_names[$record["article_sh_area"]]; ?></a></td>
 </tr>
 <?php } ?>
