@@ -17,6 +17,13 @@ $tr->initReadSQL($fields, $where_cond, $table_reference);
 $total_record_number = $tr->read()[0]["total_record_number"];
 $total_page_number = ceil($total_record_number / LIMIT);
 ?>
+<select id="page" name="page">
+<?php
+for ($i = 1; $i <= $total_page_number; $i++) {
+	echo "<option value=\"$i\">$i</option>";
+}
+?>
+</select>
 <table class="list">
 	<tr><th>刊登人</th><th>標題</th><th>檢舉內容</th><th>檢舉時間</th></tr>
 	<?php foreach ($report_list as $value) { ?>
@@ -31,18 +38,6 @@ $total_page_number = ceil($total_record_number / LIMIT);
 	</tr>
 	<?php } ?>
 </table>
-<form id="report_list_form" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="get">
-	<select id="page" name="page">
-	<?php
-	for ($i = 1; $i <= $total_page_number; $i++) {
-		echo "<option value=\"$i\">$i</option>";
-	}
-	?>
-	</select>
-</form>
-<form id="handle_article_form" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
-	<input type="hidden" id="article_id" name="article_id" value="">
-</form>
 <script type="text/javascript">
 $(window).load(function () {
 	$.getScript("../js/URI.js", function () {
@@ -59,9 +54,7 @@ $(window).load(function () {
 
 		$(".list button[value=delete]").click(function () {
 			var uri = new URI($(this).prevAll("a").prop("href"));
-			$("#article_id").prop("value", URI.parseQuery(uri.search()).article_id);
-			var uri = new URI("handle_ajax.php");
-			$.post(uri.href(), {article_id: $("#article_id").val()}, function (data) {
+			$.post("handle_ajax.php", {article_id: URI.parseQuery(uri.search()).article_id}, function (data) {
 				if (data.status) {
 					alert("delete successfully");
 				} else {

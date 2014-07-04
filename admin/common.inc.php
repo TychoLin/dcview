@@ -1,5 +1,5 @@
 <?php
-require_once("../shdb.inc.php");
+require_once("../common.inc.php");
 
 function logout() {
 	session_name("dcview");
