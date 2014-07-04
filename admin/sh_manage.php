@@ -10,7 +10,7 @@ if (!is_logined()) {
 }
 
 // controller
-$views = array("report", "article");var_dump($_GET);
+$views = array("report", "article");
 if (isset($_GET["v"]) && in_array($_GET["v"], $views)) {
 	define("VIEW_PATH", $_GET["v"].".tpl.php");
 }
@@ -18,7 +18,7 @@ if (isset($_GET["v"]) && in_array($_GET["v"], $views)) {
 <!DOCTYPE html>
 <html>
 <head>
-<title>二手專區 - 檢舉文章列表</title>
+<title>二手專區 - admin</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <style type="text/css">
 table {
@@ -28,6 +28,7 @@ table {
 table, td, th {
 	border: 1px solid black;
 	padding: 0.5em;
+	width: auto;
 }
 
 .container {
@@ -37,7 +38,6 @@ table, td, th {
 
 .list {
 	float: left;
-	width: 80%;
 }
 
 #page {
