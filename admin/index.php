@@ -9,7 +9,7 @@ if (isset($_POST["account"], $_POST["pw"], $_POST["login"])) {
 		session_name("dcview");
 		session_start();
 		$_SESSION["logined"] = true;
-		header("Location: sh_manage_report.php");
+		header("Location: sh_manage.php?v=report");
 		exit();
 	}
 } else if (isset($_POST["logout"])) {

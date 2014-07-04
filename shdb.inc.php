@@ -140,7 +140,7 @@ class RecordModel {
 
 		try {
 			$ps = $this->_dbHandler->prepare(implode(" ", $sql));
-			$ps->execute($params);
+			return $ps->execute($params);
 		} catch (PDOException $e) {
 			echo $e->getMessage();
 		}

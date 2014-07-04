@@ -38,6 +38,15 @@ function get_sub_category_id($one_piece_data) {
 	return 0;
 }
 
+// 1: 已交易 0: 未交易
+function get_article_sh_is_traded($one_piece_data) {
+	if ($one_piece_data["is_traded"] == 1) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
 function get_article_sh_trade_status($one_piece_data) {
 	if (in_array($one_piece_data["article_sh_trade_status"], array(1, 2, 3, 4))) {
 		return (int)$one_piece_data["article_sh_trade_status"];
@@ -115,6 +124,7 @@ foreach ($sh_article_have_reply as $value) {
 		"user_account" => $value["user_account"],
 		"user_nickname" => $value["user_nickname"],
 		"sh_sub_category_id" => get_sub_category_id($value),
+		"article_sh_is_traded" => get_article_sh_is_traded($value),
 		"article_title" => $value["article_title"],
 		"article_content" => $value["article_content"],
 		"article_sh_trade_status" => get_article_sh_trade_status($value),
@@ -149,6 +159,7 @@ foreach ($sh_article_have_reply as $value) {
 }
 */
 
+/*
 $objPHPExcel = PHPExcel_IOFactory::load("sh_article_no_reply_ms_data.xls");
 $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
 
@@ -166,6 +177,7 @@ foreach ($sh_article_no_reply as $value) {
 		"user_account" => $value["user_account"],
 		"user_nickname" => $value["user_nickname"],
 		"sh_sub_category_id" => get_sub_category_id($value),
+		"article_sh_is_traded" => get_article_sh_is_traded($value),
 		"article_title" => $value["article_title"],
 		"article_content" => $value["article_content"],
 		"article_sh_trade_status" => get_article_sh_trade_status($value),
@@ -181,4 +193,5 @@ foreach ($sh_article_no_reply as $value) {
 
 	$ta->create($article_record);
 }
+*/
 ?>
