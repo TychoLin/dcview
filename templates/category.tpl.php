@@ -6,8 +6,8 @@
 <?php
 $tsmc = new TblSHMainCategory();
 $fields = array("sh_main_category_id", "sh_main_category_name");
-$tsmc->initReadSQL($fields);
-$main_category_list = $tsmc->read();
+$sql_params = array("fields" => $fields);
+$main_category_list = $tsmc->read($tsmc->generateReadSQL($sql_params));
 foreach ($main_category_list as $value) {
 echo <<<EOT
 <option value="{$value["sh_main_category_id"]}">{$value["sh_main_category_name"]}</option>
@@ -27,8 +27,8 @@ EOT;
 <?php
 $tssc = new TblSHSubCategory();
 $fields = array("sh_sub_category_id", "sh_sub_category_name");
-$tssc->initReadSQL($fields, array("sh_main_category_id = ?" => 1));
-$sub_category_list = $tssc->read();
+$sql_params = array("fields" => $fields, "where_cond" => array("sh_main_category_id = ?" => 1));
+$sub_category_list = $tssc->read($tssc->generateReadSQL($sql_params));
 foreach ($sub_category_list as $value) {
 echo <<<EOT
 <option value="{$value["sh_sub_category_id"]}">{$value["sh_sub_category_name"]}</option>
@@ -39,8 +39,8 @@ EOT;
 <select id="sub_category_2">
 <option value="0">全部</option>
 <?php
-$tssc->initReadSQL($fields, array("sh_main_category_id = ?" => 2));
-$sub_category_list = $tssc->read();
+$sql_params = array("fields" => $fields, "where_cond" => array("sh_main_category_id = ?" => 2));
+$sub_category_list = $tssc->read($tssc->generateReadSQL($sql_params));
 foreach ($sub_category_list as $value) {
 echo <<<EOT
 <option value="{$value["sh_sub_category_id"]}">{$value["sh_sub_category_name"]}</option>
@@ -51,8 +51,8 @@ EOT;
 <select id="sub_category_3">
 <option value="0">全部</option>
 <?php
-$tssc->initReadSQL($fields, array("sh_main_category_id = ?" => 3));
-$sub_category_list = $tssc->read();
+$sql_params = array("fields" => $fields, "where_cond" => array("sh_main_category_id = ?" => 3));
+$sub_category_list = $tssc->read($tssc->generateReadSQL($sql_params));
 foreach ($sub_category_list as $value) {
 echo <<<EOT
 <option value="{$value["sh_sub_category_id"]}">{$value["sh_sub_category_name"]}</option>

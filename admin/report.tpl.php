@@ -4,17 +4,23 @@ $page = isset($_GET["page"]) ? (int)$_GET["page"] : 1;
 $page = ($page > 0) ? $page : 1;
 $offset = LIMIT * ($page - 1);
 
-$fields = array("a.*", "b.article_title");
-$where_cond = array();
 $table_reference = "tblReport AS a INNER JOIN tblArticle AS b ON a.article_id = b.article_id";
-$order_by_clause = "a.report_create_time DESC";
+$sql_params = array(
+	"fields" => array("a.*", "b.article_title"),
+	"table_reference" => $table_reference,
+	"order_by_clause" => "a.report_create_time DESC",
+	"limit" => LIMIT,
+	"offset" => $offset,
+);
 $tr = new TblReport();
-$tr->initReadSQL($fields, $where_cond, $table_reference, $order_by_clause, LIMIT, $offset);
-$report_list = $tr->read();
+$report_list = $tr->read($tr->generateReadSQL($sql_params));
 
-$fields = array("COUNT(*) AS total_record_number");
-$tr->initReadSQL($fields, $where_cond, $table_reference);
-$total_record_number = $tr->read()[0]["total_record_number"];
+$sql_params = array(
+	"fields" => array("COUNT(*) AS total_record_number"),
+	"table_reference" => $table_reference,
+);
+$total_record_number = $tr->read($tr->generateReadSQL($sql_params));
+$total_record_number = $total_record_number[0]["total_record_number"];
 $total_page_number = ceil($total_record_number / LIMIT);
 ?>
 <select id="page" name="page">

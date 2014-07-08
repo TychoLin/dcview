@@ -20,11 +20,11 @@ for ($i = 1; $i <= $total_page_number; $i++) {
 	</tr>
 	<?php foreach ($article_list as $record) { ?>
 	<tr>
-		<td><span class="time_text"><?php echo $record["article_create_time"]; ?></span></td>
+		<td><span><?php echo $record["sort_time"]; ?></span></td>
 		<td><a href="?name=<?php echo $record["user_nickname"]; ?>"><?php echo $record["user_nickname"]; ?></a></td>
 		<td><span><?php echo $trade_status_names[$record["article_sh_trade_status"]]; ?></span></td>
 	    <td><a href="sh_article.php?article_id=<?php echo $record["article_id"]; ?>" target="_blank"><?php echo $record["article_title"]; ?><span>(<?php echo $record["reply_amount"]; ?>)</span></a></td>
-		<td><span class="time_text">$<?php echo number_format($record["article_sh_price"]); ?></span></td>
+		<td><span>$<?php echo number_format($record["article_sh_price"]); ?></span></td>
 		<td><a href="?sub_category=<?php echo $record["sh_sub_category_id"]; ?>"><?php echo (empty($record["sh_sub_category_name"])) ? "" : $record["sh_sub_category_name"]; ?></a></td>
 	    <td><a href="?area=<?php echo $record["article_sh_area"]; ?>"><?php echo $area_names[$record["article_sh_area"]]; ?></a></td>
 	</tr>

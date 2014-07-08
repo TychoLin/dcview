@@ -9,10 +9,11 @@ $post_data = array_intersect_key($_POST, array_fill_keys($fields, null));
 if (isset($_GET["article_id"])) {
 	$article_id = (int)$_GET["article_id"];
 	$ta = new TblArticle();
-	$fields = array("*");
-	$where_cond = array("article_id = ?" => $article_id);
-	$ta->initReadSQL($fields, $where_cond);
-	$article_record = $ta->read();
+	$sql_params = array(
+		"fields" => array("*"),
+		"where_cond" => array("article_id = ?" => $article_id),
+	);
+	$article_record = $ta->read($ta->generateReadSQL($sql_params));
 	if (count($article_record) == 1) {
 		$article_record = $article_record[0];
 	} else {
@@ -159,10 +160,11 @@ if (isset($_GET["article_id"])) {
 <span>對這個拍賣的回應：</span>
 <?php
 $tr = new TblReply();
-$fields = array("user_id", "reply_content", "reply_create_time");
-$where_cond = array("article_id = ?" => $article_id);
-$tr->initReadSQL($fields, $where_cond);
-$reply_list = $tr->read();
+$sql_params = array(
+	"fields" => array("user_id", "reply_content", "reply_create_time"),
+	"where_cond" => array("article_id = ?" => $article_id),
+);
+$reply_list = $tr->read($tr->generateReadSQL($sql_params));
 foreach ($reply_list as $value) {
 ?>
 <ul>

@@ -36,6 +36,7 @@ class RecordModel {
 	private $_fields = array();
 	private $_tableReference = "";
 	private $_whereCond = "";
+	private $_groupByClause = "";
 	private $_orderByClause = "";
 	private $_limit = "";
 	private $_offset = "";
@@ -67,58 +68,83 @@ class RecordModel {
 		}
 	}
 
-	public function read($fetch_style = PDO::FETCH_ASSOC) {
-		if (is_array($this->_fields) && count($this->_fields) > 0) {
-			$fields = implode(",", $this->_fields);
-		} else {
-			$fields = "*";
-		}
-
-		$where_clause = "1 = 1";
-		if (is_array($this->_whereCond) && count($this->_whereCond) > 0) {
-			$where_clause = implode(" AND ", array_keys($this->_whereCond));
-		}
-
-		$sql = array();
-		array_push($sql, "SELECT", $fields, "FROM", $this->_tableReference, "WHERE", $where_clause);
-
-		if ($this->_orderByClause !== "") {
-			array_push($sql, "ORDER BY", $this->_orderByClause);
-		}
-
-		if ($this->_limit !== "" && $this->_offset !== "") {
-			array_push($sql, "LIMIT", $this->_limit, "OFFSET", $this->_offset);
-		}
-
-		$params = array();
-		foreach (array_values($this->_whereCond) as $value) {
-			if (is_array($value)) {
-				$params = array_merge($params, $value);
-			} else {
-				array_push($params, $value);
-			}
-		}
-
+	public function read($sql_params, $fetch_style = PDO::FETCH_ASSOC) {
 		try {
-			$ps = $this->_dbHandler->prepare(implode(" ", $sql));
-			$ps->execute($params);
+			$ps = $this->_dbHandler->prepare($sql_params["sql"]);
+			$ps->execute($sql_params["params"]);
 			return $ps->fetchAll($fetch_style);
 		} catch (PDOException $e) {
 			echo $e->getMessage();
 		}
 	}
 
-	public function initReadSQL($fields, $where_cond = "", $table_reference = "", $order_by_clause = "", $limit = "", $offset = "") {
-		$this->_fields = $fields;
-		if ($where_cond !== "") {
-			$this->_whereCond = $where_cond;
+	public function generateReadSQL($sql_params) {
+		$params = array();
+
+		$fields = "*";
+		if (isset($sql_params["fields"])) {
+			$fields = $sql_params["fields"];
+			if (is_array($fields) && count($fields) > 0) {
+				$fields = implode(",", $fields);
+			}
 		}
-		if ($table_reference !== "") {
-			$this->_tableReference = $table_reference;
+
+		$table_reference = $this->_tableReference;
+		if (isset($sql_params["table_reference"])) {
+			if (is_array($sql_params["table_reference"])) {
+				if (isset($sql_params["table_reference"]["sql"])) {
+					$table_reference = $sql_params["table_reference"]["sql"];
+					$params = array_merge($params, $sql_params["table_reference"]["params"]);
+				} else {
+					$table_reference = implode(" ", $sql_params["table_reference"]);
+				}
+			} else {
+				$table_reference = $sql_params["table_reference"];
+			}
 		}
-		$this->_orderByClause = $order_by_clause;
-		$this->_limit = $limit;
-		$this->_offset = $offset;
+
+		$where_clause = "1 = 1";
+		if (isset($sql_params["where_cond"])) {
+			$where_cond = $sql_params["where_cond"];
+			if (is_array($where_cond) && count($where_cond) > 0) {
+				$where_clause = implode(" AND ", array_keys($where_cond));
+
+				foreach (array_values($where_cond) as $value) {
+					if (is_array($value)) {
+						$params = array_merge($params, $value);
+					} else {
+						array_push($params, $value);
+					}
+				}
+			}
+		}
+
+		$sql = array();
+		array_push($sql, "SELECT", $fields, "FROM");
+		if (isset($sql_params["sub_query_alias"])) {
+			array_push($sql, "($table_reference)", "AS", $sql_params["sub_query_alias"]);
+		} else {
+			array_push($sql, $table_reference);
+		}
+		array_push($sql, "WHERE", $where_clause);
+
+		if (isset($sql_params["group_by_clause"])) {
+			array_push($sql, "GROUP BY", $sql_params["group_by_clause"]);
+		}
+
+		if (isset($sql_params["order_by_clause"])) {
+			array_push($sql, "ORDER BY", $sql_params["order_by_clause"]);
+		}
+
+		if (isset($sql_params["limit"])) {
+			array_push($sql, "LIMIT", $sql_params["limit"]);
+		}
+
+		if (isset($sql_params["offset"])) {
+			array_push($sql, "OFFSET", $sql_params["offset"]);
+		}
+
+		return array("sql" => implode(" ", $sql), "params" => $params);
 	}
 
 	public function update($record, $where_cond) {

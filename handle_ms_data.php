@@ -2,6 +2,12 @@
 // $file = file_get_contents("sh_ms_data");
 // mb_regex_encoding("UTF-8");
 // $data = mb_split("======", $file);
+
+$begin_time = time();
+
+ini_set("memory_limit", "256M");
+set_time_limit(0);
+
 require_once("PHPExcel_1.8.0/Classes/PHPExcel/IOFactory.php");
 require_once("shdb.inc.php");
 
@@ -11,16 +17,22 @@ $old_category1 = array_combine($matches[1], $matches[2]);
 // var_dump($old_category1);
 
 $tssc = new TblSHSubCategory();
-$tssc->initReadSQL(array("sh_sub_category_id", "sh_sub_category_name"), array("sh_main_category_id = ?" => 1));
-$new_category1 = array_flip($tssc->read(PDO::FETCH_COLUMN|PDO::FETCH_UNIQUE));
+$sql_params = array(
+	"fields" => array("sh_sub_category_id", "sh_sub_category_name"),
+	"where_cond" => array("sh_main_category_id = ?" => 1),
+);
+$new_category1 = array_flip($tssc->read($tssc->generateReadSQL($sql_params), PDO::FETCH_COLUMN|PDO::FETCH_UNIQUE));
 // var_dump($new_category1);
 
 preg_match_all('|<[^>]+\"([\d])\">(.*)</[^>]+>|', $category_select, $matches);
 $old_category3 = array_combine($matches[1], $matches[2]);
 // var_dump($old_category3);
 
-$tssc->initReadSQL(array("sh_sub_category_id", "sh_sub_category_name"), array("sh_main_category_id = ?" => 3));
-$new_category3 = array_flip($tssc->read(PDO::FETCH_COLUMN|PDO::FETCH_UNIQUE));
+$sql_params = array(
+	"fields" => array("sh_sub_category_id", "sh_sub_category_name"),
+	"where_cond" => array("sh_main_category_id = ?" => 3),
+);
+$new_category3 = array_flip($tssc->read($tssc->generateReadSQL($sql_params), PDO::FETCH_COLUMN|PDO::FETCH_UNIQUE));
 // var_dump($new_category3);
 
 function get_sub_category_id($one_piece_data) {
@@ -81,9 +93,10 @@ function get_date($one_piece_data) {
 	return date("Y-m-d H:i:s", mktime(0, 0, 0, $date[0], $date[1], $date[2]));
 }
 
-$objPHPExcel = PHPExcel_IOFactory::load("sh_article_have_reply_ms_data.xls");
-// $objPHPExcel = PHPExcel_IOFactory::load("sh_article_no_reply_ms_data.xls");
+$ta = new TblArticle();
+$tr = new TblReply();
 
+$objPHPExcel = PHPExcel_IOFactory::load("sh_article_have_reply_ms_data.xls");
 $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
 
 $fields = array_values(array_shift($sheetData));
@@ -92,35 +105,12 @@ foreach ($sheetData as $value) {
 	array_push($sh_article_have_reply, array_combine($fields, array_values($value)));
 }
 
-// var_dump($sh_article_have_reply);
-
-$objPHPExcel = PHPExcel_IOFactory::load("sh_article_reply_ms_data.xls");
-$sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
-
-array_shift($sheetData);
-$sh_article_reply = array();
-foreach ($sheetData as $value) {
-	$reply = array_combine($fields, array_values($value));
-
-	if (isset($sh_article_reply[$reply["回覆編號"]]) && is_array($sh_article_reply[$reply["回覆編號"]])) {
-		array_push($sh_article_reply[$reply["回覆編號"]], $reply);
-	} else {
-		$sh_article_reply[$reply["回覆編號"]] = array();
-		array_push($sh_article_reply[$reply["回覆編號"]], $reply);
-	}
-}
-
-// var_dump($sh_article_reply);
-
-$ta = new TblArticle();
-$tr = new TblReply();
-
-/*
 foreach ($sh_article_have_reply as $value) {
 	$datetime = call_user_func("get_date", $value);
 
 	$article_record = array(
 		"user_id" => mt_rand(1, 100),
+		"old_article_id" => $value["回覆編號"],
 		"user_account" => $value["user_account"],
 		"user_nickname" => $value["user_nickname"],
 		"sh_sub_category_id" => get_sub_category_id($value),
@@ -139,25 +129,53 @@ foreach ($sh_article_have_reply as $value) {
 	);
 
 	$ta->create($article_record);
-	$article_id = $ta->getLastInsertID();
+}
 
-	$replies = $sh_article_reply[$value["回覆編號"]];
-	foreach ($replies as $piece_of_reply) {
-		$datetime = call_user_func("get_date", $piece_of_reply);
+$objPHPExcel = PHPExcel_IOFactory::load("sh_article_reply_ms_data.xls");
+$sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+array_shift($sheetData);
 
-		$reply_record = array(
-			"article_id" => $article_id,
-			"user_id" => mt_rand(1, 100),
-			"user_account" => $piece_of_reply["user_account"],
-			"reply_content" => $piece_of_reply["article_content"],
-			"reply_create_time" => $datetime,
-			"reply_update_time" => $datetime,
-		);
+$sql_params = array(
+	"fields" => array("article_id", "old_article_id"),
+);
+$article_list = $ta->read($ta->generateReadSQL($sql_params));
 
-		$tr->create($reply_record);
+$sh_article_reply = array();
+$amount = count($sheetData);
+foreach ($sheetData as $key => $value) {
+	$reply = array_combine($fields, array_values($value));
+
+	if (isset($sh_article_reply[$reply["回覆編號"]]) && is_array($sh_article_reply[$reply["回覆編號"]])) {
+		array_push($sh_article_reply[$reply["回覆編號"]], $reply);
+	} else {
+		$sh_article_reply[$reply["回覆編號"]] = array();
+		array_push($sh_article_reply[$reply["回覆編號"]], $reply);
+	}
+
+	if ($key % 1000 == 0 || $key == $amount - 1) {
+		foreach ($article_list as $article_record) {
+			if (isset($sh_article_reply[$article_record["old_article_id"]])) {
+				$replies = $sh_article_reply[$article_record["old_article_id"]];
+				foreach ($replies as $piece_of_reply) {
+					$datetime = call_user_func("get_date", $piece_of_reply);
+
+					$reply_record = array(
+						"article_id" => $article_record["article_id"],
+						"user_id" => mt_rand(1, 100),
+						"user_account" => $piece_of_reply["user_account"],
+						"reply_content" => $piece_of_reply["article_content"],
+						"reply_create_time" => $datetime,
+						"reply_update_time" => $datetime,
+					);
+
+					$tr->create($reply_record);
+				}
+			}
+		}
+
+		$sh_article_reply = array();
 	}
 }
-*/
 
 /*
 $objPHPExcel = PHPExcel_IOFactory::load("sh_article_no_reply_ms_data.xls");
@@ -194,4 +212,9 @@ foreach ($sh_article_no_reply as $value) {
 	$ta->create($article_record);
 }
 */
+
+$end_time = time();
+
+$execute_time = $end_time - $begin_time;
+echo "execute time: ".$execute_time."s";
 ?>

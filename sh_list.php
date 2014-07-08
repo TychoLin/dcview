@@ -107,7 +107,7 @@ EOT;
 </tr>
 <?php foreach ($article_list as $record) { ?>
 <tr>
-	<td><span class="time_text"><?php echo $record["article_create_time"]; ?></span></td>
+	<td><span class="time_text"><?php echo $record["sort_time"]; ?></span></td>
 	<td><a href="?name=<?php echo $record["user_nickname"]; ?>"><?php echo $record["user_nickname"]; ?></a></td>
 	<td><span><?php echo $trade_status_names[$record["article_sh_trade_status"]]; ?></span></td>
     <td><a href="sh_article.php?article_id=<?php echo $record["article_id"]; ?>" target="_blank"><?php echo $record["article_title"]; ?><span>(<?php echo $record["reply_amount"]; ?>)</span></a></td>
