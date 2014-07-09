@@ -1,0 +1,157 @@
+A:link {
+	BACKGROUND: none transparent scroll repeat 0% 0%; COLOR: #0000aa; TEXT-DECORATION: none
+}
+A:visited {
+	BACKGROUND: none transparent scroll repeat 0% 0%; COLOR: #0000aa; TEXT-DECORATION: none
+}
+A:hover {
+	BACKGROUND: none transparent scroll repeat 0% 0%; COLOR: #cc3300; TEXT-DECORATION: none
+}
+A.white:link {
+	BACKGROUND: none transparent scroll repeat 0% 0%; COLOR: #ffffff; TEXT-DECORATION: none
+}
+A.white:visited {
+	BACKGROUND: none transparent scroll repeat 0% 0%; COLOR: #ffffff; TEXT-DECORATION: none
+}
+A.white:hover {
+	BACKGROUND: none transparent scroll repeat 0% 0%; COLOR: #ffffff; TEXT-DECORATION: none
+}
+BODY {
+	BACKGROUND: #ffffff; MARGIN: 0px 0px 0px 4px; COLOR: #000000; TEXT-ALIGN: left
+}
+.tp-newgoods {
+	FONT-SIZE: 12px; LINE-HEIGHT: 15px; FONT-FAMILY: "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.tp-saleinfo {
+	FONT-SIZE: 12px; LINE-HEIGHT: 16px
+}
+.Copyright {
+	FONT-SIZE: 10px; COLOR: #999999; LINE-HEIGHT: 15px; FONT-FAMILY:"Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+
+.navB0 {
+	FONT-WEIGHT: bold; FONT-SIZE: 18px; COLOR: #0000ff; FONT-FAMILY:  "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.navB {
+	FONT-SIZE: 13px; COLOR: #ffffff; FONT-FAMILY:  "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.navBf {
+	FONT-SIZE: 15px; LINE-HEIGHT: 160%; FONT-FAMILY:  "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.navBf2 {
+	FONT-SIZE: 13px; FONT-FAMILY:  "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.navBf1 {
+	 font:12px/18px "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.navBfe {
+	FONT-SIZE: 11px; COLOR: #999999; FONT-FAMILY: "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.navBfe1 {
+	FONT-SIZE: 11px; COLOR: #0000ff; FONT-FAMILY:  "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.navBb {
+	FONT-SIZE: 16px; FONT-FAMILY:  "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.navB1 {
+	FONT-SIZE: 14px; COLOR: #1063ad; FONT-FAMILY:  "Microsoft JhengHei", Arial, Helvetica, sans-serif;
+}
+.navB2 {
+	FONT-SIZE: 13px; COLOR: #1063ad; FONT-FAMILY:  "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.navB3 {
+	FONT-SIZE: 12px; COLOR: #1063ad; FONT-FAMILY:  "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.navnew {
+	FONT-SIZE: 13px; COLOR: #0000ff; FONT-FAMILY:  "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.navn1 {
+	FONT-SIZE: 12px; COLOR: #000000; FONT-FAMILY:  "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+
+.menulist {
+	FONT-SIZE: 13px; LINE-HEIGHT: 140%; FONT-FAMILY: "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.eng {
+	FONT-SIZE: 12px; LINE-HEIGHT: normal; FONT-FAMILY: "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.default {
+	FONT-SIZE: 16px; VERTICAL-ALIGN: middle; LINE-HEIGHT: 140%; FONT-STYLE: normal; FONT-FAMILY: "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.etitor {
+	FONT-SIZE: 11px; COLOR: #999999; FONT-FAMILY: "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.text-black {
+	FONT-SIZE: 15px; LINE-HEIGHT: 140%; FONT-FAMILY: "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.text-gray {
+	FONT-SIZE: 16px; COLOR: #333333; LINE-HEIGHT: 150%; FONT-FAMILY: "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.border {
+	BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; BORDER-LEFT: #000000 1px solid; BORDER-BOTTOM: #000000 1px solid
+}
+.note-gray2 {
+	FONT-SIZE: 12px; COLOR: #666666; LINE-HEIGHT: 140%; FONT-FAMILY: "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.text2-black {
+	FONT-SIZE: 13px; LINE-HEIGHT: 150%; FONT-FAMILY: "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.id {
+	FONT-WEIGHT: bold; FONT-SIZE: 12px; FONT-FAMILY: "Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.text_xs {
+	FONT-SIZE: 12px; LINE-HEIGHT: 140%; FONT-FAMILY:"Microsoft JhengHei", Arial, Helvetica, sans-serif; 
+}
+.navchtool {
+	FONT-SIZE: 15px; COLOR: #0000ae; FONT-FAMILY:"Microsoft JhengHei", Arial, Helvetica, sans-serif; }
+.navbnd_s { FONT-SIZE: 12px; FONT-FAMILY: "Microsoft JhengHei", Arial, Helvetica, sans-serif; }
+.navbnds { FONT-SIZE: 10px; COLOR: #000000; FONT-FAMILY: "Microsoft JhengHei", Arial, Helvetica, sans-serif; }
+.colsname-w { FONT-SIZE: 12px; LINE-HEIGHT: 140%; FONT-FAMILY: "Microsoft JhengHei", Arial, Helvetica, sans-serif;  color: #FFFFFF }
+.colsname-w { FONT-SIZE: 12px; COLOR: #ffffff; FONT-FAMILY: "Microsoft JhengHei", Arial, Helvetica, sans-serif;  }
+.title-bd { FONT-SIZE: 24px; LINE-HEIGHT: normal; FONT-FAMILY: "Microsoft JhengHei", Arial, Helvetica, sans-serif;  font-weight: bold}
+.colname { FONT-SIZE: 13px; COLOR: #ffffff; FONT-FAMILY:"Microsoft JhengHei", Arial, Helvetica, sans-serif; }
+.colname { FONT-SIZE: 12px; COLOR: #FFFFFF; FONT-FAMILY:"Microsoft JhengHei", Arial, Helvetica, sans-serif;  }
+.hdline { FONT-SIZE: 12px; COLOR: #000000; FONT-FAMILY: "Microsoft JhengHei", Arial, Helvetica, sans-serif; }
+.forumA { FONT-SIZE: 12px; FONT-FAMILY: "Microsoft JhengHei", Arial, Helvetica, sans-serif;  line-height: 150%}
+.forumB {  font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif;  font-size: 12px; line-height: 160%}
+.logotable {FONT-SIZE: 16px; VERTICAL-ALIGN: middle; LINE-HEIGHT: 140%; FONT-STYLE: normal; FONT-FAMILY: "Microsoft JhengHei", Arial, Helvetica, sans-serif; }
+.logotable {FONT-SIZE: 16px; VERTICAL-ALIGN: middle; LINE-HEIGHT: 140%; FONT-STYLE: normal; FONT-FAMILY: "Microsoft JhengHei", Arial, Helvetica, sans-serif; }
+.logotable {border: double;}
+
+.date {	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif; 	font-size: 10px;line-height: 9px;	color: #FF824D;}
+.event-page {	font-size: 12px;	line-height: 15px;	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif; 	color: #999933;}
+.event-pagetit {	font-size: 14px;	line-height: 17px;	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif; 	font-weight: bold;}
+.gal-msg {	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif; 	font-size: 13px;	line-height: 17px;}
+.gal-size {	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif; 	font-size: 15px;	line-height: 18px;}
+.name {	font-size: 9pt;	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif; }
+.search {	font-size: 9pt;	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif; }
+.tp1 {font-size: 13px;line-height: 17px;font-family:"Microsoft JhengHei", Arial, Helvetica, sans-serif; }
+.tp1-s {	font-size: 11px;	line-height: 14px;	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif; }
+.tp1-xs {	font-size: 10px;	line-height: 14px;	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif; }
+.tp-ad {	font-size: 16px;	line-height: 18px;}
+.tp-m {	font-size: 14px;	line-height: 19px;	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif; }
+.tp-og {	font-size: 14px;	line-height: 19px;	font-family:"Microsoft JhengHei", Arial, Helvetica, sans-serif; 	color: #FF824D;}
+.tp-tel {	font-size: 13px;	line-height: 20px;	font-family:"Microsoft JhengHei", Arial, Helvetica, sans-serif; 		color: #999933;}
+
+.BODY1 {MARGIN: 4px 4px 4px 4px; TEXT-ALIGN: left }
+
+/**
+ *
+ * =adtxt
+ *
+ **/
+.adtxt {
+    font-size: 15px;
+    margin: 5px 0 5px 10px;
+}
+
+.adtxt ul li {
+    display: inline;
+    padding: 0 0 0 20px;
+    margin: 5px 80px 5px 0;
+}
+
+.adtxt ul li.list {
+    margin: 0 0 0 0;
+}
+

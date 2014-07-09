@@ -1,9 +1,11 @@
 <?php
 require_once("shdb.inc.php");
 
-$ta = new TblArticle();
+ini_set("memory_limit", "256M");
+var_dump(ini_get_all());
 
 /*
+$ta = new TblArticle();
 for ($i = 0; $i < 20000; $i++) {
 	$record = array(
 		"user_id" => mt_rand(1, 100),

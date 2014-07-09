@@ -1,0 +1,109 @@
+/**
+ *
+ * =ad
+ *
+ **/
+
+#content-main .main .ad {
+    position: relative;
+    width: 580px;
+    margin: 10px 0 10px 5px;
+}
+
+/**
+ *
+ * =adtxt
+ *
+ **/
+.adtxt {
+	text-align:left;
+    font-size: 15px;
+    margin: 5px 0 5px 10px;
+}
+
+.adtxt ul li {
+    display: inline;
+    padding: 0 0 0 20px;
+    margin: 5px 80px 5px 0;
+}
+
+.adtxt ul li.list {
+    margin: 0 0 0 0;
+}
+/*----------------------------------------------------------------------------*/
+/* +down-ad
+*----------------------------------------------------------------------------*/
+#down-ad{
+	font: 13px/22px Verdana;
+    margin: 10px auto;
+    position: relative;
+    width: 990px;	
+}
+#down-ad ul li {
+	float: left;
+	bottom: -1px;
+	width: 310px;
+	margin: 0 10px 0 0;
+	padding: 0 10px 0 0;
+	background: url(../images/l_04.gif) repeat-y right;
+	text-align:left;
+}
+#down-ad ul li img {
+	float: left;
+	bottom: -1px;
+	padding: 0 10px 0 0;
+}
+#down-ad ul li.list {
+	float: left;
+	bottom: -1px;
+	width: 310px;
+	margin: 0;
+	background: none;
+}
+#down-ad ul li h3 {
+	font: bold 15px/22px Verdana;
+	color: #1a549e;
+	text-align:left;
+	margin: 0 0 -2px 0;
+}
+#down-ad ul li a {
+	color: #1a549e;
+	text-decoration: none;	
+}
+
+/**
+*
+* clear,clearfix
+*
+**/
+
+/* regular clearing apply to column that should drop below previous ones. */
+.clear {
+    clear: both;
+}
+
+/* this needs to be first because FF3 is now supporting this */
+.clearfix {
+    display: inline-block;
+}
+
+/* clearing floats without extra markup */
+.clearfix:after {
+    display: block;
+    visibility: hidden;
+    clear: both;
+    height: 0;
+    font-size: 0;
+    line-height: 0;
+    content: ".";
+}
+
+/* hides from IE-mac \*/
+* html .clearfix {
+    height: 1%;
+}
+
+.clearfix {
+    display: block;
+}
+/* end hide from IE-mac */

@@ -6,7 +6,7 @@ $ta = new TblArticle();
 // INNER JOIN tblSHSubCategory AS c USING(sh_sub_category_id)
 $fields = array("a.article_id", "a.user_account", "a.user_nickname", "a.article_title", "a.sh_sub_category_id", "a.article_sh_is_traded", "a.article_sh_trade_status");
 array_push($fields, "a.article_sh_price", "a.article_sh_area", "c.sh_sub_category_name", "a.article_create_time", "IFNULL(b.reply_amount, 0) AS reply_amount");
-array_push($fields, "IFNULL(b.sort_time, a.article_create_time) AS sort_time", "c.sh_sub_category_name");
+array_push($fields, "DATE_FORMAT(IFNULL(b.sort_time, a.article_create_time), '%m/%d %H:%i') AS sort_time", "c.sh_sub_category_name");
 $table_reference = array(
 	"tblArticle AS a LEFT JOIN",
 	"(SELECT article_id, COUNT(*) AS reply_amount, MAX(reply_create_time) AS sort_time FROM tblReply GROUP BY article_id) AS b USING(article_id)",

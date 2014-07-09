@@ -1,0 +1,30 @@
+/* Part Reset */
+.sitemajiad div,.sitemajiad dl,.sitemajiad dt,.sitemajiad dd,.sitemajiad ul,.sitemajiad ol,.sitemajiad li,.sitemajiad h1,.sitemajiad h2,.sitemajiad h3,.sitemajiad h4,.sitemajiad h5,.sitemajiad h6,.sitemajiad pre,.sitemajiad p,.sitemajiad blockquote {margin:0;padding:0;}
+.sitemajiad img {border:0;}
+.sitemajiad address,.sitemajiad cite,.sitemajiad code,.sitemajiad dfn,.sitemajiad em,.sitemajiad strong,.sitemajiad var {font-style:normal;font-weight:normal;}
+.sitemajiad li {list-style:none;}
+.sitemajiad h1,.sitemajiad h2,.sitemajiad h3,.sitemajiad h4,.sitemajiad h5,.sitemajiad h6 {font-size:100%;font-weight:normal;}
+.sitemajiad {font:13px/1.231 "Microsoft JhengHei", Arial, Helvetica, sans-serif;*font-size:small;*font:x-small;text-align:left;}
+/* No-Float style */
+.sitemaji-g {letter-spacing:-0.31em;*letter-spacing:normal;word-spacing:-0.43em;}
+.sitemaji-u {display:inline-block;zoom: 1;*display:inline;letter-spacing:normal;word-spacing:normal;vertical-align:top;}
+/* AD Style */
+.sitemajiad {position:relative;}
+.sitemajiad dl {padding-bottom:15px;cursor:pointer;;vertical-align:top;position:relative;padding-right:80px;display:block;padding-top:5px;}
+.sitemajiad dt {margin-bottom:2px;}
+.sitemajiad dt a {margin-right:5px;color:#00f;font-size:138.5%;text-decoration:none;letter-spacing:1px;}
+.sitemajiad dt a:hover {color:#00f;text-decoration:underline;}
+.sitemajiad dt a strong {color:#f00;}
+.sitemajiad dd {color:#434343;margin:1px 0;}
+.sitemajiad dl address {color:#ff5400;word-wrap:break-word;font-family:Verdana;}
+.sitemajiad .sitemaji-btn {position:absolute;display:inline-block;right:30px;bottom:38px;background-color:#4d90fe;border-radius:20px;-webkit-border-radius:20px;background:transparent url(bg_adblue.png) no-repeat center;}
+.sitemajiad .sitemaji-btn .first-child span {display:block;padding:4px 7px;}
+.sitemajiad .sitemaji-btn .first-child span img {width:11px;height:17px;padding-top:2px;}
+.sitemajiad .ft {font-size:85%;color:#ccc;position:absolute;right:10px;bottom:3px;}
+.horizon dl.sitemaji-u {width:30%;padding-left:1%;} 
+.photo dl.sitemaji-u {margin:0;width:100%;display:inline-block;}
+.photo dl.sitemaji-u img {float:left;width:90px;height:90px;border:1px solid #e1e1e1;}
+.photo dl.sitemaji-u dt {padding-left:100px;}
+.photo dl.sitemaji-u dd {padding-left:100px;}
+.photo dl.sitemaji-u address {display:block;padding-left:100px;}
+.photo dl .sitemaji-btn {display:none;}

@@ -1,0 +1,31 @@
+﻿/*-----------------------------------------------------------------------------
+ [TABLE OF CONTENTS]
+        +content
+            =content-main
+-----------------------------------------------------------------------------*/
+
+/* +content
+*----------------------------------------------------------------------------*/
+/* +content-main
+*----------------------------------------------------------------------------*/
+#content-main .main {
+    float: left;
+    width: 745px;
+	height: 53px;
+    background: url(../images_new/content_bg_t.gif) no-repeat left top;    
+}
+#content-main .discuss {
+    background: url(../images_new/content_bg_t_discuss.gif) no-repeat left top;    
+}
+#content-main .main-dec {
+    float: left;
+    width: 745px;
+	height: 200px; 
+}
+#content-main .main .bookmarker {
+    font: 12px/22px "Microsoft JhengHei", Arial, Helvetica, sans-serif;
+    width: 715px;
+    height: 38px;
+    padding: 15px 15px 0 15px;
+    text-align: right;
+}

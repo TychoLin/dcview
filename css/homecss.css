@@ -1,0 +1,103 @@
+
+A:link {
+	text-decoration: none;
+	color:#003399 ;
+	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif;
+}
+table.sortable td a:link,table.sortable tr a:link{ color:#6e6e6e;text-decoration: none;}
+table.sortable td a:hover,table.sortable tr a:hover{ color:#6e6e6e;text-decoration: underline;}
+
+A:visited {
+TEXT-DECORATION: none
+}
+.tp1 {
+	font-size: 13px;
+	line-height: 17px;
+	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif;
+
+}
+.tp-newgoods {
+	font-size: 12px;
+	line-height: 15px;
+	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif;
+}
+.tp-saleinfo {
+	font-size: 12px;
+	line-height: 16px;
+}
+.Copyright {
+	font-size: 10px;
+	line-height: 15px;
+	color: #999999;
+	font-family:"Microsoft JhengHei", Arial, Helvetica, sans-serif;
+
+}
+.name {
+
+	font-size: 9pt;
+	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif;
+}
+.search {
+	font-size: 9pt;
+	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif;
+
+}
+.date {
+	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	line-height: 9px;
+	color: #FF824D;
+}
+.tp-ad {
+	font-size: 16px;
+	line-height: 18px;
+}
+.tp1-s {
+
+	font-size: 11px;
+	line-height: 14px;
+	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif;
+}
+.tp-m {
+	font-size: 14px;
+	line-height: 19px;
+	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif;
+
+}
+.tp1-xs {
+
+
+	font-size: 12px;
+	line-height: 14px;
+	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif;
+}
+.event-page {
+	font-size: 12px;
+	line-height: 15px;
+	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif;
+	color: #999933;
+
+
+
+}
+.event-pagetit {
+	font-size: 14px;
+	line-height: 17px;
+	font-family:"Microsoft JhengHei", Arial, Helvetica, sans-serif;
+	font-weight: bold;
+
+}
+.tp-tel {
+	font-size: 13px;
+	line-height: 20px;
+	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif;
+	color: #999933;
+
+}
+.tp-og {
+	font-size: 14px;
+	line-height: 19px;
+	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif;
+	color: #FF824D;
+
+}

@@ -1,0 +1,157 @@
+﻿@charset "utf-8";
+/*-----------------------------------------------------------------------------
+ [TABLE OF CONTENTS]
+    +wrapper
+        +header
+        +content
+            =content-main
+            =content-sidebar
+        +down-ad            
+        +footer
+-----------------------------------------------------------------------------*/
+
+/* +wrapper
+*----------------------------------------------------------------------------*/
+img {
+	border:0;
+	margin:0;
+	padding:0;
+}
+#wrapper {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* +header
+*----------------------------------------------------------------------------*/
+
+#header {
+    position: relative;
+    width: 1000px;
+    margin: 0 auto;
+    z-index: 300;
+}
+
+/**
+ *
+ * =search
+ *
+ **/
+
+/*----------------------2012/08/17新增---------------------*/
+#header .search {
+    float: left;
+    width: 300px;
+	padding:25px 0 0 0;
+	height:50px;
+}
+#header .search .search-bar-ul{
+	padding:0px;
+	list-style-type:none;
+}
+#header .search .search-bar-ul li{
+	float:left;
+}
+#header .search .scbar_icon_td {
+    background:url(../img/search.png) no-repeat scroll 0 -444px transparent;
+    width: 13px;
+	height:38px;
+}
+#header .search .scbar_txt_td {
+    background:url(../img/search.png) repeat-x scroll 0 -222px transparent;
+	width:123px;
+	padding-top:10px;
+	height:28px;
+}
+#header #scbar_txt {
+    border: 1px solid #FFFFFF;
+    font-size: 14px;
+    outline: medium none;
+    width: 160px;
+	/*background-color:#ff0000;*/
+}
+#header .search .scbar_type_td{
+	background: url(../img/search.png) no-repeat scroll 0 -370px transparent;
+	height: 28px;
+    padding: 10px 0 0 5px;
+    width: 61px;
+	width: 57px\9;
+}
+@media screen and (-webkit-min-device-pixel-ratio:0){ #header .search .scbar_type_td #scbar_type{
+	margin: -1px 0 0 -2px;
+	background-color:transparent; 
+}
+}
+#header .search .scbar_type_td #scbar_type{
+	display: block;
+    text-align: left;
+    text-decoration: none;
+}
+#header .search .scbar_type_td .xg1, #header .search .scbar_type_td .xg1 a{
+	color: #999999 !important;
+}
+#header .search .scbar_type_td .showmenu{
+	background:url(../img/arrwd.gif) no-repeat scroll 100% 50% transparent;
+    cursor: pointer;
+    padding-right: 16px;
+    white-space: nowrap;
+}
+#header .search .scbar_btn_td{
+	background: url(../img/search.png) no-repeat scroll 0 -296px transparent;
+    text-align: center;
+    width: 67px;
+	height:28px;
+	padding-top:10px;
+	
+}
+#header .search .scbar_btn_td #scbar_btn {
+    background:none;
+    border: medium none;
+    margin: 0;
+    padding: 0;
+}
+.xs2 {
+    color: #666666;
+    font: 13px/22px Verdana !important;
+}
+/*----------------------2012/08/17新增結束------------------*/
+
+/* +content
+*----------------------------------------------------------------------------*/
+
+#content {
+	padding:10px 0 0 0;
+    position: relative;
+    width: 1000px;
+    margin: 0 auto;
+    display: block;
+    clear: both;
+    overflow: hidden;
+    /*background: #f0f0f0 url(../img/bg-content.gif) repeat-x bottom; */
+}
+
+#content-main {	
+	float: left;
+	bottom: -1px;
+	width: 745px;
+	overflow: hidden;
+	background: #f0f0f0 url(../img/content_bg_m.gif) repeat-y;
+}
+
+#content-sidebar {
+	float: right;
+	bottom: -1px;
+	width: 255px;
+	overflow: hidden;
+}
+
+/* +footer
+*----------------------------------------------------------------------------*/
+
+#footer {
+    position: relative;
+    width: 100%;
+    margin: 20px auto 0 auto;
+    background: url(../img/bg-footer.gif) repeat-x 0 41px; 
+}

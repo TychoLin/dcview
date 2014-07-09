@@ -2,7 +2,7 @@
 
 <!-- Select -->
 <label for="main_category">主類別:</label>
-<select id="main_category" name="main_category">
+<select id="main_category">
 <?php
 $tsmc = new TblSHMainCategory();
 $fields = array("sh_main_category_id", "sh_main_category_name");
