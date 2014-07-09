@@ -1,7 +1,7 @@
 <?php
 class DB {
 	private static $_db;
-	private $_dbStores = array(
+	private static $_dbStores = array(
 		"dcviewSH" => array(
 			"dsn" => "mysql:host=localhost;dbname=dcview",
 			"username" => "root",
@@ -15,18 +15,18 @@ class DB {
 	private function __construct($database) {
 		try {
 			$reflectionObj = new ReflectionClass("PDO");
-			self::$_db = $reflectionObj->newInstanceArgs($this->_dbStores[$database]);
-			self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			self::$_db[$database] = $reflectionObj->newInstanceArgs(self::$_dbStores[$database]);
+			self::$_db[$database]->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		} catch (PDOException $e) {
 			echo "Connection failed: ".$e->getMessage();
 		}
 	}
 
 	public static function getPDO($database) {
-		if (is_null(self::$_db)) {
+		if (!isset(self::$_db[$database])) {
 			new self($database);
 		}
-		return self::$_db;
+		return self::$_db[$database];
 	}
 }
 
