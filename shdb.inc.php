@@ -33,14 +33,7 @@ class DB {
 class RecordModel {
 	private $_dbHandler;
 
-	private $_fields = array();
 	private $_tableReference = "";
-	private $_whereCond = "";
-	private $_groupByClause = "";
-	private $_orderByClause = "";
-	private $_limit = "";
-	private $_offset = "";
-	private $_primaryKeyName = "";
 
 	public function __construct($database, $table_reference) {
 		$this->_dbHandler = DB::getPDO($database);

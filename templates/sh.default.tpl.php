@@ -1,3 +1,4 @@
+<?php ob_start(); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-TW" lang="zh-TW">
 	<head>
@@ -15,6 +16,7 @@
 		<link rel="stylesheet" href="./css/kickstart/css/kickstart.css" type="text/css" media="all" />
 		<link rel="stylesheet" href="./css/kickstart/css/form_style.css" type="text/css" media="all" />
 		<!--new end-->
+		<link rel="stylesheet" type="text/css" href="./css/magnific-popup.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script type="text/javascript" src="./js/tabber.js"></script>
 		<script type="text/javascript">
@@ -65,7 +67,7 @@
 						<ul class="search-bar-ul">
 							<li class="scbar_icon_td"></li>
 							<li class="scbar_txt_td">
-								<input type="text">
+								<input type="text" onfocus="javascript:  if(siteSearchForm.srchtxt.value=='請輸入搜尋內容'){ siteSearchForm.srchtxt.value = '';}" autocomplete="off" value="" id="scbar_txt" name="srchtxt" class="xg1">
 								<input type="hidden" name="searchkey" id="searchkey" value="">
 								<input type="hidden" name="kw" id="kw" value="">
 								<input type="hidden" name="mod" id="mod" value="forum">
@@ -94,7 +96,7 @@
 				<div class="menu">
 					<ul>
 						<li class="list">
-							<a href=""><img alt="會員登入" src="./img/meb_login.gif" width="56" height="19"></a>
+							<a href="http://member.dcview.com/login_frm.php"><img alt="會員登入" src="./img/meb_login.gif" width="56" height="19"></a>
 						</li>
 						<li class="list">
 							<a href="http://member.dcview.com/tos.php"><img alt="加入會員" src="./img/meb_add.gif" width="56" height="19"></a>
@@ -134,14 +136,14 @@
 						<li><a href="http://ishot.dcview.com/"><span>iShot購物</span></a>
 
 						</li>
-						<li class="active"><a href=""><span>二手專區</span></a>
+						<li class="active"><a href="./sh_list.php"><span>二手專區</span></a>
 
 						</li>
-						<li class="more">	<a href="http://www.dcview.com.tw/dcbid/flealist.asp#" onmouseover="mopen(&#39;m1&#39;)" onmouseout="mclosetime()"><span>更多</span></a>
-
-							<div style="visibility: hidden;" id="m1" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">	<a href="http://www.dcview.com.tw/e_paper/epaper_list.htm">會員電子報</a>
-	<a href="http://www.dcview.com.tw/member/">客服中心</a>
-
+						<li class="more">
+							<a href="./sh_list.php" onmouseover="mopen(&#39;m1&#39;)" onmouseout="mclosetime()"><span>更多</span></a>
+							<div style="visibility: hidden;" id="m1" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+								<a href="http://www.dcview.com.tw/e_paper/epaper_list.htm">會員電子報</a>
+								<a href="http://www.dcview.com.tw/member/">客服中心</a>
 							</div>
 						</li>
 					</ul>
@@ -180,24 +182,11 @@
 															</td>
 														</tr>
 														<tr>
-															<td class="navBf1"><a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A04">Canon</a> || <a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A14">SLR</a>
-
+															<td class="navBf1">
+																<a href="./sh_list.php?sub_category=1">Canon</a> || <a href="./sh_list.php?sub_category=2">SLR</a>
 															</td>
-															<td class="navBf1"><a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A07">Fujifilm</a> || <a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A20">SLR</a>
-
-															</td>
-														</tr>
-														<tr>
-															<td colspan="2">
-																<img height="1" src="./img/bd_spline.gif" width="240">
-															</td>
-														</tr>
-														<tr>
-															<td class="navBf1"><a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A01">Nikon</a> || <a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A15">SLR</a>
-
-															</td>
-															<td class="navBf1"><a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A02">Olympus</a> || <a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A29">SLR</a>
-
+															<td class="navBf1">
+																<a href="./sh_list.php?sub_category=3">Fujifilm</a> || <a href="./sh_list.php?sub_category=4">SLR</a>
 															</td>
 														</tr>
 														<tr>
@@ -206,24 +195,11 @@
 															</td>
 														</tr>
 														<tr>
-															<td class="navBf1"><a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A19">Panasonic</a> || <a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A34">SLR</a>
-
+															<td class="navBf1">
+																<a href="./sh_list.php?sub_category=7">Nikon</a> || <a href="./sh_list.php?sub_category=8">SLR</a>
 															</td>
-															<td class="navBf1"><a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A18">Pentax</a> || <a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A30">SLR</a>
-
-															</td>
-														</tr>
-														<tr>
-															<td colspan="2">
-																<img height="1" src="./img/bd_spline.gif" width="240">
-															</td>
-														</tr>
-														<tr>
-															<td class="navBf1"><a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A03">Sony</a> || <a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A33">SLR</a>
-
-															</td>
-															<td class="navBf1"><a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A05">CASIO</a>
-
+															<td class="navBf1">
+																<a href="./sh_list.php?sub_category=9">Olympus</a> || <a href="./sh_list.php?sub_category=10">SLR</a>
 															</td>
 														</tr>
 														<tr>
@@ -232,24 +208,11 @@
 															</td>
 														</tr>
 														<tr>
-															<td class="navBf1"><a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A28">Contax</a>
-
+															<td class="navBf1">
+																<a href="./sh_list.php?sub_category=23">Panasonic</a> || <a href="./sh_list.php?sub_category=24">SLR</a>
 															</td>
-															<td class="navBf1">	<a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A22">Leica</a>
-
-															</td>
-														</tr>
-														<tr>
-															<td colspan="2">
-																<img height="1" src="./img/bd_spline.gif" width="240">
-															</td>
-														</tr>
-														<tr>
-															<td class="navBf1"><a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A09">Ricoh</a>
-
-															</td>
-															<td class="navBf1">	<a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A23">Samsung</a>
-
+															<td class="navBf1">
+																<a href="./sh_list.php?sub_category=11">Pentax</a> || <a href="./sh_list.php?sub_category=12">SLR</a>
 															</td>
 														</tr>
 														<tr>
@@ -258,8 +221,47 @@
 															</td>
 														</tr>
 														<tr>
-															<td class="navBf1"><a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A21">Sigma</a>
-
+															<td class="navBf1">
+																<a href="./sh_list.php?sub_category=13">Sony</a> || <a href="./sh_list.php?sub_category=14">SLR</a>
+															</td>
+															<td class="navBf1">
+																<a href="./sh_list.php?sub_category=16">CASIO</a>
+															</td>
+														</tr>
+														<tr>
+															<td colspan="2">
+																<img height="1" src="./img/bd_spline.gif" width="240">
+															</td>
+														</tr>
+														<tr>
+															<td class="navBf1">
+																<a href="./sh_list.php?sub_category=17">Contax</a>
+															</td>
+															<td class="navBf1">
+																<a href="./sh_list.php?sub_category=22">Leica</a>
+															</td>
+														</tr>
+														<tr>
+															<td colspan="2">
+																<img height="1" src="./img/bd_spline.gif" width="240">
+															</td>
+														</tr>
+														<tr>
+															<td class="navBf1">
+																<a href="./sh_list.php?sub_category=26">Ricoh</a>
+															</td>
+															<td class="navBf1">
+																<a href="./sh_list.php?sub_category=28">Samsung</a>
+															</td>
+														</tr>
+														<tr>
+															<td colspan="2">
+																<img height="1" src="./img/bd_spline.gif" width="240">
+															</td>
+														</tr>
+														<tr>
+															<td class="navBf1">
+																<a href="./sh_list.php?sub_category=30">Sigma</a>
 															</td>
 															<td class="navBf1">&nbsp;</td>
 														</tr>
@@ -269,11 +271,11 @@
 															</td>
 														</tr>
 														<tr>
-															<td class="navBf1"><a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A12">傳統相機</a>
-
+															<td class="navBf1">
+																<a href="./sh_list.php?sub_category=31">傳統相機</a>
 															</td>
-															<td class="navBf1">	<a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0A13">其他相機</a>
-
+															<td class="navBf1">
+																<a href="./sh_list.php?sub_category=32">其他相機</a>
 															</td>
 														</tr>
 														<tr>
@@ -282,11 +284,11 @@
 															</td>
 														</tr>
 														<tr>
-															<td class="navBf1"><a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0B14">照相手機</a>
-
+															<td class="navBf1">
+																<a href="">照相手機</a>
 															</td>
-															<td class="navBf1">	<a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=0B15">數位攝影機</a>
-
+															<td class="navBf1">
+																<a href="">數位攝影機</a>
 															</td>
 														</tr>
 														<tr>
@@ -300,24 +302,11 @@
 															</td>
 														</tr>
 														<tr>
-															<td class="navBf1"><a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=1">鏡頭 (廣角增距等)</a>
-
+															<td class="navBf1">
+																<a href="./sh_list.php?sub_category=33">鏡頭 (廣角增距等)</a>
 															</td>
-															<td class="navBf1" colspan="2"><a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=2">列印 (印相,輸出等)</a>
-
-															</td>
-														</tr>
-														<tr>
-															<td colspan="2">
-																<img height="1" src="./img/bd_spline.gif" width="240">
-															</td>
-														</tr>
-														<tr>
-															<td class="navBf1"><a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=3">閃光燈</a>
-
-															</td>
-															<td class="navBf1" colspan="2"><a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=4">記憶卡/儲存設備</a>
-
+															<td class="navBf1" colspan="2">
+																<a href="./sh_list.php?sub_category=34">列印 (印相,輸出等)</a>
 															</td>
 														</tr>
 														<tr>
@@ -326,11 +315,24 @@
 															</td>
 														</tr>
 														<tr>
-															<td class="navBf1"><a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=5">電池 (一般，鋰電)</a>
+															<td class="navBf1"><a href="./sh_list.php?sub_category=35">閃光燈</a>
 
 															</td>
-															<td class="navBf1" colspan="2"><a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=6">腳架</a>
-
+															<td class="navBf1" colspan="2">
+																<a href="./sh_list.php?sub_category=36">記憶卡/儲存設備</a>
+															</td>
+														</tr>
+														<tr>
+															<td colspan="2">
+																<img height="1" src="./img/bd_spline.gif" width="240">
+															</td>
+														</tr>
+														<tr>
+															<td class="navBf1">
+																<a href="./sh_list.php?sub_category=37">電池 (一般，鋰電)</a>
+															</td>
+															<td class="navBf1" colspan="2">
+																<a href="./sh_list.php?sub_category=38">腳架</a>
 															</td>
 														</tr>
 														<tr>
@@ -340,8 +342,8 @@
 														</tr>
 														<!--<tr><td class="navBf1" colspan=2><a href="/dcbid/flealist.asp?ptype=7">電源、充電器</a></td></tr> <tr><td colspan=2><img height=1 src="/images/bd_spline.gif" width=240></td></tr>-->
 														<tr>
-															<td class="navBf1" colspan="2"><a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype=8">背包、皮套</a>
-
+															<td class="navBf1" colspan="2">
+																<a href="./sh_list.php?sub_category=40">背包、皮套</a>
 															</td>
 														</tr>
 														<tr>
@@ -356,8 +358,8 @@
 															</td>
 														</tr>
 														<tr>
-															<td class="navBf1" colspan="2"><a href="http://www.dcview.com.tw/dcbid/flealist.asp?ptype">所有類別物品</a>
-
+															<td class="navBf1" colspan="2">
+																<a href="./sh_list.php">所有類別物品</a>
 															</td>
 														</tr>
 														<tr>

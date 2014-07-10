@@ -58,7 +58,7 @@ if (count($post_data) == count($fields) && verify_article_data($post_data)) {
 <!--類別-->
 <div class="block01">
 <ul>
-<li>刊登人：m=0=m</li>
+<li>刊登人：<?php echo $user["nickname"]; ?></li>
 <li>刊登在數位相機二手市場</li>
 </ul>
 <?php require_once("templates/category.tpl.php"); ?>

@@ -83,16 +83,6 @@ function get_sh_area($one_piece_data) {
 	return 0;
 }
 
-function get_date($one_piece_data) {
-	$date = $one_piece_data["article_create_time"];
-	$date = explode("-", $date);
-	foreach ($date as $key => $value) {
-		$date[$key] = (int)$value;
-	}
-
-	return date("Y-m-d H:i:s", mktime(0, 0, 0, $date[0], $date[1], $date[2]));
-}
-
 $ta = new TblArticle();
 $tr = new TblReply();
 
@@ -106,8 +96,6 @@ foreach ($sheetData as $value) {
 }
 
 foreach ($sh_article_have_reply as $value) {
-	$datetime = call_user_func("get_date", $value);
-
 	$article_record = array(
 		"user_id" => mt_rand(1, 100),
 		"old_article_id" => $value["回覆編號"],
@@ -124,8 +112,8 @@ foreach ($sh_article_have_reply as $value) {
 		"article_phone_number" => $value["article_phone_number"],
 		"article_img_url1" => $value["article_img_url1"],
 		"article_img_url2" => $value["article_img_url2"],
-		"article_create_time" => $datetime,
-		"article_update_time" => $datetime,
+		"article_create_time" => $value["article_create_time"],
+		"article_update_time" => $value["article_update_time"],
 	);
 
 	$ta->create($article_record);
@@ -157,15 +145,13 @@ foreach ($sheetData as $key => $value) {
 			if (isset($sh_article_reply[$article_record["old_article_id"]])) {
 				$replies = $sh_article_reply[$article_record["old_article_id"]];
 				foreach ($replies as $piece_of_reply) {
-					$datetime = call_user_func("get_date", $piece_of_reply);
-
 					$reply_record = array(
 						"article_id" => $article_record["article_id"],
 						"user_id" => mt_rand(1, 100),
 						"user_account" => $piece_of_reply["user_account"],
 						"reply_content" => $piece_of_reply["article_content"],
-						"reply_create_time" => $datetime,
-						"reply_update_time" => $datetime,
+						"reply_create_time" => $piece_of_reply["article_create_time"],
+						"reply_update_time" => $piece_of_reply["article_update_time"],
 					);
 
 					$tr->create($reply_record);
@@ -177,7 +163,7 @@ foreach ($sheetData as $key => $value) {
 	}
 }
 
-/*
+
 $objPHPExcel = PHPExcel_IOFactory::load("sh_article_no_reply_ms_data.xls");
 $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
 
@@ -188,8 +174,6 @@ foreach ($sheetData as $value) {
 }
 
 foreach ($sh_article_no_reply as $value) {
-	$datetime = call_user_func("get_date", $value);
-
 	$article_record = array(
 		"user_id" => mt_rand(1, 100),
 		"user_account" => $value["user_account"],
@@ -205,13 +189,13 @@ foreach ($sh_article_no_reply as $value) {
 		"article_phone_number" => $value["article_phone_number"],
 		"article_img_url1" => $value["article_img_url1"],
 		"article_img_url2" => $value["article_img_url2"],
-		"article_create_time" => $datetime,
-		"article_update_time" => $datetime,
+		"article_create_time" => $value["article_create_time"],
+		"article_update_time" => $value["article_update_time"],
 	);
 
 	$ta->create($article_record);
 }
-*/
+
 
 $end_time = time();
 

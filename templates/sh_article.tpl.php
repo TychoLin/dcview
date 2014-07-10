@@ -136,7 +136,7 @@ if (isset($_GET["article_id"])) {
 <div class="title03">
 <p>網友請注意:
 本版僅提供網頁平台供網友張貼拍賣訊息。因此本版無法保證所有訊息資料之可靠性。
-建議網友進行交易之前，務必確實比對貨品之規格是否符合，並留下對方之真實姓名(最好記下身分證字號)、聯絡 方式，強烈建議網友，務必當場點清貨品規格後再行付款，以免事後產生糾紛。
+建議網友進行交易之前，務必確實比對貨品之規格是否符合，並留下對方之真實姓名(最好記下身分證字號)、聯絡方式，強烈建議網友，務必當場點清貨品規格後再行付款，以免事後產生糾紛。
 建議勿用郵局代收貨款, 或匯款方式進行交易(這些都容易產生糾紛)，建議一手交錢、一手交貨。</p>
 </div>
 <!--notice end-->
@@ -167,30 +167,62 @@ foreach ($reply_list as $value) {
 </div>
 
 <div id="reply-popup" class="white-popup mfp-hide">
-<form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
-標題：Re：<?php echo $article_record["article_title"]; ?>
-<textarea class="style02" name="content" placeholder=""></textarea>
-<input type="hidden" id="article_id" name="article_id" value="<?php echo $article_id; ?>">
-<button type="submit" name="submit" value="reply">送出</button>
-</form>
+	<form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
+		<div class="p_content">
+			<!--規則說明-->
+			<div class="rule">
+				<p>二手市場區張貼規則: <span>(未依規定發表之留言將一律刪除，恕不另行通知。)</span>
+					<br>1. 本版純屬交流，不歡迎打廣告<span>（含已經刊登於其他拍賣者）</span>，未依規定發表之刊登與留言將一律刪除，恕不另行通知。
+					<br>2. 本站無法稽核二手買賣商品內容之真實性，網友請自行負責承擔風險，盡可能當面交易點清，切勿貿然匯款或郵寄商品給陌生人。
+					<br>3. 本區謝絕任何形式廣告，包括水貨商、跑單幫者、清庫存促銷、或是任何特賣活動。
+					<br>4. 發起團購者，請於十二小時內將您的姓名、身分證字號、服務單位、聯絡電話、地址通知站方 備查，否則將一律刪除。
+					<br>5. 同物品一週內若重複刊登，我們將會全數刪除，並將該會員帳號停權處理！
+					<br>6. 刊登物品請詳述您的物件內容，否則將予以刪除！
+					<br>7. 會員每次刊登僅一則為限，之後間隔30分鐘可再次刊登<span>（內容不得重複）</span>。
+					<br>8. 新註冊之會員，註冊成功起三天內恕無法刊登。
+				</p>
+			</div>
+			<!--規則說明 end-->
+			<!--類別-->
+			<div class="block01">
+				<ul>
+					<li>刊登人：m=0=m</li>
+				</ul>
+			</div>
+			<!--類別 end-->
+			<!--標題-->
+			<span class="respond_text"> 標題:<span class="color">Re：<?php echo $article_record["article_title"]; ?></span></span>
+			<span class="respond_text1"> 您的回覆或疑問：</span>
+			<!-- Textarea -->
+			<textarea class="style02" name="content" placeholder=""></textarea>
+			<input type="hidden" id="article_id" name="article_id" value="<?php echo $article_id; ?>">
+			<!--標題 end-->
+			<!--物品圖片-->
+			<button type="submit" name="submit" value="reply" class="style01">確定送出</button>
+		</div>
+	</form>
 </div>
 
 <div id="edit-popup" class="white-popup mfp-hide">
-<form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
-標題：<?php echo $article_record["article_title"]; ?>
-<textarea class="style02" name="content" placeholder=""></textarea>
-<input type="hidden" id="article_id" name="article_id" value="<?php echo $article_id; ?>">
-<button type="submit" name="submit" value="edit">送出</button>
-</form>
+	<div class="p_content">
+		<form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
+		標題：<?php echo $article_record["article_title"]; ?>
+		<textarea class="style02" name="content" placeholder=""></textarea>
+		<input type="hidden" id="article_id" name="article_id" value="<?php echo $article_id; ?>">
+		<button type="submit" name="submit" value="edit" class="style01">確定送出</button>
+		</form>
+	</div>
 </div>
 
 <div id="report-popup" class="white-popup mfp-hide">
-<form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
-<p>請簡單填寫您檢舉此篇的理由，以方便我們處理, thanks a lot!</p>
-<input type="text" name="content"><br>
-<input type="hidden" id="article_id" name="article_id" value="<?php echo $article_id; ?>">
-(請勿超過 40字) <button type="submit" name="submit" value="report">送出</button>
-</form>
+	<div class="p_content">
+		<form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
+		<p>請簡單填寫您檢舉此篇的理由，以方便我們處理, thanks a lot!</p>
+		<input type="text" name="content"><br>
+		<input type="hidden" id="article_id" name="article_id" value="<?php echo $article_id; ?>">
+		(請勿超過 40字) <button type="submit" name="submit" value="report" class="style01">確定送出</button>
+		</form>
+	</div>
 </div>
 
 <script type="text/javascript">

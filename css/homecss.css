@@ -2,7 +2,7 @@
 A:link {
 	text-decoration: none;
 	color:#003399 ;
-	font-family: "Microsoft JhengHei", Arial, Helvetica, sans-serif;
+	
 }
 table.sortable td a:link,table.sortable tr a:link{ color:#6e6e6e;text-decoration: none;}
 table.sortable td a:hover,table.sortable tr a:hover{ color:#6e6e6e;text-decoration: underline;}

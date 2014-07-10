@@ -131,10 +131,7 @@ input.br_style{ display:block;}
 	a.button,
 	a,
 	input[type="file"]{
-	-moz-transition: -moz-box-shadow 0.5s, border 0.5s, background 0.5s;
-	-webkit-transition: -webkit-box-shadow 0.5s, border 0.5s, background 0.5s;
-	-o-transition:  box-shadow 0.5s, border 0.5s, background 0.5s;
-	transition: box-shadow 0.5s, border 0.5s, background 0.5s;
+
 	}
 
 input.checkbox,
