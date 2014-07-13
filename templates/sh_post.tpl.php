@@ -54,11 +54,11 @@ if (count($post_data) == count($fields) && verify_article_data($post_data)) {
 </div>
 <!--規則說明 end-->
 
-<form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
+<form id="sh_article_form" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
 <!--類別-->
 <div class="block01">
 <ul>
-<li>刊登人：<?php echo $user["nickname"]; ?></li>
+<li>刊登人：nickname</li>
 <li>刊登在數位相機二手市場</li>
 </ul>
 <?php require_once("templates/category.tpl.php"); ?>
@@ -100,7 +100,7 @@ if (count($post_data) == count($fields) && verify_article_data($post_data)) {
 
 <!--標題-->
 <label for="title">標題:</label>
-<input class="width_block" id="title" name="title" type="text">
+<input class="width_block" id="title" name="title" type="text" required>
 <span class="color">(以 30個中文字或 60個英文字為限)</span>
 <!-- Textarea -->
 <textarea class="style02" name="content" placeholder=""></textarea>
@@ -136,6 +136,7 @@ if (count($post_data) == count($fields) && verify_article_data($post_data)) {
 </form>
 
 </div>
+<script type="text/javascript" scr="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
 <script type="text/javascript">
 $(window).load(function () {
 	$("select option[value=0]").remove();
@@ -144,5 +145,7 @@ $(window).load(function () {
 		var suffix = $("option:selected", this).val();
 		$("#sub_category").empty().append($("#sub_category_" + suffix + " option").clone());
 	});
+
+	$("#sh_article_form").validate();
 });
 </script>

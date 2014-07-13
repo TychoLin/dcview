@@ -34,7 +34,7 @@ require_once("handle.article.request.php");
 
 <label for="keyword">關鍵字:</label>
 <input id="keyword" name="keyword" type="text" />
-<button type="submit" class="small">搜尋</button>
+<button id="search_sh" type="button" class="small">搜尋</button>
 </div>
 <!--買賣地區 end-->
 
@@ -150,7 +150,11 @@ $(window).load(function () {
 		$("#fake_page option[value=" + search.page + "]").prop("selected", true);
 	});
 
-	// fix page in excess of total pages
+	$("#search_sh").click(function () {
+		$("#page option[value=1]").prop("selected", true);
+		$("#sh_list_form").submit();
+	});
+
 	$("[id*='page']").change(function () {
 		if ($(this).is("[id='fake_page']")) {
 			$("#page option[value=" + $("option:selected", this).val() + "]").prop("selected", true);
@@ -158,7 +162,7 @@ $(window).load(function () {
 		$("#sh_list_form").submit();
 	});
 
-	$("button[type='button']").click(function () {
+	$("button[class='small orange style02']").click(function () {
 		window.location = "sh_post.php";
 	});
 
