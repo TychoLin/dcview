@@ -100,10 +100,12 @@ if (count($post_data) == count($fields) && verify_article_data($post_data)) {
 
 <!--標題-->
 <label for="title">標題:</label>
-<input class="width_block" id="title" name="title" type="text" required>
-<span class="color">(以 30個中文字或 60個英文字為限)</span>
+<input class="width_block" id="title" name="title" type="text">
+<span class="color">(以30個中文字為限)</span>
 <!-- Textarea -->
+<p>
 <textarea class="style02" name="content" placeholder=""></textarea>
+</p>
 <!--標題 end-->
 
 <!--check box-->
@@ -136,7 +138,7 @@ if (count($post_data) == count($fields) && verify_article_data($post_data)) {
 </form>
 
 </div>
-<script type="text/javascript" scr="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
+<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
 <script type="text/javascript">
 $(window).load(function () {
 	$("select option[value=0]").remove();
@@ -146,6 +148,37 @@ $(window).load(function () {
 		$("#sub_category").empty().append($("#sub_category_" + suffix + " option").clone());
 	});
 
-	$("#sh_article_form").validate();
+	$("#sh_article_form").validate({
+		rules: {
+			price: {
+				required: true,
+				digits: true
+			},
+			title: {
+				required: true
+			},
+			content: {
+				required: true
+			},
+			email: {
+				email: true
+			}
+		},
+		messages: {
+			price: {
+				required: "必填欄位",
+				digits: "限數字"
+			},
+			title: {
+				required: "必填欄位"
+			},
+			content: {
+				required: "必填欄位"
+			},
+			email: {
+				email: "email 格式不符"
+			}
+		}
+	});
 });
 </script>
