@@ -52,7 +52,7 @@ function get_sub_category_id($one_piece_data) {
 
 // 1: 已交易 0: 未交易
 function get_article_sh_is_traded($one_piece_data) {
-	if ($one_piece_data["is_traded"] == 1) {
+	if ($one_piece_data["article_sh_is_traded"] == 1) {
 		return 1;
 	} else {
 		return 0;
@@ -87,12 +87,11 @@ $ta = new TblArticle();
 $tr = new TblReply();
 
 $objPHPExcel = PHPExcel_IOFactory::load("sh_article_have_reply_ms_data.xls");
-$sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+$sh_article_have_reply = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
 
-$fields = array_values(array_shift($sheetData));
-$sh_article_have_reply = array();
-foreach ($sheetData as $value) {
-	array_push($sh_article_have_reply, array_combine($fields, array_values($value)));
+$fields = array_values(array_shift($sh_article_have_reply));
+foreach ($sh_article_have_reply as &$value) {
+	$value = array_combine($fields, array_values($value));
 }
 
 foreach ($sh_article_have_reply as $value) {
@@ -112,6 +111,8 @@ foreach ($sh_article_have_reply as $value) {
 		"article_phone_number" => $value["article_phone_number"],
 		"article_img_url1" => $value["article_img_url1"],
 		"article_img_url2" => $value["article_img_url2"],
+		"article_page_views" => $value["article_page_views"],
+		"article_sh_is_notified" => $value["article_sh_is_notified"],
 		"article_create_time" => $value["article_create_time"],
 		"article_update_time" => $value["article_update_time"],
 	);
@@ -151,7 +152,7 @@ foreach ($sheetData as $key => $value) {
 						"user_account" => $piece_of_reply["user_account"],
 						"reply_content" => $piece_of_reply["article_content"],
 						"reply_create_time" => $piece_of_reply["article_create_time"],
-						"reply_update_time" => $piece_of_reply["article_update_time"],
+						"reply_update_time" => $piece_of_reply["article_create_time"],
 					);
 
 					$tr->create($reply_record);
@@ -163,14 +164,14 @@ foreach ($sheetData as $key => $value) {
 	}
 }
 
+unset($sheetData);
 
 $objPHPExcel = PHPExcel_IOFactory::load("sh_article_no_reply_ms_data.xls");
-$sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+$sh_article_no_reply = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
 
-$fields = array_values(array_shift($sheetData));
-$sh_article_no_reply = array();
-foreach ($sheetData as $value) {
-	array_push($sh_article_no_reply, array_combine($fields, array_values($value)));
+$fields = array_values(array_shift($sh_article_no_reply));
+foreach ($sh_article_no_reply as &$value) {
+	$value = array_combine($fields, array_values($value));
 }
 
 foreach ($sh_article_no_reply as $value) {
@@ -189,6 +190,8 @@ foreach ($sh_article_no_reply as $value) {
 		"article_phone_number" => $value["article_phone_number"],
 		"article_img_url1" => $value["article_img_url1"],
 		"article_img_url2" => $value["article_img_url2"],
+		"article_page_views" => $value["article_page_views"],
+		"article_sh_is_notified" => $value["article_sh_is_notified"],
 		"article_create_time" => $value["article_create_time"],
 		"article_update_time" => $value["article_update_time"],
 	);

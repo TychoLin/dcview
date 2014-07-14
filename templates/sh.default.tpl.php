@@ -52,6 +52,37 @@
 					$('#footer #nav .nav-more').hide();
 				});
 			});
+			function chk_search() {
+				if (document.siteSearchForm.scbar_txt.value.length < 1) {
+					alert("需輸入搜尋字串!!");
+					return false;
+				}
+				$('#kw').val($('#scbar_txt').val());
+				$('#searchkey').val($('#scbar_txt').val());
+				$('#siteSearchForm').submit();
+				return false;
+			}
+			
+			$(function () {
+				$('#scbar_type').val(1);
+				$('#scbar_txt').val('');
+				$('#scbar_type').change(function () {
+					switch ($('#scbar_type').val()) {
+						case '1':
+							$('#siteSearchForm').attr('action', 'http://gallery.dcview.com/result.php');
+							break;
+						case '2':
+							$('#siteSearchForm').attr('action', 'http://tw.dcview.com/search.php');
+							break;
+					}
+				});
+				$('#scbar_btn').click(function () {
+					$('#kw').val($('#scbar_txt').val());
+					$('#searchkey').val($('#scbar_txt').val());
+					$('#siteSearchForm').submit();
+                    return false;
+				});
+			});
 		</script>
 	</head>
 	<body bgcolor="#FFFFFF" topmargin="0" marginheight="0" leftmargin="0" marginwidth="0">
@@ -516,7 +547,7 @@
 					</div>
 					<!--=copyright -->
 					<div class="copyright">
-						<div class="logo">	<a href="http://www.dcview.com.tw/dcbid/new.html">
+						<div class="logo">	<a href="http://www.dcview.com.tw/">
 					<img src="./img/logo_d2.gif" alt="dcview-首頁" width="200" height="60"></a>
 
 						</div>
