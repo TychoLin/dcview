@@ -2,7 +2,7 @@
 define("DOC_ROOT", realpath(dirname(__FILE__)));
 mb_internal_encoding("UTF-8");
 
-require_once("shdb.inc.php");
+require_once("../shdb.inc.php");
 
 $main_content_path = DOC_ROOT."/templates/".str_replace(".", ".tpl.", basename($_SERVER["PHP_SELF"]));
 define("MAIN_CONTENT_PATH", $main_content_path);
