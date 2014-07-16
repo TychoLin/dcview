@@ -4,6 +4,42 @@ mb_internal_encoding("UTF-8");
 
 require_once("../shdb.inc.php");
 
+class DcviewSHRecordModel extends RecordModel {
+	public function __construct($table_reference) {
+		parent::__construct("dcviewSH", $table_reference);
+	}
+}
+
+class TblArticle extends DcviewSHRecordModel {
+	public function __construct() {
+		parent::__construct("tblArticle");
+	}
+}
+
+class TblReply extends DcviewSHRecordModel {
+	public function __construct() {
+		parent::__construct("tblReply");
+	}
+}
+
+class TblReport extends DcviewSHRecordModel {
+	public function __construct() {
+		parent::__construct("tblReport");
+	}
+}
+
+class TblSHMainCategory extends DcviewSHRecordModel {
+	public function __construct() {
+		parent::__construct("tblSHMainCategory");
+	}
+}
+
+class TblSHSubCategory extends DcviewSHRecordModel {
+	public function __construct() {
+		parent::__construct("tblSHSubCategory");
+	}
+}
+
 $main_content_path = DOC_ROOT."/templates/".str_replace(".", ".tpl.", basename($_SERVER["PHP_SELF"]));
 define("MAIN_CONTENT_PATH", $main_content_path);
 

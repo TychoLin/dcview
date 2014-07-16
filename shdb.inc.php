@@ -3,7 +3,15 @@ class DB {
 	private static $_db;
 	private static $_dbStores = array(
 		"dcviewSH" => array(
-			"dsn" => "mysql:host=localhost;dbname=dcview",
+			"dsn" => "mysql:host=localhost;dbname=dcviewSH",
+			"username" => "root",
+			"password" => "9999",
+			"options" => array(
+				PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
+			),
+		),
+		"dcviewEdm" => array(
+			"dsn" => "mysql:host=localhost;dbname=dcviewEdm",
 			"username" => "root",
 			"password" => "9999",
 			"options" => array(
@@ -167,42 +175,6 @@ class RecordModel {
 
 	public function getLastInsertID() {
 		return $this->_dbHandler->lastInsertId();
-	}
-}
-
-class DcviewSHRecordModel extends RecordModel {
-	public function __construct($table_reference) {
-		parent::__construct("dcviewSH", $table_reference);
-	}
-}
-
-class TblArticle extends DcviewSHRecordModel {
-	public function __construct() {
-		parent::__construct("tblArticle");
-	}
-}
-
-class TblReply extends DcviewSHRecordModel {
-	public function __construct() {
-		parent::__construct("tblReply");
-	}
-}
-
-class TblReport extends DcviewSHRecordModel {
-	public function __construct() {
-		parent::__construct("tblReport");
-	}
-}
-
-class TblSHMainCategory extends DcviewSHRecordModel {
-	public function __construct() {
-		parent::__construct("tblSHMainCategory");
-	}
-}
-
-class TblSHSubCategory extends DcviewSHRecordModel {
-	public function __construct() {
-		parent::__construct("tblSHSubCategory");
 	}
 }
 ?>
