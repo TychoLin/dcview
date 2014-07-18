@@ -4,7 +4,11 @@
 <!DOCTYPE html>
 <html>
 <head>
- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<title></title>
+	<link rel="stylesheet" href="css/magnific-popup.css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
+	<script src="js/jquery.magnific-popup.js"></script>
 </head>
 <body>
 <form id="edm_form" enctype="multipart/form-data" action="__URL__" method="POST">
@@ -14,6 +18,9 @@
 	<p>publish date: <input type="date" id="publish_date" name="publish_date"></p>
 	<p><button type="button" id="submit" name="submit">submit</button></p>
 </form>
+<div id="test-popup" class="mfp-hide">
+	<img src="http://localhost:9999/dcview/edm/upload/edm/2014/07/20140719/edm_yiwLEv.jpg">
+</div>
 <script type="text/javascript">
 $(function () {
 	$("#submit").click(function () {
@@ -59,11 +66,50 @@ $(function () {
 			},
 			success: function (data) {
 				console.log(data);
+				data.forEach(function (elem) {
+					var img = $("<img>");
+					img.load(function () {
+						console.log($(this).width());
+						if (img.width() > 300 || img.height() > 300) {
+							if (img.width() > img.height()) {
+								var resize_ratio = 300 / img.width();
+							} else {
+								var resize_ratio = 300 / img.height();
+							}
+
+							console.log(resize_ratio);
+							img.width(resize_ratio + "em");
+							img.height(resize_ratio + "em");
+						}
+					});
+					img.prop("src", elem).appendTo($("#test-popup"));
+				});
+
+				// $.magnificPopup.open({
+				// 	items: {
+				// 		src: "#test-popup"
+				// 	},
+				// 	type: "inline"
+				// }, 0);
 			}
 		});
 	});
-});
-$("#upload_imgs").change(function (event) {
+
+	$("#edm_form").validate({
+		rules: {
+			title: {
+				required: true
+			},
+		},
+		messages: {
+			title: {
+				required: "必填欄位"
+			},
+		}
+	});
+
+	$("#upload_imgs").change(function (event) {
+	});
 });
 </script>
 </body>
