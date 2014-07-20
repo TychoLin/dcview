@@ -63,7 +63,9 @@ if (isset($edm_id, $publish_year, $publish_month, $publish_day)) {
 	}
 
 	$dir_url_path = "http://".str_replace(basename(__FILE__), "", $_SERVER["HTTP_HOST"].$_SERVER["PHP_SELF"]).$dir_path;
-	$img_url_list = array();
+	$data = array();
+	$data["edm_id"] = $edm_id;
+	$data["urls"] = array();
 	foreach ($_FILES["upload_imgs"]["error"] as $key => $error) {
 		if ($error == UPLOAD_ERR_OK) {
 			$tmp_name = $_FILES["upload_imgs"]["tmp_name"][$key];
@@ -73,12 +75,12 @@ if (isset($edm_id, $publish_year, $publish_month, $publish_day)) {
 			$new_tmp_file_name = $tmp_file_name.".$extension";
 			rename($tmp_file_name, $new_tmp_file_name);
 			if (move_uploaded_file($tmp_name, $new_tmp_file_name)) {
-				array_push($img_url_list, $dir_url_path.basename($new_tmp_file_name));
+				array_push($data["urls"], $dir_url_path.basename($new_tmp_file_name));
 			}
 		}
 	}
 
 	header("Content-Type: application/json");
-	echo json_encode($img_url_list);die;
+	echo json_encode($data);die;
 }
 ?>

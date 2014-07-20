@@ -1,29 +1,54 @@
-<?php
-
-?>
 <!DOCTYPE html>
 <html>
 <head>
 	<title></title>
+	<link rel="stylesheet" href="css/edm.css">
 	<link rel="stylesheet" href="css/magnific-popup.css">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
 	<script src="js/jquery.magnific-popup.js"></script>
+	<script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 </head>
 <body>
-<form id="edm_form" enctype="multipart/form-data" action="__URL__" method="POST">
-	<p><input type="file" id="upload_imgs" name="upload_imgs[]" accept="image/*" multiple></p>
-	<p>title: <input type="text" id="title" name="title"></p>
-	<p>volume: <input type="number" id="volume" name="volume"></p>
-	<p>publish date: <input type="date" id="publish_date" name="publish_date"></p>
-	<p><button type="button" id="submit" name="submit">submit</button></p>
-</form>
-<div id="test-popup" class="mfp-hide">
-	<img src="http://localhost:9999/dcview/edm/upload/edm/2014/07/20140719/edm_yiwLEv.jpg">
+<div id="edm_list" class="layout-content">
+	<nav>
+		<button type="button" id="create_edm_button">new</button>
+	</nav>
+</div>
+<div id="edm_operation" class="layout-content">
+	<nav>
+		<button type="button" id="save_edm_button">save</button>
+		<button type="button" id="close_edm_button">close</button>
+	</nav>
+	<form id="edm_form">
+		<p>title: <input type="text" id="title" name="title"></p>
+		<p>volume: <input type="number" id="volume" name="volume"></p>
+		<p>publish date: <input type="date" id="publish_date" name="publish_date"></p>
+		<p><input type="file" id="upload_imgs" name="upload_imgs[]" accept="image/*" multiple></p>
+		<div id="edm_thumbnail_setup">
+			<div class="dnd_zone">
+				<div>drag images below here</div>
+				<div>drag images below here</div>
+			</div>
+			<div class="gallery"></div>
+			<div style="clear: both;"></div>
+		</div>
+	</form>
 </div>
 <script type="text/javascript">
 $(function () {
-	$("#submit").click(function () {
+	$("#create_edm_button").click(function () {
+		$("#edm_list").hide();
+		$("#edm_operation").show();
+	});
+
+	$("#close_edm_button").click(function () {
+		$("#edm_operation").hide();
+		$("#edm_list").show();
+	});
+
+	$("#save_edm_button").click(function () {
 		var form_data = new FormData();
 
 		var files = $("#upload_imgs").prop("files");
@@ -66,31 +91,31 @@ $(function () {
 			},
 			success: function (data) {
 				console.log(data);
-				data.forEach(function (elem) {
+				var count = 0;
+				$(data.urls).each(function (index, elem) {
 					var img = $("<img>");
 					img.load(function () {
-						console.log($(this).width());
-						if (img.width() > 300 || img.height() > 300) {
-							if (img.width() > img.height()) {
-								var resize_ratio = 300 / img.width();
+						var width = img.prop("width");
+						var height = img.prop("height");
+						if (width > 300 || height > 300) {
+							if (width > height) {
+								var resize_ratio = 300 / width;
 							} else {
-								var resize_ratio = 300 / img.height();
+								var resize_ratio = 300 / height;
 							}
 
-							console.log(resize_ratio);
-							img.width(resize_ratio + "em");
-							img.height(resize_ratio + "em");
+							img.width(width * resize_ratio);
+							img.height(height * resize_ratio);
+
+							count++;
+							if (count == $(data.urls).length) {
+								$("#edm_thumbnail_setup .gallery").show();
+							}
 						}
 					});
-					img.prop("src", elem).appendTo($("#test-popup"));
+					img.prop("src", elem);
+					$("<div>").append(img).draggable({revert: true}).appendTo($("#edm_thumbnail_setup .gallery"));
 				});
-
-				// $.magnificPopup.open({
-				// 	items: {
-				// 		src: "#test-popup"
-				// 	},
-				// 	type: "inline"
-				// }, 0);
 			}
 		});
 	});
@@ -109,6 +134,14 @@ $(function () {
 	});
 
 	$("#upload_imgs").change(function (event) {
+	});
+
+	$(".dnd_zone div").droppable({
+		drop: function (event) {
+			console.log(event);
+			$(event.target).children("img").remove();
+			$(event.toElement).clone().appendTo($(event.target));
+		}
 	});
 });
 </script>
