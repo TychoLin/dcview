@@ -1,3 +1,27 @@
+<?php
+require_once("common.inc.php");
+
+define("LIMIT", 10);
+$page = isset($_GET["page"]) ? (int)$_GET["page"] : 1;
+$page = ($page > 0) ? $page : 1;
+$offset = LIMIT * ($page - 1);
+
+$te = new TblEdm();
+$sql_params = array(
+	"fields" => array("edm_id", "edm_volume", "edm_title", "edm_publish_date", "edm_thumbnail_path1", "edm_thumbnail_path2"),
+	"order_by_clause" => "edm_create_time DESC",
+	"limit" => LIMIT,
+	"offset" => $offset,
+);
+$edm_list = $te->read($te->generateReadSQL($sql_params));
+
+$sql_params = array(
+	"fields" => array("COUNT(*) AS total_record_number"),
+);
+$total_record_number = $te->read($te->generateReadSQL($sql_params));
+$total_record_number = $total_record_number[0]["total_record_number"];
+$total_page_number = ceil($total_record_number / LIMIT);
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +38,32 @@
 <div id="edm_list" class="layout-content">
 	<nav>
 		<button type="button" id="create_edm_button">new</button>
+		<select id="page" name="page">
+		<?php
+		for ($i = 1; $i <= $total_page_number; $i++) {
+			echo "<option value=\"$i\">$i</option>";
+		}
+		?>
+		</select>
 	</nav>
+	<table>
+		<tr>
+			<th>volume</th>
+			<th>title</th>
+			<th>publish date</th>
+			<th>big image</th>
+			<th>smaill image</th>
+		</tr>
+		<?php foreach($edm_list as $value) { ?>
+		<tr>
+			<td><?php echo $value["edm_volume"]; ?></td>
+			<td class="title"><?php echo $value["edm_title"]; ?></td>
+			<td><?php echo $value["edm_publish_date"]; ?></td>
+			<td><img src="<?php echo $value["edm_thumbnail_path1"]; ?>"></td>
+			<td><img src="<?php echo $value["edm_thumbnail_path2"]; ?>"></td>
+		</tr>
+		<?php } ?>
+	</table>
 </div>
 <div id="edm_operation" class="layout-content">
 	<nav>
@@ -91,6 +140,8 @@ $(function () {
 			},
 			success: function (data) {
 				console.log(data);
+				$(".dnd_zone").data("edm_id", data.edm_id);
+
 				var count = 0;
 				$(data.urls).each(function (index, elem) {
 					var img = $("<img>");
@@ -141,7 +192,32 @@ $(function () {
 			console.log(event);
 			$(event.target).children("img").remove();
 			$(event.toElement).clone().appendTo($(event.target));
+
+			var post_data = {edm_id: $(".dnd_zone").data("edm_id")};
+			var index = $(".dnd_zone div").index($(event.target));
+			if (index == 0) {
+				post_data.edm_thumbnail_src1 = $(event.toElement).prop("src");
+			} else {
+				post_data.edm_thumbnail_src2 = $(event.toElement).prop("src");
+			}
+
+			$.post("update_edm_ajax.php", post_data, function (data) {
+				console.log(data);
+			});
 		}
+	});
+
+	$.getScript("js/URI.js", function () {
+		var search = URI.parseQuery(window.location.search);
+		for (var name in search) {
+			$("#" + name + " option[value=" + search[name] + "]").prop("selected", true);
+		}
+	});
+
+	$("#page").change(function () {
+		var uri = new URI();
+		uri.setQuery({page: $("option:selected", this).val()});
+		window.location = uri.href();
 	});
 });
 </script>

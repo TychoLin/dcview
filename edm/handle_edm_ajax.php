@@ -1,7 +1,7 @@
 <?php
 require_once("common.inc.php");
 // header("Content-Type: application/json");
-// echo json_encode($_FILES);die;
+// echo json_encode($_POST);die;
 
 function verify_edm_data($data) {
 	if (empty($data["title"])) {
@@ -81,6 +81,6 @@ if (isset($edm_id, $publish_year, $publish_month, $publish_day)) {
 	}
 
 	header("Content-Type: application/json");
-	echo json_encode($data);die;
+	echo json_encode($data);
 }
 ?>

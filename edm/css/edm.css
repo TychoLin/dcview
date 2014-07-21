@@ -10,12 +10,17 @@ td, th {
 	overflow: hidden;
 }
 
+td img {
+	max-width: 300px;
+	max-height: 200px;
+	overflow: hidden;
+}
+
 .layout-content {
 }
 
 .title {
 	width: 50%;
-	overflow: hidden;
 }
 
 .white-popup {
@@ -31,7 +36,6 @@ td, th {
 	display: none;
 	float: left;
 	width: 800px;
-	border: 1px solid blue;
 }
 
 .gallery div {
@@ -50,13 +54,17 @@ td, th {
 	border-radius: 5px;
 	text-align: center;
 	width: 300px;
-	height: 300px;
+	height: 200px;
 	padding: 25px;
 	margin: 0 20px 20px 0;
 }
 
+#edm_operation {
+	display: none;
+}
+
 #edm_thumbnail_setup {
-	border: 1px solid red;
+	max-width: 1200px;
 	max-height: 600px;
 	overflow-y: scroll;
 }
