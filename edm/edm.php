@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once("common.inc.php");
 
 define("LIMIT", 10);
@@ -71,19 +71,25 @@ $total_page_number = ceil($total_record_number / LIMIT);
 		<button type="button" id="close_edm_button">close</button>
 	</nav>
 	<form id="edm_form">
-		<p>title: <input type="text" id="title" name="title"></p>
-		<p>volume: <input type="number" id="volume" name="volume"></p>
-		<p>publish date: <input type="date" id="publish_date" name="publish_date"></p>
-		<p><input type="file" id="upload_imgs" name="upload_imgs[]" accept="image/*" multiple></p>
+		<p>title: <input type="text" name="title"></p>
+		<p>volume: <input type="number" name="volume"></p>
+		<p>publish date: <input type="date" name="publish_date"></p>
 		<div id="edm_thumbnail_setup">
 			<div class="dnd_zone">
 				<div>drag images below here</div>
 				<div>drag images below here</div>
 			</div>
-			<div class="gallery"></div>
-			<div style="clear: both;"></div>
 		</div>
 	</form>
+	<form id="edm_info_type1_form">
+		<p>title: <input type="text" name="title"></p>
+		<p>summary: <textarea name="summary" rows="10" cols="50"></textarea></p>
+		<p>url: <input type="text" name="url"></p>
+	</form>
+	<div id="image_upload_zone">
+		<p><input type="file" id="upload_imgs" name="upload_imgs[]" accept="image/*" multiple></p>
+		<div class="gallery"></div>
+	</div>
 </div>
 <script type="text/javascript">
 $(function () {
@@ -98,6 +104,10 @@ $(function () {
 	});
 
 	$("#save_edm_button").click(function () {
+		// if (!$("edm_form").valid()) {
+		// 	return;
+		// }
+
 		var form_data = new FormData();
 
 		var files = $("#upload_imgs").prop("files");
@@ -160,12 +170,12 @@ $(function () {
 
 							count++;
 							if (count == $(data.urls).length) {
-								$("#edm_thumbnail_setup .gallery").show();
+								$("#image_upload_zone .gallery").show();
 							}
 						}
 					});
 					img.prop("src", elem);
-					$("<div>").append(img).draggable({revert: true}).appendTo($("#edm_thumbnail_setup .gallery"));
+					$("<div>").append(img).draggable({revert: true}).appendTo($("#image_upload_zone .gallery"));
 				});
 			}
 		});
@@ -207,6 +217,7 @@ $(function () {
 		}
 	});
 
+	// init page select
 	$.getScript("js/URI.js", function () {
 		var search = URI.parseQuery(window.location.search);
 		for (var name in search) {

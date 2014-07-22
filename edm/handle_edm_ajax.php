@@ -70,6 +70,7 @@ if (isset($edm_id, $publish_year, $publish_month, $publish_day)) {
 		if ($error == UPLOAD_ERR_OK) {
 			$tmp_name = $_FILES["upload_imgs"]["tmp_name"][$key];
 			$name = $_FILES["upload_imgs"]["name"][$key];
+			// validate if uploaded file is image
 			$extension = pathinfo($name, PATHINFO_EXTENSION);
 			$tmp_file_name = tempnam($dir_path, $prefix);
 			$new_tmp_file_name = $tmp_file_name.".$extension";
