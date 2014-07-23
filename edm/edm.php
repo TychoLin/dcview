@@ -1,7 +1,7 @@
 ﻿<?php
 require_once("common.inc.php");
 
-define("LIMIT", 10);
+define("LIMIT", 5);
 $page = isset($_GET["page"]) ? (int)$_GET["page"] : 1;
 $page = ($page > 0) ? $page : 1;
 $offset = LIMIT * ($page - 1);
@@ -57,38 +57,64 @@ $total_page_number = ceil($total_record_number / LIMIT);
 		<?php foreach($edm_list as $value) { ?>
 		<tr>
 			<td><?php echo $value["edm_volume"]; ?></td>
-			<td class="title"><?php echo $value["edm_title"]; ?></td>
+			<td style="width: 40%;"><?php echo $value["edm_title"]; ?></td>
 			<td><?php echo $value["edm_publish_date"]; ?></td>
 			<td><img src="<?php echo $value["edm_thumbnail_path1"]; ?>"></td>
 			<td><img src="<?php echo $value["edm_thumbnail_path2"]; ?>"></td>
 		</tr>
 		<?php } ?>
 	</table>
+	<script type="text/javascript">
+	$(function () {
+		// init page select
+		$.getScript("js/URI.js", function () {
+			var search = URI.parseQuery(window.location.search);
+			for (var name in search) {
+				$("#" + name + " option[value=" + search[name] + "]").prop("selected", true);
+			}
+		});
+
+		$("#page").change(function () {
+			var uri = new URI();
+			uri.setQuery({page: $("option:selected", this).val()});
+			window.location = uri.href();
+		});
+	});
+	</script>
 </div>
 <div id="edm_operation" class="layout-content">
 	<nav>
-		<button type="button" id="save_edm_button">save</button>
-		<button type="button" id="close_edm_button">close</button>
+		<button type="button" name="close">close</button>
 	</nav>
 	<form id="edm_form">
+		<h1>edm</h1>
+		<button type="button" name="save">save</button>
 		<p>title: <input type="text" name="title"></p>
 		<p>volume: <input type="number" name="volume"></p>
 		<p>publish date: <input type="date" name="publish_date"></p>
-		<div id="edm_thumbnail_setup">
-			<div class="dnd_zone">
-				<div>drag images below here</div>
-				<div>drag images below here</div>
-			</div>
+		<div class="dnd_zone">
+			<div>drag images below here</div>
+			<div>drag images below here</div>
 		</div>
 	</form>
-	<form id="edm_info_type1_form">
-		<p>title: <input type="text" name="title"></p>
-		<p>summary: <textarea name="summary" rows="10" cols="50"></textarea></p>
-		<p>url: <input type="text" name="url"></p>
-	</form>
+	<div id="edm_info_type1">
+		<h2>focus news</h2>
+		<button type="button" name="save">save</button>
+		<button type="button" name="new">new</button>
+	</div>
 	<div id="image_upload_zone">
 		<p><input type="file" id="upload_imgs" name="upload_imgs[]" accept="image/*" multiple></p>
 		<div class="gallery"></div>
+	</div>
+	<div class="edm_info_sample_form">
+		<form id="edm_info_type1_form">
+			<p>title: <input type="text" name="title"></p>
+			<p>summary: <textarea name="summary" rows="10" cols="50"></textarea></p>
+			<p>url: <input type="text" name="url"></p>
+			<div class="dnd_zone">
+				<div>drag images below here</div>
+			</div>
+		</form>
 	</div>
 </div>
 <script type="text/javascript">
@@ -98,15 +124,47 @@ $(function () {
 		$("#edm_operation").show();
 	});
 
-	$("#close_edm_button").click(function () {
+	$("#edm_operation nav button[name='close']").click(function () {
 		$("#edm_operation").hide();
 		$("#edm_list").show();
 	});
 
-	$("#save_edm_button").click(function () {
+	$("#edm_form button[name='save']").click(function () {
 		// if (!$("edm_form").valid()) {
 		// 	return;
 		// }
+
+		var post_data = {};
+		jQuery.each($("#edm_form").serializeArray(), function (index, elem) {
+			post_data[elem.name] = elem.value;
+		});
+
+		post_data.action = "create";
+
+		console.log(post_data);
+		$.post("handle_edm_ajax.php", post_data, function (data) {
+			console.log(data);
+			$("#edm_form").data("edm_id", data.edm_id);
+		});
+	});
+
+	$("#edm_form").validate({
+		rules: {
+			title: {
+				required: true
+			},
+		},
+		messages: {
+			title: {
+				required: "必填欄位"
+			},
+		}
+	});
+
+	$("#upload_imgs").change(function (event) {
+		if ($("#edm_form").data("edm_id") === undefined) {
+			return;
+		}
 
 		var form_data = new FormData();
 
@@ -117,14 +175,11 @@ $(function () {
 			}
 		});
 
-		var post_data = $("#edm_form").serializeArray();
-		$(post_data).each(function (index, elem) {
-			form_data.append(elem.name, elem.value);
-		});
+		form_data.append("edm_id", $("#edm_form").data("edm_id"));
 
 		$.ajax({
 			type: "POST",
-			url: "handle_edm_ajax.php",
+			url: "handle_upload_ajax.php",
 			data: form_data,
 			processData: false,
 			contentType: false,
@@ -148,12 +203,10 @@ $(function () {
 				}, false);
 				return xhr;
 			},
-			success: function (data) {
-				console.log(data);
-				$(".dnd_zone").data("edm_id", data.edm_id);
-
+			success: function (urls) {
+				console.log(urls);
 				var count = 0;
-				$(data.urls).each(function (index, elem) {
+				$(urls).each(function (index, elem) {
 					var img = $("<img>");
 					img.load(function () {
 						var width = img.prop("width");
@@ -169,7 +222,7 @@ $(function () {
 							img.height(height * resize_ratio);
 
 							count++;
-							if (count == $(data.urls).length) {
+							if (count == $(urls).length) {
 								$("#image_upload_zone .gallery").show();
 							}
 						}
@@ -181,54 +234,45 @@ $(function () {
 		});
 	});
 
-	$("#edm_form").validate({
-		rules: {
-			title: {
-				required: true
-			},
-		},
-		messages: {
-			title: {
-				required: "必填欄位"
-			},
-		}
-	});
-
-	$("#upload_imgs").change(function (event) {
-	});
-
 	$(".dnd_zone div").droppable({
 		drop: function (event) {
 			console.log(event);
 			$(event.target).children("img").remove();
 			$(event.toElement).clone().appendTo($(event.target));
 
-			var post_data = {edm_id: $(".dnd_zone").data("edm_id")};
+			var post_data = {edm_id: $("#edm_form").data("edm_id")};
 			var index = $(".dnd_zone div").index($(event.target));
 			if (index == 0) {
-				post_data.edm_thumbnail_src1 = $(event.toElement).prop("src");
+				post_data.edm_thumbnail_path1 = $(event.toElement).prop("src");
 			} else {
-				post_data.edm_thumbnail_src2 = $(event.toElement).prop("src");
+				post_data.edm_thumbnail_path2 = $(event.toElement).prop("src");
 			}
 
-			$.post("update_edm_ajax.php", post_data, function (data) {
-				console.log(data);
+			// $.post("update_edm_ajax.php", post_data, function (data) {
+			// 	console.log(data);
+			// });
+		}
+	});
+
+	$("#edm_info_type1 button[name='save']").click(function () {
+		if ($("#edm_form").data("edm_id") === undefined) {
+			return;
+		}
+
+		var edm_info1 = [];
+		jQuery.each($("#edm_info_type1 form"), function (index, elem) {
+			var edm_info_obj = {};
+			jQuery.each($(elem).serializeArray(), function (index, elem) {
+				edm_info_obj[elem.name] = elem.value;
 			});
-		}
+			edm_info1.push(edm_info_obj);
+		});
+
+		post_data["edm_info1"] = edm_info1;
 	});
 
-	// init page select
-	$.getScript("js/URI.js", function () {
-		var search = URI.parseQuery(window.location.search);
-		for (var name in search) {
-			$("#" + name + " option[value=" + search[name] + "]").prop("selected", true);
-		}
-	});
-
-	$("#page").change(function () {
-		var uri = new URI();
-		uri.setQuery({page: $("option:selected", this).val()});
-		window.location = uri.href();
+	$("#edm_info_type1 button[name='new']").click(function () {
+		$("#edm_info_type1_form").clone().removeAttr("id").appendTo($("#edm_info_type1"));
 	});
 });
 </script>

@@ -1,7 +1,6 @@
 table {
 	border-collapse: collapse;
 	width: 100%;
-	table-layout: fixed;
 }
 
 td, th {
@@ -10,17 +9,12 @@ td, th {
 	overflow: hidden;
 }
 
-td img {
-	max-width: 300px;
-	max-height: 200px;
-	overflow: hidden;
+td * {
+	width: 100%;
+	vertical-align: middle;
 }
 
 .layout-content {
-}
-
-.title {
-	width: 50%;
 }
 
 .white-popup {
@@ -51,9 +45,20 @@ td img {
 	border-radius: 5px;
 	text-align: center;
 	width: 300px;
-	height: 200px;
+	min-height: 200px;
+	height: auto;
 	padding: 25px;
 	margin: 0 20px 20px 0;
+}
+
+.dnd_zone img {
+	position: relative;
+	left: 0px;
+	top: 0px;
+}
+
+.edm_info_sample_form {
+	display: none;
 }
 
 #edm_operation {
