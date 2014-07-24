@@ -55,7 +55,7 @@ $total_page_number = ceil($total_record_number / LIMIT);
 			<th>smaill image</th>
 		</tr>
 		<?php foreach($edm_list as $value) { ?>
-		<tr>
+		<tr edm_id="<?php echo $value["edm_id"]; ?>">
 			<td><?php echo $value["edm_volume"]; ?></td>
 			<td style="width: 40%;"><?php echo $value["edm_title"]; ?></td>
 			<td><?php echo $value["edm_publish_date"]; ?></td>
@@ -64,24 +64,42 @@ $total_page_number = ceil($total_record_number / LIMIT);
 		</tr>
 		<?php } ?>
 	</table>
-	<script type="text/javascript">
-	$(function () {
-		// init page select
-		$.getScript("js/URI.js", function () {
-			var search = URI.parseQuery(window.location.search);
-			for (var name in search) {
-				$("#" + name + " option[value=" + search[name] + "]").prop("selected", true);
-			}
-		});
+</div>
+<script type="text/javascript">
+function nano(template, data) {
+	return template.replace(/\{([\w\.]*)\}/g, function(str, key) {
+		var keys = key.split("."), v = data[keys.shift()];
+		for (var i = 0, l = keys.length; i < l; i++)
+			v = v[keys[i]];
+		return (typeof v !== "undefined" && v !== null) ? v : "";
+	});
+}
 
-		$("#page").change(function () {
-			var uri = new URI();
-			uri.setQuery({page: $("option:selected", this).val()});
-			window.location = uri.href();
+$(function () {
+	// init page select
+	$.getScript("js/URI.js", function () {
+		var search = URI.parseQuery(window.location.search);
+		for (var name in search) {
+			$("#" + name + " option[value=" + search[name] + "]").prop("selected", true);
+		}
+	});
+
+	$("#page").change(function () {
+		var uri = new URI();
+		uri.setQuery({page: $("option:selected", this).val()});
+		window.location = uri.href();
+	});
+
+	$("#edm_list table tr[edm_id]").click(function () {
+		$.get("handle_edm_ajax.php", {edm_id: $(this).attr("edm_id")}, function (data) {
+			$("#edm_form").html(nano($("#edm_form").html(), data.edm));
+			$("#edm_form").data("edm_id", data.edm.edm_id);
+			$("#edm_list").hide();
+			$("#edm_operation").show();
 		});
 	});
-	</script>
-</div>
+});
+</script>
 <div id="edm_operation" class="layout-content">
 	<nav>
 		<button type="button" name="close">close</button>
@@ -89,18 +107,29 @@ $total_page_number = ceil($total_record_number / LIMIT);
 	<form id="edm_form">
 		<h1>edm</h1>
 		<button type="button" name="save">save</button>
-		<p>title: <input type="text" name="title"></p>
-		<p>volume: <input type="number" name="volume"></p>
-		<p>publish date: <input type="date" name="publish_date"></p>
+		<p>title: <input type="text" name="title" value="{edm_title}"></p>
+		<p>volume: <input type="number" name="volume" value="{edm_volume}"></p>
+		<p>publish date: <input type="date" name="publish_date" value="{edm_publish_date}"></p>
 		<div class="dnd_zone">
 			<div>drag images below here</div>
 			<div>drag images below here</div>
 		</div>
+		<input type="hidden" name="edm_id" value="{edm_id}">
 	</form>
 	<div id="edm_info_type1">
-		<h2>focus news</h2>
-		<button type="button" name="save">save</button>
-		<button type="button" name="new">new</button>
+		<h2>焦點新聞</h2>
+		<button type="button" name="save" class="edm_info">save</button>
+		<button type="button" name="new" class="edm_info">new</button>
+	</div>
+	<div id="edm_info_type2">
+		<h2>新聞追蹤</h2>
+		<button type="button" name="save" class="edm_info">save</button>
+		<button type="button" name="new" class="edm_info">new</button>
+	</div>
+	<div id="edm_info_type3">
+		<h2>達人部落精選</h2>
+		<button type="button" name="save" class="edm_info">save</button>
+		<button type="button" name="new" class="edm_info">new</button>
 	</div>
 	<div id="image_upload_zone">
 		<p><input type="file" id="upload_imgs" name="upload_imgs[]" accept="image/*" multiple></p>
@@ -114,6 +143,22 @@ $total_page_number = ceil($total_record_number / LIMIT);
 			<div class="dnd_zone">
 				<div>drag images below here</div>
 			</div>
+			<input type="hidden" name="edm_info_id" value="">
+		</form>
+		<form id="edm_info_type2_form">
+			<p>title: <input type="text" name="title"></p>
+			<p>url: <input type="text" name="url"></p>
+			<input type="hidden" name="edm_info_id" value="">
+		</form>
+		<form id="edm_info_type3_form">
+			<p>title: <input type="text" name="title"></p>
+			<p>author: <input type="text" name="author"></p>
+			<p>summary: <textarea name="summary" rows="10" cols="50"></textarea></p>
+			<p>url: <input type="text" name="url"></p>
+			<div class="dnd_zone">
+				<div>drag images below here</div>
+			</div>
+			<input type="hidden" name="edm_info_id" value="">
 		</form>
 	</div>
 </div>
@@ -129,21 +174,28 @@ $(function () {
 		$("#edm_list").show();
 	});
 
-	$("#edm_form button[name='save']").click(function () {
+	$("#edm_form").on("click", "button[name='save']", function () {
+		// validate fields
 		// if (!$("edm_form").valid()) {
 		// 	return;
 		// }
 
 		var post_data = {};
+		var hidden_elem = $(this).siblings("input[name='edm_id']");
+		if (hidden_elem.val() == "") {
+			post_data.action = "create";
+		} else {
+			post_data.action = "update";
+		}
+
 		jQuery.each($("#edm_form").serializeArray(), function (index, elem) {
 			post_data[elem.name] = elem.value;
 		});
 
-		post_data.action = "create";
-
 		console.log(post_data);
 		$.post("handle_edm_ajax.php", post_data, function (data) {
 			console.log(data);
+			hidden_elem.val(data.edm_id);
 			$("#edm_form").data("edm_id", data.edm_id);
 		});
 	});
@@ -234,45 +286,57 @@ $(function () {
 		});
 	});
 
-	$(".dnd_zone div").droppable({
-		drop: function (event) {
-			console.log(event);
-			$(event.target).children("img").remove();
-			$(event.toElement).clone().appendTo($(event.target));
+	$(".dnd_zone").on("drop", "div", function (event) {
+		console.log(event);
+		$(event.target).children("img").remove();
+		$(event.toElement).clone().appendTo($(event.target));
 
-			var post_data = {edm_id: $("#edm_form").data("edm_id")};
-			var index = $(".dnd_zone div").index($(event.target));
-			if (index == 0) {
-				post_data.edm_thumbnail_path1 = $(event.toElement).prop("src");
-			} else {
-				post_data.edm_thumbnail_path2 = $(event.toElement).prop("src");
-			}
-
-			// $.post("update_edm_ajax.php", post_data, function (data) {
-			// 	console.log(data);
-			// });
+		var post_data = {edm_id: $("#edm_form").data("edm_id")};
+		var index = $(".dnd_zone div").index($(event.target));
+		if (index == 0) {
+			post_data.edm_thumbnail_path1 = $(event.toElement).prop("src");
+		} else {
+			post_data.edm_thumbnail_path2 = $(event.toElement).prop("src");
 		}
+
+		// $.post("update_edm_ajax.php", post_data, function (data) {
+		// 	console.log(data);
+		// });
 	});
 
-	$("#edm_info_type1 button[name='save']").click(function () {
+	$("button[name='save']").filter(".edm_info").click(function () {
 		if ($("#edm_form").data("edm_id") === undefined) {
 			return;
 		}
 
-		var edm_info1 = [];
-		jQuery.each($("#edm_info_type1 form"), function (index, elem) {
-			var edm_info_obj = {};
-			jQuery.each($(elem).serializeArray(), function (index, elem) {
-				edm_info_obj[elem.name] = elem.value;
-			});
-			edm_info1.push(edm_info_obj);
-		});
+		var post_data = {};
+		var id = $(this).parent().prop("id");
+		post_data.type = id.replace("edm_info_type", "");
+		post_data.edm_id = $("#edm_form").data("edm_id");
 
-		post_data["edm_info1"] = edm_info1;
+		jQuery.each($("#" + id + " form"), function (index, elem) {
+			var hidden_elem = $(elem).children("input[name='edm_info_id']");
+			if (hidden_elem.val() == "") {
+				post_data.action = "create";
+			} else {
+				post_data.action = "update";
+			}
+
+			jQuery.each($(elem).serializeArray(), function (index, elem) {
+				post_data[elem.name] = elem.value;
+			});
+
+			console.log(post_data);
+			$.post("handle_edm_info_ajax.php", post_data, function (data) {
+				console.log(data);
+				hidden_elem.val(data.edm_info_id);
+			});
+		});
 	});
 
-	$("#edm_info_type1 button[name='new']").click(function () {
-		$("#edm_info_type1_form").clone().removeAttr("id").appendTo($("#edm_info_type1"));
+	$("button[name='new']").filter(".edm_info").click(function () {
+		var id = $(this).parent().prop("id");
+		$("#" + id + "_form").clone().removeAttr("id").appendTo($("#" + id));
 	});
 });
 </script>

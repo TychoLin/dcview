@@ -12,4 +12,10 @@ class TblEdm extends DcviewEdmRecordModel {
 		parent::__construct("tblEdm");
 	}
 }
+
+class TblEdmInfo extends DcviewEdmRecordModel {
+	public function __construct() {
+		parent::__construct("tblEdmInfo");
+	}
+}
 ?>

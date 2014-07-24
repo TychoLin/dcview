@@ -51,37 +51,60 @@ function verify_thumbnail_path2() {
 header("Content-Type: application/json");
 // echo json_encode($_POST);die;
 
-$fields = array("action", "edm_id", "title", "volume", "publish_date", "thumbnail_path1", "thumbnail_path2");
-$post_data = array_intersect_key($_POST, array_fill_keys($fields, null));
-
-if (!isset($post_data["action"])) {
-	die();
-}
-
-// handle post data
-$record = array();
-foreach ($post_data as $key => $value) {
-	$func_name = "verify_".$key;
-	if (function_exists($func_name) && call_user_func($func_name, $value)) {
-		if (in_array($key, array("thumbnail_path1", "thumbnail_path2"))) {
-			$value = get_path($value);
-		}
-		$record["edm_".$key] = $value;
-	}
-}
-
 $data = array();
-if (count($record) > 0) {
+if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["edm_id"])) {
 	$te = new TblEdm();
-	$now = date("Y-m-d H:i:s");
-	$record["edm_update_time"] = $now;
+	$sql_params = array(
+		"fields" => array("*"),
+		"where_cond" => array("edm_id = ?" => $_GET["edm_id"]),
+	);
+	$result = $te->read($te->generateReadSQL($sql_params));
 
-	if ($post_data["action"] == "create") {
-		$record["edm_create_time"] = $now;
-		$te->create($record);
-		$data["edm_id"] = $te->getLastInsertID();
-	} else if ($post_data["action"] == "update" && isset($post_data["edm_id"])) {
-		$te->update($record, array("edm_id = ?" => $post_data["edm_id"]));
+	if (count($result) != 1) {
+		die();
+	}
+
+	$data["edm"] = $result[0];
+
+	$tei = new TblEdmInfo();
+	$sql_params = array(
+		"fields" => array("*"),
+		"where_cond" => array("edm_id = ?" => $_GET["edm_id"]),
+	);
+	$data["edm_infos"] = $tei->read($tei->generateReadSQL($sql_params));
+} else if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	$fields = array("action", "edm_id", "title", "volume", "publish_date", "thumbnail_path1", "thumbnail_path2");
+	$post_data = array_intersect_key($_POST, array_fill_keys($fields, null));
+
+	if (!isset($post_data["action"])) {
+		die();
+	}
+
+	// handle post data
+	$record = array();
+	foreach ($post_data as $key => $value) {
+		$func_name = "verify_".$key;
+		if (function_exists($func_name) && call_user_func($func_name, $value)) {
+			if (in_array($key, array("thumbnail_path1", "thumbnail_path2"))) {
+				$value = get_path($value);
+			}
+			$record["edm_".$key] = $value;
+		}
+	}
+
+	if (count($record) > 0) {
+		$te = new TblEdm();
+		$now = date("Y-m-d H:i:s");
+		$record["edm_update_time"] = $now;
+
+		if ($post_data["action"] == "create") {
+			$record["edm_create_time"] = $now;
+			$te->create($record);
+			$data["edm_id"] = $te->getLastInsertID();
+		} else if ($post_data["action"] == "update" && isset($post_data["edm_id"])) {
+			$te->update($record, array("edm_id = ?" => $post_data["edm_id"]));
+			$data["edm_id"] = $post_data["edm_id"];
+		}
 	}
 }
 

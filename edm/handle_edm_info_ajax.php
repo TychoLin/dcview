@@ -30,6 +30,7 @@ function verify_thumbnail_path($thumbnail_path) {
 }
 
 header("Content-Type: application/json");
+// echo json_encode($_POST);die;
 
 $fields = array("action", "edm_info_id", "edm_id", "type", "title", "summary", "url", "thumbnail_path");
 $post_data = array_intersect_key($_POST, array_fill_keys($fields, null));
