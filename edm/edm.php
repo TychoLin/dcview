@@ -92,7 +92,7 @@ $(function () {
 
 	$("#edm_list table tr[edm_id]").click(function () {
 		$.get("handle_edm_ajax.php", {edm_id: $(this).attr("edm_id")}, function (data) {
-			$("#edm_form").html(nano($("#edm_form").html(), data.edm));
+			$("#edm_form").html(nano($("#edm_reuse_form").html(), data.edm));
 			$("#edm_form").data("edm_id", data.edm.edm_id);
 			$("#edm_list").hide();
 			$("#edm_operation").show();
@@ -107,14 +107,14 @@ $(function () {
 	<form id="edm_form">
 		<h1>edm</h1>
 		<button type="button" name="save">save</button>
-		<p>title: <input type="text" name="title" value="{edm_title}"></p>
-		<p>volume: <input type="number" name="volume" value="{edm_volume}"></p>
-		<p>publish date: <input type="date" name="publish_date" value="{edm_publish_date}"></p>
+		<p>title: <input type="text" name="title" value=""></p>
+		<p>volume: <input type="number" name="volume" value=""></p>
+		<p>publish date: <input type="date" name="publish_date" value=""></p>
 		<div class="dnd_zone">
 			<div>drag images below here</div>
 			<div>drag images below here</div>
 		</div>
-		<input type="hidden" name="edm_id" value="{edm_id}">
+		<input type="hidden" name="edm_id" value="">
 	</form>
 	<div id="edm_info_type1">
 		<h2>焦點新聞</h2>
@@ -135,7 +135,19 @@ $(function () {
 		<p><input type="file" id="upload_imgs" name="upload_imgs[]" accept="image/*" multiple></p>
 		<div class="gallery"></div>
 	</div>
-	<div class="edm_info_sample_form">
+	<div class="edm_sample_form">
+		<form id="edm_reuse_form">
+			<h1>edm</h1>
+			<button type="button" name="save">save</button>
+			<p>title: <input type="text" name="title" value="{edm_title}"></p>
+			<p>volume: <input type="number" name="volume" value="{edm_volume}"></p>
+			<p>publish date: <input type="date" name="publish_date" value="{edm_publish_date}"></p>
+			<div class="dnd_zone">
+				<div>drag images below here</div>
+				<div>drag images below here</div>
+			</div>
+			<input type="hidden" name="edm_id" value="{edm_id}">
+		</form>
 		<form id="edm_info_type1_form">
 			<p>title: <input type="text" name="title"></p>
 			<p>summary: <textarea name="summary" rows="10" cols="50"></textarea></p>
@@ -163,8 +175,24 @@ $(function () {
 	</div>
 </div>
 <script type="text/javascript">
+$.fn.clearForm = function () {
+	return this.each(function () {
+		var type = this.type, tag = this.tagName.toLowerCase();
+		if (tag == 'form')
+			return $(':input',this).clearForm();
+		if (type == 'text' || type == 'password' || tag == 'textarea' || type == 'hidden' || type == 'number' || type == 'date')
+			this.value = '';
+		else if (type == 'checkbox' || type == 'radio')
+			this.checked = false;
+		else if (tag == 'select')
+			this.selectedIndex = -1;
+	});
+};
+
 $(function () {
 	$("#create_edm_button").click(function () {
+		$("#edm_form").empty();
+		$("#edm_reuse_form").clone().clearForm().contents().appendTo($("#edm_form"));
 		$("#edm_list").hide();
 		$("#edm_operation").show();
 	});
@@ -286,22 +314,22 @@ $(function () {
 		});
 	});
 
-	$(".dnd_zone").on("drop", "div", function (event) {
-		console.log(event);
-		$(event.target).children("img").remove();
-		$(event.toElement).clone().appendTo($(event.target));
+	$("#image_upload_zone").on("mouseenter", function () {
+		$(".dnd_zone div").droppable({
+			drop: function (event) {
+				console.log(event);
+				$(event.target).children("img").remove();
+				$(event.toElement).clone().appendTo($(event.target));
 
-		var post_data = {edm_id: $("#edm_form").data("edm_id")};
-		var index = $(".dnd_zone div").index($(event.target));
-		if (index == 0) {
-			post_data.edm_thumbnail_path1 = $(event.toElement).prop("src");
-		} else {
-			post_data.edm_thumbnail_path2 = $(event.toElement).prop("src");
-		}
-
-		// $.post("update_edm_ajax.php", post_data, function (data) {
-		// 	console.log(data);
-		// });
+				var post_data = {edm_id: $("#edm_form").data("edm_id")};
+				var index = $(".dnd_zone div").index($(event.target));
+				if (index == 0) {
+					post_data.edm_thumbnail_path1 = $(event.toElement).prop("src");
+				} else {
+					post_data.edm_thumbnail_path2 = $(event.toElement).prop("src");
+				}
+			}
+		});
 	});
 
 	$("button[name='save']").filter(".edm_info").click(function () {
