@@ -13,6 +13,14 @@ function verify_title($title) {
 	return true;
 }
 
+function verify_author($author) {
+	if (empty($author)) {
+		// return false;
+	}
+
+	return true;
+}
+
 function verify_summary($summary) {
 	if (empty($summary)) {
 		// return false;
@@ -32,7 +40,7 @@ function verify_thumbnail_path($thumbnail_path) {
 header("Content-Type: application/json");
 // echo json_encode($_POST);die;
 
-$fields = array("action", "edm_info_id", "edm_id", "type", "title", "summary", "url", "thumbnail_path");
+$fields = array("action", "edm_info_id", "edm_id", "type", "author", "title", "summary", "url", "thumbnail_path");
 $post_data = array_intersect_key($_POST, array_fill_keys($fields, null));
 
 if (!isset($post_data["action"])) {
@@ -44,6 +52,9 @@ $record = array();
 foreach ($post_data as $key => $value) {
 	$func_name = "verify_".$key;
 	if (function_exists($func_name) && call_user_func($func_name, $value)) {
+		if (in_array($key, array("thumbnail_path"))) {
+			$value = get_path($value);
+		}
 		$record["edm_info_".$key] = $value;
 		continue;
 	}
@@ -65,6 +76,7 @@ if (count($record) > 0) {
 		$data["edm_info_id"] = $tei->getLastInsertID();
 	} else if ($post_data["action"] == "update" && isset($post_data["edm_info_id"])) {
 		$tei->update($record, array("edm_info_id = ?" => $post_data["edm_info_id"]));
+		$data["edm_info_id"] = $post_data["edm_info_id"];
 	}
 }
 

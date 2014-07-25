@@ -92,8 +92,18 @@ $(function () {
 
 	$("#edm_list table tr[edm_id]").click(function () {
 		$.get("handle_edm_ajax.php", {edm_id: $(this).attr("edm_id")}, function (data) {
+			// init edm data
+			console.log(data);
+			$("#edm_operation").find("form").empty();
 			$("#edm_form").html(nano($("#edm_reuse_form").html(), data.edm));
 			$("#edm_form").data("edm_id", data.edm.edm_id);
+			$(data.edm_infos).each(function (index, elem) {
+				var type = elem.edm_info_type;
+				$("#edm_info_type" + type).append(nano($("#edm_info_type" + type + "_form").clone().removeAttr("id")[0].outerHTML, elem));
+			});
+			$("#image_upload_zone .gallery").empty();
+			create_draggable_images(data.urls);
+
 			$("#edm_list").hide();
 			$("#edm_operation").show();
 		});
@@ -105,16 +115,7 @@ $(function () {
 		<button type="button" name="close">close</button>
 	</nav>
 	<form id="edm_form">
-		<h1>edm</h1>
-		<button type="button" name="save">save</button>
-		<p>title: <input type="text" name="title" value=""></p>
-		<p>volume: <input type="number" name="volume" value=""></p>
-		<p>publish date: <input type="date" name="publish_date" value=""></p>
-		<div class="dnd_zone">
-			<div>drag images below here</div>
-			<div>drag images below here</div>
-		</div>
-		<input type="hidden" name="edm_id" value="">
+		<!-- edm tempate here -->
 	</form>
 	<div id="edm_info_type1">
 		<h2>焦點新聞</h2>
@@ -135,44 +136,44 @@ $(function () {
 		<p><input type="file" id="upload_imgs" name="upload_imgs[]" accept="image/*" multiple></p>
 		<div class="gallery"></div>
 	</div>
-	<div class="edm_sample_form">
-		<form id="edm_reuse_form">
-			<h1>edm</h1>
-			<button type="button" name="save">save</button>
-			<p>title: <input type="text" name="title" value="{edm_title}"></p>
-			<p>volume: <input type="number" name="volume" value="{edm_volume}"></p>
-			<p>publish date: <input type="date" name="publish_date" value="{edm_publish_date}"></p>
-			<div class="dnd_zone">
-				<div>drag images below here</div>
-				<div>drag images below here</div>
-			</div>
-			<input type="hidden" name="edm_id" value="{edm_id}">
-		</form>
-		<form id="edm_info_type1_form">
-			<p>title: <input type="text" name="title"></p>
-			<p>summary: <textarea name="summary" rows="10" cols="50"></textarea></p>
-			<p>url: <input type="text" name="url"></p>
-			<div class="dnd_zone">
-				<div>drag images below here</div>
-			</div>
-			<input type="hidden" name="edm_info_id" value="">
-		</form>
-		<form id="edm_info_type2_form">
-			<p>title: <input type="text" name="title"></p>
-			<p>url: <input type="text" name="url"></p>
-			<input type="hidden" name="edm_info_id" value="">
-		</form>
-		<form id="edm_info_type3_form">
-			<p>title: <input type="text" name="title"></p>
-			<p>author: <input type="text" name="author"></p>
-			<p>summary: <textarea name="summary" rows="10" cols="50"></textarea></p>
-			<p>url: <input type="text" name="url"></p>
-			<div class="dnd_zone">
-				<div>drag images below here</div>
-			</div>
-			<input type="hidden" name="edm_info_id" value="">
-		</form>
-	</div>
+</div>
+<div class="edm_template_zone">
+	<form id="edm_reuse_form">
+		<h1>edm</h1>
+		<button type="button" name="save">save</button>
+		<p>title: <input type="text" name="title" value="{edm_title}"></p>
+		<p>volume: <input type="number" name="volume" value="{edm_volume}"></p>
+		<p>publish date: <input type="date" name="publish_date" value="{edm_publish_date}"></p>
+		<div class="dnd_zone">
+			<div>drag images below here<img src="{edm_thumbnail_path1}"></div>
+			<div>drag images below here<img src="{edm_thumbnail_path2}"></div>
+		</div>
+		<input type="hidden" name="edm_id" value="{edm_id}">
+	</form>
+	<form id="edm_info_type1_form">
+		<p>title: <input type="text" name="title" value="{edm_info_title}"></p>
+		<p>summary: <textarea name="summary" rows="10" cols="50">{edm_info_summary}</textarea></p>
+		<p>url: <input type="text" name="url" value="{edm_info_url}"></p>
+		<div class="dnd_zone">
+			<div>drag images below here<img src="{edm_info_thumbnail_path}"></div>
+		</div>
+		<input type="hidden" name="edm_info_id" value="{edm_info_id}">
+	</form>
+	<form id="edm_info_type2_form">
+		<p>title: <input type="text" name="title" value="{edm_info_title}"></p>
+		<p>url: <input type="text" name="url" value="{edm_info_url}"></p>
+		<input type="hidden" name="edm_info_id" value="{edm_info_id}">
+	</form>
+	<form id="edm_info_type3_form">
+		<p>title: <input type="text" name="title" value="{edm_info_title}"></p>
+		<p>author: <input type="text" name="author" value="{edm_info_author}"></p>
+		<p>summary: <textarea name="summary" rows="10" cols="50">{edm_info_summary}</textarea></p>
+		<p>url: <input type="text" name="url" value="{edm_info_url}"></p>
+		<div class="dnd_zone">
+			<div>drag images below here<img src="{edm_info_thumbnail_path}"></div>
+		</div>
+		<input type="hidden" name="edm_info_id" value="{edm_info_id}">
+	</form>
 </div>
 <script type="text/javascript">
 $.fn.clearForm = function () {
@@ -189,17 +190,49 @@ $.fn.clearForm = function () {
 	});
 };
 
+function create_draggable_images(urls) {
+	var count = 0;
+	$(urls).each(function (index, elem) {
+		var img = $("<img>");
+		img.load(function () {
+			var width = img.prop("width");
+			var height = img.prop("height");
+			if (width > 300 || height > 300) {
+				if (width > height) {
+					var resize_ratio = 300 / width;
+				} else {
+					var resize_ratio = 300 / height;
+				}
+
+				img.width(width * resize_ratio);
+				img.height(height * resize_ratio);
+
+				count++;
+				if (count == $(urls).length) {
+					$("#image_upload_zone .gallery").show();
+				}
+			}
+		});
+		img.prop("src", elem);
+		$("<div>").append(img).draggable({revert: true}).appendTo($("#image_upload_zone .gallery"));
+	});
+}
+
 $(function () {
 	$("#create_edm_button").click(function () {
-		$("#edm_form").empty();
+		// init new edm
+		$("#edm_operation").find("form").empty();
+		$("#edm_form").removeData("edm_id");
 		$("#edm_reuse_form").clone().clearForm().contents().appendTo($("#edm_form"));
+		$("#edm_form img").prop("src", "");
+		$("#image_upload_zone .gallery").empty();
+
 		$("#edm_list").hide();
 		$("#edm_operation").show();
 	});
 
 	$("#edm_operation nav button[name='close']").click(function () {
-		$("#edm_operation").hide();
-		$("#edm_list").show();
+		window.location = "edm.php";
 	});
 
 	$("#edm_form").on("click", "button[name='save']", function () {
@@ -242,6 +275,7 @@ $(function () {
 	});
 
 	$("#upload_imgs").change(function (event) {
+		console.log(event);
 		if ($("#edm_form").data("edm_id") === undefined) {
 			return;
 		}
@@ -283,34 +317,7 @@ $(function () {
 				}, false);
 				return xhr;
 			},
-			success: function (urls) {
-				console.log(urls);
-				var count = 0;
-				$(urls).each(function (index, elem) {
-					var img = $("<img>");
-					img.load(function () {
-						var width = img.prop("width");
-						var height = img.prop("height");
-						if (width > 300 || height > 300) {
-							if (width > height) {
-								var resize_ratio = 300 / width;
-							} else {
-								var resize_ratio = 300 / height;
-							}
-
-							img.width(width * resize_ratio);
-							img.height(height * resize_ratio);
-
-							count++;
-							if (count == $(urls).length) {
-								$("#image_upload_zone .gallery").show();
-							}
-						}
-					});
-					img.prop("src", elem);
-					$("<div>").append(img).draggable({revert: true}).appendTo($("#image_upload_zone .gallery"));
-				});
-			}
+			success: create_draggable_images
 		});
 	});
 
@@ -318,21 +325,48 @@ $(function () {
 		$(".dnd_zone div").droppable({
 			drop: function (event) {
 				console.log(event);
-				$(event.target).children("img").remove();
-				$(event.toElement).clone().appendTo($(event.target));
+				if ($("#edm_form").data("edm_id") === undefined) {
+					return;
+				}
 
 				var post_data = {edm_id: $("#edm_form").data("edm_id")};
-				var index = $(".dnd_zone div").index($(event.target));
-				if (index == 0) {
-					post_data.edm_thumbnail_path1 = $(event.toElement).prop("src");
+
+				if ($(event.target).parents("form").is("[id='edm_form']")) {
+					post_data.action = "update";
+					var index = $(".dnd_zone div").index($(event.target));
+					if (index == 0) {
+						post_data.thumbnail_path1 = $(event.toElement).prop("src");
+					} else {
+						post_data.thumbnail_path2 = $(event.toElement).prop("src");
+					}
+
+					$.post("handle_edm_ajax.php", post_data, function (data) {
+						console.log(data);
+					});
 				} else {
-					post_data.edm_thumbnail_path2 = $(event.toElement).prop("src");
+					var id = $(event.target).parents("div[id^='edm_info_type']").prop("id");
+					post_data.type = id.replace("edm_info_type", "");
+					var hidden_elem = $(event.target).parents("form").children("input[name='edm_info_id']");
+					if (hidden_elem.val() != "") {
+						post_data.action = "update";
+						post_data.edm_info_id = hidden_elem.val();
+						post_data.thumbnail_path = $(event.toElement).prop("src");
+
+						$.post("handle_edm_info_ajax.php", post_data, function (data) {
+							console.log(data);
+						});
+					}
 				}
+
+				console.log(post_data);
+				$(event.target).children("img").remove();
+				$(event.toElement).clone().appendTo($(event.target));
 			}
 		});
 	});
 
 	$("button[name='save']").filter(".edm_info").click(function () {
+		console.log($(this));
 		if ($("#edm_form").data("edm_id") === undefined) {
 			return;
 		}
@@ -364,7 +398,7 @@ $(function () {
 
 	$("button[name='new']").filter(".edm_info").click(function () {
 		var id = $(this).parent().prop("id");
-		$("#" + id + "_form").clone().removeAttr("id").appendTo($("#" + id));
+		$("#" + id + "_form").clone().removeAttr("id").clearForm().appendTo($("#" + id)).find("img").prop("src", "");
 	});
 });
 </script>
