@@ -8,8 +8,8 @@ $begin_time = time();
 ini_set("memory_limit", "256M");
 set_time_limit(0);
 
+require_once("common.inc.php");
 require_once("../PHPExcel_1.8.0/Classes/PHPExcel/IOFactory.php");
-require_once("../shdb.inc.php");
 
 $category_select = file_get_contents("category.select");
 preg_match_all("|<[^>]+\"(0A[^>]+)\">(.*)</[^>]+>|", $category_select, $matches);
