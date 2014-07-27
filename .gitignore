@@ -1,6 +1,7 @@
 PHPExcel_1.8.0/
 tmp_css_js/
 upload/
+bootstrap/
 *.html
 *.xls
 dcview.sql
