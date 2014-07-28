@@ -1,6 +1,8 @@
 <?php
 require_once("../shdb.inc.php");
 
+mb_internal_encoding("UTF-8");
+
 function get_path($src) {
 	if (empty($src)) {
 		return "";
@@ -11,6 +13,14 @@ function get_path($src) {
 		return str_replace($search, "", $src);
 	} else {
 		return $search.$src;
+	}
+}
+
+function limit_str($str, $length) {
+	if (mb_strlen($str) > $length) {
+		return mb_substr($str, 0, $length)."...";
+	} else {
+		return $str;
 	}
 }
 

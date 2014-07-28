@@ -9,6 +9,14 @@ function verify_title($title) {
 	return true;
 }
 
+function verify_summary($summary) {
+	if (empty($summary)) {
+		// return false;
+	}
+
+	return true;
+}
+
 function verify_volume($volume) {
 	if (!is_numeric($volume)) {
 		// return false;
@@ -99,9 +107,13 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["edm_id"])) {
 		"fields" => array("*"),
 		"where_cond" => array("edm_id = ?" => $_GET["edm_id"]),
 	);
-	$data["edm_infos"] = $tei->read($tei->generateReadSQL($sql_params));
+	$edm_info_list = $tei->read($tei->generateReadSQL($sql_params));
+	foreach ($edm_info_list as &$value) {
+		$value["edm_info_thumbnail_path"] = get_path($value["edm_info_thumbnail_path"]);
+	}
+	$data["edm_infos"] = $edm_info_list;
 } else if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$fields = array("action", "edm_id", "title", "volume", "publish_date", "thumbnail_path1", "thumbnail_path2");
+	$fields = array("action", "edm_id", "title", "summary", "volume", "publish_date", "thumbnail_path1", "thumbnail_path2");
 	$post_data = array_intersect_key($_POST, array_fill_keys($fields, null));
 
 	if (!isset($post_data["action"])) {
