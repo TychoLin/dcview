@@ -1,7 +1,9 @@
 <?php
-require_once("../shdb.inc.php");
+define("EDM_DIR_PATH", "upload/edm");
 
 mb_internal_encoding("UTF-8");
+
+require_once("../shdb.inc.php");
 
 function get_path($src) {
 	if (empty($src)) {
@@ -14,6 +16,16 @@ function get_path($src) {
 	} else {
 		return $search.$src;
 	}
+}
+
+function get_edm_dir_path($publish_date) {
+	$tmp = explode("-", $publish_date);
+	$publish_year = $tmp[0];
+	$publish_month = $tmp[1];
+	$publish_day = $tmp[2];
+	$some_edm_dirname = $publish_year.$publish_month.$publish_day;
+	
+	return EDM_DIR_PATH."/$publish_year/$publish_month/$some_edm_dirname/";
 }
 
 function limit_str($str, $length) {

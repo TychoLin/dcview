@@ -14,18 +14,12 @@ $sql_params = array(
 );
 $result = $te->read($te->generateReadSQL($sql_params));
 if (count($result) == 1) {
-	$edm_publish_date = $result[0]["edm_publish_date"];
+	$publish_date = $result[0]["edm_publish_date"];
 } else {
 	die();
 }
 
-$tmp = explode("-", $edm_publish_date);
-$publish_year = $tmp[0];
-$publish_month = $tmp[1];
-$publish_day = $tmp[2];
-
-$some_edm_dirname = $publish_year.$publish_month.$publish_day;
-$dir_path = "upload/edm/$publish_year/$publish_month/$some_edm_dirname/";
+$dir_path = get_edm_dir_path($publish_date);
 $prefix = "edm_";
 
 if (!is_dir($dir_path) && !mkdir($dir_path, 0775, true)) {
@@ -33,10 +27,14 @@ if (!is_dir($dir_path) && !mkdir($dir_path, 0775, true)) {
 }
 
 $dir_url_path = "http://".str_replace(basename(__FILE__), "", $_SERVER["HTTP_HOST"].$_SERVER["PHP_SELF"]).$dir_path;
+$allowed_imagetypes = array(1 => "IMAGETYPE_GIF", 2 => "IMAGETYPE_JPEG", 3 => "IMAGETYPE_PNG");
 $urls = array();
 foreach ($_FILES["upload_imgs"]["error"] as $key => $error) {
 	if ($error == UPLOAD_ERR_OK) {
 		$tmp_name = $_FILES["upload_imgs"]["tmp_name"][$key];
+		if (!in_array(exif_imagetype($tmp_name), array_keys($allowed_imagetypes)))
+			continue;
+
 		$name = $_FILES["upload_imgs"]["name"][$key];
 		// validate if uploaded file is image
 		$extension = pathinfo($name, PATHINFO_EXTENSION);

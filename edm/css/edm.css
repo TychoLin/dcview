@@ -3,6 +3,10 @@ table {
 	width: 100%;
 }
 
+td:hover[edm_id] {
+	cursor: pointer;
+}
+
 td, th {
 	border: 1px solid black;
 	padding: 0.5em;
@@ -10,7 +14,6 @@ td, th {
 }
 
 td * {
-	width: 100%;
 	vertical-align: middle;
 }
 
@@ -35,6 +38,10 @@ td * {
 	float: left;
 }
 
+.gallery div:hover {
+	cursor: pointer;
+}
+
 .dnd_zone {
 }
 
@@ -51,10 +58,15 @@ td * {
 }
 
 .dnd_zone img {
-	position: relative;
-	left: 0px;
-	top: 0px;
+	display: block;
 	max-width: 300px;
+	margin: 0 auto;
+}
+
+.thumbnail {
+	max-width: 200px;
+	max-height: 130px;
+	overflow: hidden;
 }
 
 .edm_template_zone {
@@ -63,9 +75,6 @@ td * {
 
 #edm_operation {
 	display: none;
-}
-
-#edm_thumbnail_setup {
 }
 
 #image_upload_zone {

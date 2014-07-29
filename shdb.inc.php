@@ -173,6 +173,53 @@ class RecordModel {
 		}
 	}
 
+	public function delete($sql_params) {
+		$params = array();
+
+		$table_names = "";
+		if (isset($sql_params["table_names"])) {
+			$table_names = $sql_params["table_names"];
+			if (is_array($table_names) && count($table_names) > 0) {
+				$table_names = implode(",", $table_names);
+			}
+		}
+
+		$table_reference = $this->_tableReference;
+		if (isset($sql_params["table_reference"])) {
+			if (is_array($sql_params["table_reference"])) {
+				$table_reference = implode(" ", $sql_params["table_reference"]);
+			} else {
+				$table_reference = $sql_params["table_reference"];
+			}
+		}
+
+		$where_clause = "1 = 1";
+		if (isset($sql_params["where_cond"])) {
+			$where_cond = $sql_params["where_cond"];
+			if (is_array($where_cond) && count($where_cond) > 0) {
+				$where_clause = implode(" AND ", array_keys($where_cond));
+
+				foreach (array_values($where_cond) as $value) {
+					if (is_array($value)) {
+						$params = array_merge($params, $value);
+					} else {
+						array_push($params, $value);
+					}
+				}
+			}
+		}
+
+		$sql = array();
+		array_push($sql, "DELETE", $table_names, "FROM", $table_reference, "WHERE", $where_clause);
+
+		try {
+			$ps = $this->_dbHandler->prepare(implode(" ", $sql));
+			return $ps->execute($params);
+		} catch (PDOException $e) {
+			echo $e->getMessage();
+		}
+	}
+
 	public function getLastInsertID() {
 		return $this->_dbHandler->lastInsertId();
 	}

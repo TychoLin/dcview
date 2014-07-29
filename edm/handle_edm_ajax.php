@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once("common.inc.php");
 
 function verify_title($title) {
@@ -52,19 +52,14 @@ function verify_thumbnail_path2() {
 }
 
 function get_urls($publish_date) {
-	$allowed_imagetypes = array(1 => "IMAGETYPE_GIF", 2 => "IMAGETYPE_JPEG", 3 => "IMAGETYPE_PNG", 17 => "IMAGETYPE_ICO");
+	$allowed_imagetypes = array(1 => "IMAGETYPE_GIF", 2 => "IMAGETYPE_JPEG", 3 => "IMAGETYPE_PNG");
 	$urls = array();
 
 	if (!verify_publish_date($publish_date)) {
 		return $urls;
 	}
 
-	$tmp = explode("-", $publish_date);
-	$publish_year = $tmp[0];
-	$publish_month = $tmp[1];
-	$publish_day = $tmp[2];
-	$some_edm_dirname = $publish_year.$publish_month.$publish_day;
-	$dir_path = "upload/edm/$publish_year/$publish_month/$some_edm_dirname/";
+	$dir_path = get_edm_dir_path($publish_date);
 
 	if (is_dir($dir_path)) {
 		if ($dh = opendir($dir_path)) {
@@ -78,6 +73,23 @@ function get_urls($publish_date) {
 	}
 
 	return $urls;
+}
+
+function del_image_dir($publish_date) {
+	if (!verify_publish_date($publish_date)) {
+		return;
+	}
+
+	del_tree(get_edm_dir_path($publish_date));
+}
+
+function del_tree($dir) {
+	$files = array_diff(scandir($dir), array(".", ".."));
+	foreach ($files as $file) {
+		(is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file");
+	}
+
+	return rmdir($dir);
 }
 
 header("Content-Type: application/json");
@@ -113,7 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["edm_id"])) {
 	}
 	$data["edm_infos"] = $edm_info_list;
 } else if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$fields = array("action", "edm_id", "title", "summary", "volume", "publish_date", "thumbnail_path1", "thumbnail_path2");
+	$fields = array("action", "edm_id", "title", "summary", "volume", "publish_date", "thumbnail_path1", "thumbnail_path2", "edm_ids");
 	$post_data = array_intersect_key($_POST, array_fill_keys($fields, null));
 
 	if (!isset($post_data["action"])) {
@@ -121,29 +133,56 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["edm_id"])) {
 	}
 
 	// handle post data
-	$record = array();
-	foreach ($post_data as $key => $value) {
-		$func_name = "verify_".$key;
-		if (function_exists($func_name) && call_user_func($func_name, $value)) {
-			if (in_array($key, array("thumbnail_path1", "thumbnail_path2"))) {
-				$value = get_path($value);
+	$action = $post_data["action"];
+	if ($action == "delete" && isset($post_data["edm_ids"])) {
+		if (is_array($post_data["edm_ids"]) && count($post_data["edm_ids"]) > 0) {
+			$te = new TblEdm();
+			$place_holders = implode(",", array_fill(0, count($post_data["edm_ids"]), "?"));
+
+			// delete image dir
+			$sql_params = array(
+				"fields" => array("edm_publish_date"),
+				"where_cond" => array("edm_id IN($place_holders)" => $post_data["edm_ids"]),
+			);
+			$edm_list = $te->read($te->generateReadSQL($sql_params));
+
+			foreach ($edm_list as $value) {
+				del_image_dir($value["edm_publish_date"]);
 			}
-			$record["edm_".$key] = $value;
+
+			// delete db data
+			$sql_params = array(
+				"table_names" => array("tblEdm", "tblEdmInfo"),
+				"table_reference" => "tblEdm LEFT JOIN tblEdmInfo USING(edm_id)",
+				"where_cond" => array("tblEdm.edm_id IN($place_holders)" => $post_data["edm_ids"]),
+			);
+			$data["status"] = $te->delete($sql_params);
 		}
-	}
+	} else {
+		$record = array();
+		foreach ($post_data as $key => $value) {
+			$func_name = "verify_".$key;
+			if (function_exists($func_name) && call_user_func($func_name, $value)) {
+				if (in_array($key, array("thumbnail_path1", "thumbnail_path2"))) {
+					$value = get_path($value);
+				}
+				$record["edm_".$key] = $value;
+			}
+		}
 
-	if (count($record) > 0) {
-		$te = new TblEdm();
-		$now = date("Y-m-d H:i:s");
-		$record["edm_update_time"] = $now;
+		if (count($record) > 0) {
+			$te = new TblEdm();
+			$now = date("Y-m-d H:i:s");
+			$record["edm_update_time"] = $now;
 
-		if ($post_data["action"] == "create") {
-			$record["edm_create_time"] = $now;
-			$te->create($record);
-			$data["edm_id"] = $te->getLastInsertID();
-		} else if ($post_data["action"] == "update" && isset($post_data["edm_id"])) {
-			$te->update($record, array("edm_id = ?" => $post_data["edm_id"]));
-			$data["edm_id"] = $post_data["edm_id"];
+			if ($action == "create") {
+				$record["edm_create_time"] = $now;
+				$te->create($record);
+				$data["edm_id"] = $te->getLastInsertID();
+			} else if ($action == "update" && isset($post_data["edm_id"])) {
+				$te->update($record, array("edm_id = ?" => $post_data["edm_id"]));
+				$data["edm_id"] = $post_data["edm_id"];
+			}
 		}
 	}
 }

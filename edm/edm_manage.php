@@ -27,11 +27,11 @@ $total_page_number = ceil($total_record_number / LIMIT);
 <head>
 	<title></title>
 	<link rel="stylesheet" href="css/edm.css">
-	<link rel="stylesheet" href="css/magnific-popup.css">
+	<!-- <link rel="stylesheet" href="css/magnific-popup.css"> -->
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
-	<script src="js/jquery.magnific-popup.js"></script>
+	<!-- <script src="js/jquery.magnific-popup.js"></script> -->
 	<script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 </head>
 <body>
@@ -45,9 +45,11 @@ $total_page_number = ceil($total_record_number / LIMIT);
 		}
 		?>
 		</select>
+		<button type="button" id="delete_edm_button" style="display: none;">delete</button>
 	</nav>
 	<table>
 		<tr>
+			<th><input type="checkbox"></th>
 			<th>volume</th>
 			<th>title</th>
 			<th>publish date</th>
@@ -55,12 +57,13 @@ $total_page_number = ceil($total_record_number / LIMIT);
 			<th>smaill image</th>
 		</tr>
 		<?php foreach($edm_list as $value) { ?>
-		<tr edm_id="<?php echo $value["edm_id"]; ?>">
+		<tr>
+			<td><input type="checkbox" value="<?php echo $value["edm_id"]; ?>"></td>
 			<td><?php echo $value["edm_volume"]; ?></td>
-			<td style="width: 40%;"><?php echo $value["edm_title"]; ?></td>
+			<td edm_id="<?php echo $value["edm_id"]; ?>" style="width: 40%;"><?php echo $value["edm_title"]; ?></td>
 			<td><?php echo $value["edm_publish_date"]; ?></td>
-			<td><img src="<?php echo $value["edm_thumbnail_path1"]; ?>"></td>
-			<td><img src="<?php echo $value["edm_thumbnail_path2"]; ?>"></td>
+			<td><div class="thumbnail"><img src="<?php echo $value["edm_thumbnail_path1"]; ?>"></div></td>
+			<td><div class="thumbnail"><img src="<?php echo $value["edm_thumbnail_path2"]; ?>"></div></td>
 		</tr>
 		<?php } ?>
 	</table>
@@ -90,7 +93,7 @@ $(function () {
 		window.location = uri.href();
 	});
 
-	$("#edm_list table tr[edm_id]").click(function () {
+	$("#edm_list table tr td[edm_id]").click(function () {
 		$.get("handle_edm_ajax.php", {edm_id: $(this).attr("edm_id")}, function (data) {
 			// init edm data
 			console.log(data);
@@ -104,9 +107,44 @@ $(function () {
 			$("#image_upload_zone .gallery").empty();
 			create_draggable_images(data.urls);
 
-			$("#edm_list").hide();
-			$("#edm_operation").show();
+			$("#edm_list").toggle();
+			$("#edm_operation").toggle();
 		});
+	});
+
+	$("#delete_edm_button").on("click", function () {
+		if (!window.confirm("confirm to delete?")) {
+			return;
+		}
+
+		var edm_ids = [];
+		$("#edm_list td input:checked").each(function (index, elem) {
+			edm_ids.push($(elem).val());
+		});
+
+		$.post("handle_edm_ajax.php", {action: "delete", edm_ids: edm_ids}, function (data) {
+			if (data.status) {
+				alert("delete successfully");
+				window.location = "edm_manage.php";
+			}
+		});
+	});
+
+	$("#edm_list th input[type=checkbox]").on("click", function () {
+		if ($(this).prop("checked")) {
+			$("#edm_list td input[type=checkbox]").prop("checked", true);
+			$("#delete_edm_button").show();
+		} else {
+			$("#edm_list td input[type=checkbox]").prop("checked", false);
+		}
+	});
+
+	$("#edm_list td input[type=checkbox]").on("click", function () {
+		if ($("#edm_list td input:checked").length > 0) {
+			$("#delete_edm_button").show();
+		} else {
+			$("#delete_edm_button").hide();
+		}
 	});
 });
 </script>
@@ -260,11 +298,11 @@ function create_draggable_images(urls) {
 
 				img.width(width * resize_ratio);
 				img.height(height * resize_ratio);
+			}
 
-				count++;
-				if (count == $(urls).length) {
-					$("#image_upload_zone .gallery").show();
-				}
+			count++;
+			if (count == $(urls).length) {
+				$("#image_upload_zone .gallery").show();
 			}
 		});
 		img.prop("src", elem);
@@ -281,8 +319,8 @@ $(function () {
 		$("#edm_form img").prop("src", "");
 		$("#image_upload_zone .gallery").empty();
 
-		$("#edm_list").hide();
-		$("#edm_operation").show();
+		$("#edm_list").toggle();
+		$("#edm_operation").toggle();
 	});
 
 	$("#edm_operation nav button[name='close']").click(function () {
