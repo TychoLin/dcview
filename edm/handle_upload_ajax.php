@@ -19,14 +19,14 @@ if (count($result) == 1) {
 	die();
 }
 
+$upload_dir_path = get_edm_dir_path($publish_date, true);
 $dir_path = get_edm_dir_path($publish_date);
 $prefix = "edm_";
 
-if (!is_dir($dir_path) && !mkdir($dir_path, 0775, true)) {
+if (!is_dir($upload_dir_path) && !mkdir($upload_dir_path, 0775, true)) {
 	die("Failed to create folders...");
 }
 
-$dir_url_path = "http://".str_replace(basename(__FILE__), "", $_SERVER["HTTP_HOST"].$_SERVER["PHP_SELF"]).$dir_path;
 $allowed_imagetypes = array(1 => "IMAGETYPE_GIF", 2 => "IMAGETYPE_JPEG", 3 => "IMAGETYPE_PNG");
 $urls = array();
 foreach ($_FILES["upload_imgs"]["error"] as $key => $error) {
@@ -38,11 +38,11 @@ foreach ($_FILES["upload_imgs"]["error"] as $key => $error) {
 		$name = $_FILES["upload_imgs"]["name"][$key];
 		// validate if uploaded file is image
 		$extension = pathinfo($name, PATHINFO_EXTENSION);
-		$tmp_file_name = tempnam($dir_path, $prefix);
+		$tmp_file_name = tempnam($upload_dir_path, $prefix);
 		$new_tmp_file_name = $tmp_file_name.".$extension";
 		rename($tmp_file_name, $new_tmp_file_name);
 		if (move_uploaded_file($tmp_name, $new_tmp_file_name)) {
-			array_push($urls, $dir_url_path.basename($new_tmp_file_name));
+			array_push($urls, get_path("$dir_path/".basename($new_tmp_file_name)));
 		}
 	}
 }

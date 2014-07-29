@@ -1,5 +1,8 @@
 <?php
+define("DOC_ROOT", realpath(dirname(__FILE__)));
 define("EDM_DIR_PATH", "upload/edm");
+define("EDM_URL_PATH", "http://".str_replace(basename($_SERVER["PHP_SELF"]), "", $_SERVER["HTTP_HOST"].$_SERVER["PHP_SELF"]));
+
 
 mb_internal_encoding("UTF-8");
 
@@ -10,7 +13,7 @@ function get_path($src) {
 		return "";
 	}
 
-	$search = "http://".str_replace(basename($_SERVER["PHP_SELF"]), "", $_SERVER["HTTP_HOST"].$_SERVER["PHP_SELF"]);
+	$search = EDM_URL_PATH;
 	if (preg_match("|$search|", $src) == 1) {
 		return str_replace($search, "", $src);
 	} else {
@@ -18,14 +21,18 @@ function get_path($src) {
 	}
 }
 
-function get_edm_dir_path($publish_date) {
+function get_edm_dir_path($publish_date, $absolute = false) {
 	$tmp = explode("-", $publish_date);
 	$publish_year = $tmp[0];
 	$publish_month = $tmp[1];
 	$publish_day = $tmp[2];
-	$some_edm_dirname = $publish_year.$publish_month.$publish_day;
-	
-	return EDM_DIR_PATH."/$publish_year/$publish_month/$some_edm_dirname/";
+	$some_edm_dirname = "/$publish_year/$publish_month/$publish_year.$publish_month.$publish_day";
+
+	if ($absolute) {
+		return DOC_ROOT."/".EDM_DIR_PATH.$some_edm_dirname;
+	} else {
+		return EDM_DIR_PATH.$some_edm_dirname;
+	}
 }
 
 function limit_str($str, $length) {

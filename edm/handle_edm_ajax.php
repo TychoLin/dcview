@@ -59,13 +59,14 @@ function get_urls($publish_date) {
 		return $urls;
 	}
 
+	$upload_dir_path = get_edm_dir_path($publish_date, true);
 	$dir_path = get_edm_dir_path($publish_date);
 
-	if (is_dir($dir_path)) {
-		if ($dh = opendir($dir_path)) {
+	if (is_dir($upload_dir_path)) {
+		if ($dh = opendir($upload_dir_path)) {
 			while (($file = readdir($dh)) !== false) {
-				if ($file != "." && $file != ".." && in_array(exif_imagetype($dir_path.$file), array_keys($allowed_imagetypes))) {
-					array_push($urls, get_path($dir_path.$file));
+				if ($file != "." && $file != ".." && in_array(exif_imagetype("$upload_dir_path/$file"), array_keys($allowed_imagetypes))) {
+					array_push($urls, get_path("$dir_path/$file"));
 				}
 			}
 			closedir($dh);
@@ -80,7 +81,7 @@ function del_image_dir($publish_date) {
 		return;
 	}
 
-	del_tree(get_edm_dir_path($publish_date));
+	del_tree(get_edm_dir_path($publish_date, true));
 }
 
 function del_tree($dir) {
