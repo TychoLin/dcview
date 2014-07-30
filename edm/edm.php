@@ -24,6 +24,7 @@ $tei = new TblEdmInfo();
 $sql_params = array(
 	"fields" => array("*"),
 	"where_cond" => array("edm_id = ?" => $_GET["id"]),
+	"order_by_clause" => "edm_info_type, edm_info_rank",
 );
 $edm_info_list = $tei->read($tei->generateReadSQL($sql_params));
 foreach ($edm_info_list as &$value) {

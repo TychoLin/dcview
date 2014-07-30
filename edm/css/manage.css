@@ -3,7 +3,7 @@ table {
 	width: 100%;
 }
 
-td:hover[edm_id] {
+td:hover[edm_id], .gallery div:hover, .edm_info_forms:hover {
 	cursor: pointer;
 }
 
@@ -36,10 +36,6 @@ td * {
 .gallery div {
 	margin: 0 5px 5px 0;
 	float: left;
-}
-
-.gallery div:hover {
-	cursor: pointer;
 }
 
 .dnd_zone {
@@ -75,6 +71,18 @@ td * {
 
 #edm_operation {
 	display: none;
+}
+
+.edm_info_forms {
+	width: 500px;
+}
+
+.edm_info_forms form {
+	border: 1px solid green;
+	margin-bottom: 20px;
+	padding: 10px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
 }
 
 #image_upload_zone {

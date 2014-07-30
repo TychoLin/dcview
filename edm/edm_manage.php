@@ -26,7 +26,8 @@ $total_page_number = ceil($total_record_number / LIMIT);
 <html>
 <head>
 	<title></title>
-	<link rel="stylesheet" href="css/edm.css">
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="css/manage.css">
 	<!-- <link rel="stylesheet" href="css/magnific-popup.css"> -->
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -62,8 +63,8 @@ $total_page_number = ceil($total_record_number / LIMIT);
 			<td><?php echo $value["edm_volume"]; ?></td>
 			<td edm_id="<?php echo $value["edm_id"]; ?>" style="width: 40%;"><?php echo $value["edm_title"]; ?></td>
 			<td><?php echo $value["edm_publish_date"]; ?></td>
-			<td><div class="thumbnail"><img src="<?php echo $value["edm_thumbnail_path1"]; ?>"></div></td>
-			<td><div class="thumbnail"><img src="<?php echo $value["edm_thumbnail_path2"]; ?>"></div></td>
+			<td><div class="thumbnail"><img src="<?php echo get_path($value["edm_thumbnail_path1"]); ?>"></div></td>
+			<td><div class="thumbnail"><img src="<?php echo get_path($value["edm_thumbnail_path2"]); ?>"></div></td>
 		</tr>
 		<?php } ?>
 	</table>
@@ -96,13 +97,11 @@ $(function () {
 	$("#edm_list table tr td[edm_id]").click(function () {
 		$.get("handle_edm_ajax.php", {edm_id: $(this).attr("edm_id")}, function (data) {
 			// init edm data
-			console.log(data);
-			$("#edm_operation").find("form").empty();
 			$("#edm_form").html(nano($("#edm_reuse_form").html(), data.edm));
 			$("#edm_form").data("edm_id", data.edm.edm_id);
 			$(data.edm_infos).each(function (index, elem) {
 				var type = elem.edm_info_type;
-				$("#edm_info_type" + type).append(nano($("#edm_info_type" + type + "_form").clone().removeAttr("id")[0].outerHTML, elem));
+				$("#edm_info_type" + type + " .edm_info_forms").append(nano($("#edm_info_type" + type + "_form").clone().removeAttr("id")[0].outerHTML, elem)).sortable();
 			});
 			$("#image_upload_zone .gallery").empty();
 			create_draggable_images(data.urls);
@@ -159,36 +158,43 @@ $(function () {
 		<h2>焦點新聞</h2>
 		<button type="button" name="save" class="edm_info">save</button>
 		<button type="button" name="new" class="edm_info">new</button>
+		<div class="edm_info_forms"></div>
 	</div>
 	<div id="edm_info_type2">
 		<h2>新聞追蹤</h2>
 		<button type="button" name="save" class="edm_info">save</button>
 		<button type="button" name="new" class="edm_info">new</button>
+		<div class="edm_info_forms"></div>
 	</div>
 	<div id="edm_info_type3">
 		<h2>達人部落精選</h2>
 		<button type="button" name="save" class="edm_info">save</button>
 		<button type="button" name="new" class="edm_info">new</button>
+		<div class="edm_info_forms"></div>
 	</div>
 	<div id="edm_info_type4">
 		<h2>攝影好讀</h2>
 		<button type="button" name="save" class="edm_info">save</button>
 		<button type="button" name="new" class="edm_info">new</button>
+		<div class="edm_info_forms"></div>
 	</div>
 	<div id="edm_info_type5">
 		<h2>本週作品精選</h2>
 		<button type="button" name="save" class="edm_info">save</button>
 		<button type="button" name="new" class="edm_info">new</button>
+		<div class="edm_info_forms"></div>
 	</div>
 	<div id="edm_info_type6">
 		<h2>活動快訊</h2>
 		<button type="button" name="save" class="edm_info">save</button>
 		<button type="button" name="new" class="edm_info">new</button>
+		<div class="edm_info_forms"></div>
 	</div>
 	<div id="edm_info_type7">
 		<h2>資訊情報</h2>
 		<button type="button" name="save" class="edm_info">save</button>
 		<button type="button" name="new" class="edm_info">new</button>
+		<div class="edm_info_forms"></div>
 	</div>
 	<div id="image_upload_zone">
 		<p><input type="file" id="upload_imgs" name="upload_imgs[]" accept="image/*" multiple></p>
@@ -210,6 +216,7 @@ $(function () {
 		<input type="hidden" name="edm_id" value="{edm_id}">
 	</form>
 	<form id="edm_info_type1_form">
+		<button type="button" name="delete" style="float: right;">X</button>
 		<p>title: <input type="text" name="title" value="{edm_info_title}"></p>
 		<p>summary: <textarea name="summary" rows="10" cols="50">{edm_info_summary}</textarea></p>
 		<p>url: <input type="text" name="url" value="{edm_info_url}"></p>
@@ -219,11 +226,13 @@ $(function () {
 		<input type="hidden" name="edm_info_id" value="{edm_info_id}">
 	</form>
 	<form id="edm_info_type2_form">
+		<button type="button" name="delete" style="float: right;">X</button>
 		<p>title: <input type="text" name="title" value="{edm_info_title}"></p>
 		<p>url: <input type="text" name="url" value="{edm_info_url}"></p>
 		<input type="hidden" name="edm_info_id" value="{edm_info_id}">
 	</form>
 	<form id="edm_info_type3_form">
+		<button type="button" name="delete" style="float: right;">X</button>
 		<p>title: <input type="text" name="title" value="{edm_info_title}"></p>
 		<p>author: <input type="text" name="author" value="{edm_info_author}"></p>
 		<p>summary: <textarea name="summary" rows="10" cols="50">{edm_info_summary}</textarea></p>
@@ -234,6 +243,7 @@ $(function () {
 		<input type="hidden" name="edm_info_id" value="{edm_info_id}">
 	</form>
 	<form id="edm_info_type4_form">
+		<button type="button" name="delete" style="float: right;">X</button>
 		<p>title: <input type="text" name="title" value="{edm_info_title}"></p>
 		<p>author: <input type="text" name="author" value="{edm_info_author}"></p>
 		<p>summary: <textarea name="summary" rows="10" cols="50">{edm_info_summary}</textarea></p>
@@ -244,6 +254,7 @@ $(function () {
 		<input type="hidden" name="edm_info_id" value="{edm_info_id}">
 	</form>
 	<form id="edm_info_type5_form">
+		<button type="button" name="delete" style="float: right;">X</button>
 		<p>title: <input type="text" name="title" value="{edm_info_title}"></p>
 		<p>author: <input type="text" name="author" value="{edm_info_author}"></p>
 		<p>url: <input type="text" name="url" value="{edm_info_url}"></p>
@@ -253,6 +264,7 @@ $(function () {
 		<input type="hidden" name="edm_info_id" value="{edm_info_id}">
 	</form>
 	<form id="edm_info_type6_form">
+		<button type="button" name="delete" style="float: right;">X</button>
 		<p>title: <input type="text" name="title" value="{edm_info_title}"></p>
 		<p>author: <input type="text" name="author" value="{edm_info_author}"></p>
 		<p>url: <input type="text" name="url" value="{edm_info_url}"></p>
@@ -262,6 +274,7 @@ $(function () {
 		<input type="hidden" name="edm_info_id" value="{edm_info_id}">
 	</form>
 	<form id="edm_info_type7_form">
+		<button type="button" name="delete" style="float: right;">X</button>
 		<p>title: <input type="text" name="title" value="{edm_info_title}"></p>
 		<p>url: <input type="text" name="url" value="{edm_info_url}"></p>
 		<input type="hidden" name="edm_info_id" value="{edm_info_id}">
@@ -313,8 +326,6 @@ function create_draggable_images(urls) {
 $(function () {
 	$("#create_edm_button").click(function () {
 		// init new edm
-		$("#edm_operation").find("form").empty();
-		$("#edm_form").removeData("edm_id");
 		$("#edm_reuse_form").clone().clearForm().contents().appendTo($("#edm_form"));
 		$("#edm_form img").prop("src", "");
 		$("#image_upload_zone .gallery").empty();
@@ -345,11 +356,10 @@ $(function () {
 			post_data[elem.name] = elem.value;
 		});
 
-		console.log(post_data);
 		$.post("handle_edm_ajax.php", post_data, function (data) {
-			console.log(data);
 			hidden_elem.val(data.edm_id);
 			$("#edm_form").data("edm_id", data.edm_id);
+			alert("save successfully");
 		});
 	});
 
@@ -367,7 +377,6 @@ $(function () {
 	});
 
 	$("#upload_imgs").change(function (event) {
-		console.log(event);
 		if ($("#edm_form").data("edm_id") === undefined) {
 			return;
 		}
@@ -415,8 +424,8 @@ $(function () {
 
 	$("#image_upload_zone").on("mouseenter", function () {
 		$(".dnd_zone div").droppable({
+			accept: ".gallery div",
 			drop: function (event) {
-				console.log(event);
 				if ($("#edm_form").data("edm_id") === undefined) {
 					return;
 				}
@@ -433,7 +442,7 @@ $(function () {
 					}
 
 					$.post("handle_edm_ajax.php", post_data, function (data) {
-						console.log(data);
+						// do something
 					});
 				} else {
 					var id = $(event.target).parents("div[id^='edm_info_type']").prop("id");
@@ -445,12 +454,11 @@ $(function () {
 						post_data.thumbnail_path = $(event.toElement).prop("src");
 
 						$.post("handle_edm_info_ajax.php", post_data, function (data) {
-							console.log(data);
+							// do something
 						});
 					}
 				}
 
-				console.log(post_data);
 				$(event.target).children("img").remove();
 				$(event.toElement).clone().appendTo($(event.target));
 			}
@@ -458,7 +466,6 @@ $(function () {
 	});
 
 	$("button[name='save']").filter(".edm_info").click(function () {
-		console.log($(this));
 		if ($("#edm_form").data("edm_id") === undefined) {
 			return;
 		}
@@ -480,17 +487,39 @@ $(function () {
 				post_data[elem.name] = elem.value;
 			});
 
-			console.log(post_data);
+			post_data.rank = index;
 			$.post("handle_edm_info_ajax.php", post_data, function (data) {
-				console.log(data);
 				hidden_elem.val(data.edm_info_id);
+				alert("save successfully");
 			});
 		});
 	});
 
 	$("button[name='new']").filter(".edm_info").click(function () {
 		var id = $(this).parent().prop("id");
-		$("#" + id + "_form").clone().removeAttr("id").clearForm().appendTo($("#" + id)).find("img").prop("src", "");
+		$("#" + id + "_form").clone().removeAttr("id").clearForm().appendTo($("#" + id + " .edm_info_forms")).find("img").prop("src", "");
+		$("#" + id + " .edm_info_forms").sortable();
+	});
+
+	$(".edm_info_forms").on("click", "button[name=delete]", function () {
+		var edm_info_id = $(this).parent().find("input[type=hidden]").val();
+
+		if (edm_info_id == "") {
+			$(this).parent().remove();
+			return;
+		}
+
+		if (!window.confirm("confirm to delete?")) {
+			return;
+		}
+
+		var form_elem = $(this).parent();
+		$.post("handle_edm_info_ajax.php", {action: "delete", edm_info_id: edm_info_id}, function (data) {
+			if (data.status) {
+				form_elem.remove();
+				alert("delete successfully");
+			}
+		});
 	});
 });
 </script>

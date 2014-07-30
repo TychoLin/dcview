@@ -20,6 +20,7 @@ foreach ($edm_list as &$record) {
 <html>
 <head>
 	<title></title>
+	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
 	<!--[if lte IE 8]>
@@ -28,72 +29,7 @@ foreach ($edm_list as &$record) {
 	<!--[if gt IE 8]><!-->
 	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css">
 	<!--<![endif]-->
-	<style type="text/css">
-	.conainter {
-		width: 48em;
-		margin: 0 auto;
-	}
-
-	.header {
-		background: url("img/top_bg.gif") repeat-x;
-		margin-bottom: 14px;
-	}
-
-	.nav {
-		margin: 0.8em 0 0 0;
-		font-size: 0.8em;
-	}
-
-	.nav a {
-		float: left;
-		margin-left: 0.5em;
-		padding-left: 0.5em;
-		border-left: 1px solid rgb(200, 200, 200);
-	}
-
-	.nav a:first-child {
-		border-left: 0px;
-		margin-left: 0px;
-		padding-left: 0px;
-	}
-
-	.navbar-right {
-		float: right;
-	}
-
-	.jumbotron {
-		border: 1px solid #d8d8d8;
-		padding: 12px;
-		font-size: 0.8em;
-	}
-
-	.jumbotron h3 {
-		width: 380px;
-		font-size: 1.3em;
-	}
-
-	.cell {
-		padding: 0.8em;
-		font-size: 0.8em;
-	}
-
-	.volume {
-		font-size: 1.3em;
-		font-weight: bold;
-	}
-
-	.title {
-		font-size: 1.3em;
-		font-weight: bold;
-		display: block;
-		margin-top: 10px;
-	}
-
-	.footer {
-		padding: 0.8em;
-		background: url("img/copy_bg.gif") repeat-x;
-	}
-	</style>
+	<link rel="stylesheet" href="css/list.css">
 </head>
 <body>
 	<div class="conainter">
