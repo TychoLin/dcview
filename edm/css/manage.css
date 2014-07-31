@@ -90,5 +90,17 @@ td * {
 	top: 0px;
 	right: 0px;
 	width: 800px;
+	height: auto;
 	border: 1px solid red;
+	padding: 0 1em;
+}
+
+#image_empty_zone {
+	color: #bbb;
+	border: 2px dashed #bbb;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	text-align: center;
+	padding: 1.6em;
+	margin-bottom: 1em;
 }

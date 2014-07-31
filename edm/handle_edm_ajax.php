@@ -127,7 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["edm_id"])) {
 	}
 	$data["edm_infos"] = $edm_info_list;
 } else if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$fields = array("action", "edm_id", "title", "summary", "volume", "publish_date", "thumbnail_path1", "thumbnail_path2", "edm_ids");
+	$fields = array("action", "edm_id", "title", "summary", "volume", "publish_date", "thumbnail_path1", "thumbnail_path2", "edm_ids", "image_src");
 	$post_data = array_intersect_key($_POST, array_fill_keys($fields, null));
 
 	if (!isset($post_data["action"])) {
@@ -160,6 +160,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["edm_id"])) {
 			);
 			$data["status"] = $te->delete($sql_params);
 		}
+	} else if ($action == "delete image" && isset($post_data["image_src"])) {
+		$data["status"] = unlink(DOC_ROOT."/".get_path($post_data["image_src"]));
 	} else {
 		$record = array();
 		foreach ($post_data as $key => $value) {

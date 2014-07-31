@@ -31,7 +31,7 @@ foreach ($edm_info_list as &$value) {
 	$value["edm_info_title"] = htmlentities($value["edm_info_title"], ENT_COMPAT, "UTF-8");
 	$value["edm_info_author"] = htmlentities($value["edm_info_author"], ENT_COMPAT, "UTF-8");
 	$value["edm_info_summary"] = htmlentities($value["edm_info_summary"], ENT_COMPAT, "UTF-8");
-	$value["edm_info_summary"] = limit_str($value["edm_info_summary"], 60);
+	$value["edm_info_summary"] = limit_str($value["edm_info_summary"], 60)."...";
 	$value["edm_info_thumbnail_path"] = get_path($value["edm_info_thumbnail_path"]);
 
 	$var = "edm_info_list".$value["edm_info_type"];
@@ -312,7 +312,7 @@ a:active {
 										<tr>
 											<td align="left" valign="top">
 												<span style="font-size: 12px; color: rgb(115, 129, 144);">作者：<?php echo $value["edm_info_author"]; ?></span><br>
-												<span style="font-size: 13px; color: rgb(102, 102, 102); line-height: 21px;"><?php echo $value["edm_info_summmary"]; ?></span><a href="<?php echo $value["edm_info_url"]; ?>" target="Newwindow" style="color: rgb(86, 127, 171); text-decoration: underline;">閱讀全文</a>
+												<span style="font-size: 13px; color: rgb(102, 102, 102); line-height: 21px;"><?php echo $value["edm_info_summary"]; ?></span><a href="<?php echo $value["edm_info_url"]; ?>" target="Newwindow" style="color: rgb(86, 127, 171); text-decoration: underline;">閱讀全文</a>
 											</td>
 										</tr>
 									</tbody>

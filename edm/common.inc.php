@@ -16,7 +16,7 @@ function get_path($src) {
 	if (preg_match("|$search|", $src) == 1) {
 		return str_replace($search, "", $src);
 	} else {
-		return "$search/$src";
+		return $search.$src;
 	}
 }
 
@@ -36,7 +36,7 @@ function get_edm_dir_path($publish_date, $absolute = false) {
 
 function limit_str($str, $length) {
 	if (mb_strlen($str) > $length) {
-		return mb_substr($str, 0, $length)."...";
+		return mb_substr($str, 0, $length);
 	} else {
 		return $str;
 	}

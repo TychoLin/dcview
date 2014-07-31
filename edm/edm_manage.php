@@ -197,7 +197,9 @@ $(function () {
 		<div class="edm_info_forms"></div>
 	</div>
 	<div id="image_upload_zone">
-		<p><input type="file" id="upload_imgs" name="upload_imgs[]" accept="image/*" multiple></p>
+		<p style="float: right;"><select></select></p>
+		<p><span id="upload_progress_bar"></span><input type="file" id="upload_imgs" name="upload_imgs[]" accept="image/*" multiple></p>
+		<div id="image_empty_zone">drop images below here to delete</div>
 		<div class="gallery"></div>
 	</div>
 </div>
@@ -210,8 +212,8 @@ $(function () {
 		<p>publish date: <input type="date" name="publish_date" value="{edm_publish_date}"></p>
 		<p>summary: <textarea name="summary" rows="10" cols="50">{edm_summary}</textarea></p>
 		<div class="dnd_zone">
-			<div>drag images below here<img src="{edm_thumbnail_path1}"></div>
-			<div>drag images below here<img src="{edm_thumbnail_path2}"></div>
+			<div>drag images below here after click save button<img src="{edm_thumbnail_path1}"></div>
+			<div>drag images below here after click save button<img src="{edm_thumbnail_path2}"></div>
 		</div>
 		<input type="hidden" name="edm_id" value="{edm_id}">
 	</form>
@@ -221,7 +223,7 @@ $(function () {
 		<p>summary: <textarea name="summary" rows="10" cols="50">{edm_info_summary}</textarea></p>
 		<p>url: <input type="text" name="url" value="{edm_info_url}"></p>
 		<div class="dnd_zone">
-			<div>drag images below here<img src="{edm_info_thumbnail_path}"></div>
+			<div>drag images below here after click save button<img src="{edm_info_thumbnail_path}"></div>
 		</div>
 		<input type="hidden" name="edm_info_id" value="{edm_info_id}">
 	</form>
@@ -238,7 +240,7 @@ $(function () {
 		<p>summary: <textarea name="summary" rows="10" cols="50">{edm_info_summary}</textarea></p>
 		<p>url: <input type="text" name="url" value="{edm_info_url}"></p>
 		<div class="dnd_zone">
-			<div>drag images below here<img src="{edm_info_thumbnail_path}"></div>
+			<div>drag images below here after click save button<img src="{edm_info_thumbnail_path}"></div>
 		</div>
 		<input type="hidden" name="edm_info_id" value="{edm_info_id}">
 	</form>
@@ -249,7 +251,7 @@ $(function () {
 		<p>summary: <textarea name="summary" rows="10" cols="50">{edm_info_summary}</textarea></p>
 		<p>url: <input type="text" name="url" value="{edm_info_url}"></p>
 		<div class="dnd_zone">
-			<div>drag images below here<img src="{edm_info_thumbnail_path}"></div>
+			<div>drag images below here after click save button<img src="{edm_info_thumbnail_path}"></div>
 		</div>
 		<input type="hidden" name="edm_info_id" value="{edm_info_id}">
 	</form>
@@ -259,7 +261,7 @@ $(function () {
 		<p>author: <input type="text" name="author" value="{edm_info_author}"></p>
 		<p>url: <input type="text" name="url" value="{edm_info_url}"></p>
 		<div class="dnd_zone">
-			<div>drag images below here<img src="{edm_info_thumbnail_path}"></div>
+			<div>drag images below here after click save button<img src="{edm_info_thumbnail_path}"></div>
 		</div>
 		<input type="hidden" name="edm_info_id" value="{edm_info_id}">
 	</form>
@@ -269,7 +271,7 @@ $(function () {
 		<p>author: <input type="text" name="author" value="{edm_info_author}"></p>
 		<p>url: <input type="text" name="url" value="{edm_info_url}"></p>
 		<div class="dnd_zone">
-			<div>drag images below here<img src="{edm_info_thumbnail_path}"></div>
+			<div>drag images below here after click save button<img src="{edm_info_thumbnail_path}"></div>
 		</div>
 		<input type="hidden" name="edm_info_id" value="{edm_info_id}">
 	</form>
@@ -281,6 +283,8 @@ $(function () {
 	</form>
 </div>
 <script type="text/javascript">
+const limit = 10;
+
 $.fn.clearForm = function () {
 	return this.each(function () {
 		var type = this.type, tag = this.tagName.toLowerCase();
@@ -315,6 +319,14 @@ function create_draggable_images(urls) {
 
 			count++;
 			if (count == $(urls).length) {
+				// init image folder select
+				$("#image_upload_zone select").empty();
+				for (var i = 1; i <= Math.ceil($("#image_upload_zone .gallery div").length / limit); i++) {
+					$("#image_upload_zone select").append($("<option>").val(i).text(i));
+				}
+
+				$("#image_upload_zone .gallery div").show();
+				$("#image_upload_zone .gallery div").slice(limit).hide();
 				$("#image_upload_zone .gallery").show();
 			}
 		});
@@ -403,17 +415,16 @@ $(function () {
 				//Upload progress
 				xhr.upload.addEventListener("progress", function (evt) {
 					if (evt.lengthComputable) {
-						var percentComplete = (evt.loaded / evt.total) * 100;
+						var percentComplete = Math.floor((evt.loaded / evt.total) * 100);
 						//Do something with upload progress
-						console.log(percentComplete);
+						$("#upload_progress_bar").text(percentComplete + "%");
 					}
 				}, false);
 				//Download progress
 				xhr.addEventListener("progress", function (evt) {
 					if (evt.lengthComputable) {
-						var percentComplete = (evt.loaded / evt.total) * 100;
+						var percentComplete = Math.floor((evt.loaded / evt.total) * 100);
 						//Do something with download progress
-						console.log(percentComplete);
 					}
 				}, false);
 				return xhr;
@@ -520,6 +531,28 @@ $(function () {
 				alert("delete successfully");
 			}
 		});
+	});
+
+	$("#image_upload_zone").on("change", "select", function (event) {
+		var begin = ($(this).val() - 1) * limit;
+		var end = begin + limit;
+		$("#image_upload_zone .gallery div").hide();
+		$("#image_upload_zone .gallery div").slice(begin, end).show();
+	});
+
+	$("#image_empty_zone").droppable({
+		accept: ".gallery div",
+		drop: function (event) {
+			if (!window.confirm("confirm to delete?")) {
+				return;
+			}
+			
+			$.post("handle_edm_ajax.php", {action: "delete image", image_src: $(event.toElement).prop("src")}, function (data) {
+				if (data.status) {
+					$(event.toElement).parent().remove();
+				}
+			});
+		}
 	});
 });
 </script>
