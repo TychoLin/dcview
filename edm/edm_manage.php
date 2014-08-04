@@ -151,50 +151,52 @@ $(function () {
 	<nav>
 		<button type="button" name="close">close</button>
 	</nav>
-	<form id="edm_form">
-		<!-- edm tempate here -->
-	</form>
-	<div id="edm_info_type1">
-		<h2>焦點新聞</h2>
-		<button type="button" name="save" class="edm_info">save</button>
-		<button type="button" name="new" class="edm_info">new</button>
-		<div class="edm_info_forms"></div>
-	</div>
-	<div id="edm_info_type2">
-		<h2>新聞追蹤</h2>
-		<button type="button" name="save" class="edm_info">save</button>
-		<button type="button" name="new" class="edm_info">new</button>
-		<div class="edm_info_forms"></div>
-	</div>
-	<div id="edm_info_type3">
-		<h2>達人部落精選</h2>
-		<button type="button" name="save" class="edm_info">save</button>
-		<button type="button" name="new" class="edm_info">new</button>
-		<div class="edm_info_forms"></div>
-	</div>
-	<div id="edm_info_type4">
-		<h2>攝影好讀</h2>
-		<button type="button" name="save" class="edm_info">save</button>
-		<button type="button" name="new" class="edm_info">new</button>
-		<div class="edm_info_forms"></div>
-	</div>
-	<div id="edm_info_type5">
-		<h2>本週作品精選</h2>
-		<button type="button" name="save" class="edm_info">save</button>
-		<button type="button" name="new" class="edm_info">new</button>
-		<div class="edm_info_forms"></div>
-	</div>
-	<div id="edm_info_type6">
-		<h2>活動快訊</h2>
-		<button type="button" name="save" class="edm_info">save</button>
-		<button type="button" name="new" class="edm_info">new</button>
-		<div class="edm_info_forms"></div>
-	</div>
-	<div id="edm_info_type7">
-		<h2>資訊情報</h2>
-		<button type="button" name="save" class="edm_info">save</button>
-		<button type="button" name="new" class="edm_info">new</button>
-		<div class="edm_info_forms"></div>
+	<div id="edm_data">
+		<form id="edm_form">
+			<!-- edm tempate here -->
+		</form>
+		<div id="edm_info_type1">
+			<h2>焦點新聞</h2>
+			<button type="button" name="save" class="edm_info">save</button>
+			<button type="button" name="new" class="edm_info">new</button>
+			<div class="edm_info_forms"></div>
+		</div>
+		<div id="edm_info_type2">
+			<h2>新聞追蹤</h2>
+			<button type="button" name="save" class="edm_info">save</button>
+			<button type="button" name="new" class="edm_info">new</button>
+			<div class="edm_info_forms"></div>
+		</div>
+		<div id="edm_info_type3">
+			<h2>達人部落精選</h2>
+			<button type="button" name="save" class="edm_info">save</button>
+			<button type="button" name="new" class="edm_info">new</button>
+			<div class="edm_info_forms"></div>
+		</div>
+		<div id="edm_info_type4">
+			<h2>攝影好讀</h2>
+			<button type="button" name="save" class="edm_info">save</button>
+			<button type="button" name="new" class="edm_info">new</button>
+			<div class="edm_info_forms"></div>
+		</div>
+		<div id="edm_info_type5">
+			<h2>本週作品精選</h2>
+			<button type="button" name="save" class="edm_info">save</button>
+			<button type="button" name="new" class="edm_info">new</button>
+			<div class="edm_info_forms"></div>
+		</div>
+		<div id="edm_info_type6">
+			<h2>活動快訊</h2>
+			<button type="button" name="save" class="edm_info">save</button>
+			<button type="button" name="new" class="edm_info">new</button>
+			<div class="edm_info_forms"></div>
+		</div>
+		<div id="edm_info_type7">
+			<h2>資訊情報</h2>
+			<button type="button" name="save" class="edm_info">save</button>
+			<button type="button" name="new" class="edm_info">new</button>
+			<div class="edm_info_forms"></div>
+		</div>
 	</div>
 	<div id="image_upload_zone">
 		<p style="float: right;"><select></select></p>

@@ -73,6 +73,20 @@ td * {
 	display: none;
 }
 
+#edm_data {
+	width: 40%;
+}
+
+#edm_operation h1 {
+	padding: 0.5em 0;
+	background-color: #f4cccc;
+}
+
+#edm_operation h2 {
+	padding: 0.5em 0;
+	background-color: #c9daf8;
+}
+
 .edm_info_forms {
 	width: 500px;
 }
@@ -89,7 +103,7 @@ td * {
 	position: fixed;
 	top: 0px;
 	right: 0px;
-	width: 800px;
+	width: 50%;
 	height: auto;
 	border: 1px solid red;
 	padding: 0 1em;
