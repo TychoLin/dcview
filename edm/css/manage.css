@@ -1,0 +1,120 @@
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+td:hover[edm_id], .gallery div:hover, .edm_info_forms:hover {
+	cursor: pointer;
+}
+
+td, th {
+	border: 1px solid black;
+	padding: 0.5em;
+	overflow: hidden;
+}
+
+td * {
+	vertical-align: middle;
+}
+
+.layout-content {
+}
+
+.white-popup {
+	position: relative;
+	background: #FFF;
+	padding: 20px;
+	width: auto;
+	max-width: 700px;
+	margin: 20px auto;
+}
+
+.gallery {
+	display: none;
+}
+
+.gallery div {
+	margin: 0 5px 5px 0;
+	float: left;
+}
+
+.dnd_zone {
+}
+
+.dnd_zone div {
+	color: #bbb;
+	border: 2px dashed #bbb;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	text-align: center;
+	width: 300px;
+	min-height: 200px;
+	padding: 25px;
+	margin: 0 20px 20px 0;
+}
+
+.dnd_zone img {
+	display: block;
+	max-width: 300px;
+	margin: 0 auto;
+}
+
+.thumbnail {
+	max-width: 200px;
+	max-height: 130px;
+	overflow: hidden;
+}
+
+.edm_template_zone {
+	display: none;
+}
+
+#edm_operation {
+	display: none;
+}
+
+#edm_data {
+	width: 40%;
+}
+
+#edm_operation h1 {
+	padding: 0.5em 0;
+	background-color: #f4cccc;
+}
+
+#edm_operation h2 {
+	padding: 0.5em 0;
+	background-color: #c9daf8;
+}
+
+.edm_info_forms {
+	width: 500px;
+}
+
+.edm_info_forms form {
+	border: 1px solid green;
+	margin-bottom: 20px;
+	padding: 10px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#image_upload_zone {
+	position: fixed;
+	top: 0px;
+	right: 0px;
+	width: 50%;
+	height: auto;
+	border: 1px solid red;
+	padding: 0 1em;
+}
+
+#image_empty_zone {
+	color: #bbb;
+	border: 2px dashed #bbb;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	text-align: center;
+	padding: 1.6em;
+	margin-bottom: 1em;
+}
