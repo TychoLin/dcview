@@ -16,112 +16,81 @@ foreach ($edm_list as &$record) {
 	$record["edm_thumbnail_path2"] = get_path($record["edm_thumbnail_path2"]);
 }
 ?>
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-	<title></title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
-	<!--[if lte IE 8]>
-	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-old-ie-min.css">
-	<![endif]-->
-	<!--[if gt IE 8]><!-->
-	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css">
-	<!--<![endif]-->
-	<link rel="stylesheet" href="css/list.css">
+	<meta charset="utf-8">
+	<title>數位視野電子報</title>
+	<link href="css/edm_style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-	<div class="conainter">
-		<div class="header">
-			<img src="img/logo.gif">
-			<div class="nav navbar-right">
-				<a href="#">討論區</a>
-				<a href="#">作品發表</a>
-				<a href="#">文章總覽</a>
+	<div class="header">
+		<div class="top">
+			<h1><a href="http://www.dcview.com/" target="_blank"><img src="img/logo.png" width="300" height="50" alt="DCView數位視野" title="DCView數位視野"></a></h1>
+			<div class="nav">
+				<ul>
+					<li><a href="http://tw.dcview.com/forum.php" target="_blank">討論區</a></li>
+					<li><a href="http://gallery.dcview.com/" target="_blank">作品發表</a></li>
+					<li><a href="http://article.dcview.com/" target="_blank">文章總覽</a></li>
+					<li class="last"><a href="http://tw.dcview.com/spec/" target="_blank">相機專區</a></li>
+				</ul>
+			</div>
+
+		</div>
+	</div>
+	<div class="article">
+		<?php
+		$value = array_shift($edm_list);
+		if (!empty($value)) {
+		?>
+		<div class="content">
+			<div class="space"><img src="<?php echo $value["edm_thumbnail_path1"]; ?>" width="200" height="130"></div>
+			<div class="right_content">
+				<ul class="content_title">
+					<li>第<?php echo $value["edm_volume"]; ?>期</li>
+					<li class="last"><?php echo $value["edm_publish_date"]; ?> 出刊</li>
+				</ul>
+				<h2><a href="edm.php?id=<?php echo $value["edm_id"]; ?>" target="_blank"><?php echo $value["edm_title"]; ?></a></h2>
+				<!-- <p><?php echo $value["edm_summary"]; ?></p> -->
+				<span class="date">
+					<span class="last"><a href="edm.php?id=<?php echo $value["edm_id"]; ?>" target="_blank">閱讀內容</a></span>
+				</span>
 			</div>
 		</div>
-		<div class="jumbotron">
-			<?php
-			$value = array_shift($edm_list);
-			if (!empty($value)) {
-			?>
-			<div class="pure-g">
-				<div class="pure-u-1 pure-u-md-7-24"><img src="<?php echo $value["edm_thumbnail_path1"]; ?>" width="200" height="130"></div>
-				<div class="pure-u-1 pure-u-md-17-24">
-					<span style="float: right;"><?php echo $value["edm_publish_date"]; ?> 出刊</span>
-					<h3><?php echo $value["edm_title"]; ?></h3>
-					<p><?php echo $value["edm_summary"]; ?></p>
-					<a href="edm.php?id=<?php echo $value["edm_id"]; ?>" style="float: right;" target="_blank">閱讀內容</a>
-				</div>
+		<?php } ?>
+	</div>
+	<div class="article01">
+		<div class="content01">
+			<?php foreach ($edm_list as $key => $value) { ?>
+			<div class="<?php echo ($key % 2 == 0) ? "sub_content": "sub_content1"; ?>">
+				<div class="space"><img src="<?php echo $value["edm_thumbnail_path1"]; ?>" width="100" height="65"></div>
+				<ul>
+					<li>第<?php echo $value["edm_volume"]; ?>期</li>
+					<li class="last"><?php echo $value["edm_publish_date"]; ?> 出刊</li>
+				</ul>
+				<h3><a href="edm.php?id=<?php echo $value["edm_id"]; ?>" target="_blank"><?php echo $value["edm_title"]; ?></a></h3>
+				<span class="date">
+					<span class="last"><a href="edm.php?id=<?php echo $value["edm_id"]; ?>" target="_blank">閱讀內容</a></span>
+				</span>
 			</div>
+			<?php if ($key > 0 && ($key % 2 == 1)) { ?>
+			<p class="border"></p>
 			<?php } ?>
-		</div>
-		<hr style="margin: 14px 0; border: 1px dashed #d8d8d8;">
-		<div class="pure-g">
-			<?php foreach ($edm_list as $value) { ?>
-			<div class="pure-u-1 pure-u-md-1-2">
-				<div class="pure-g cell">
-					<div class="pure-u-1 pure-u-md-7-24"><img src="<?php echo $value["edm_thumbnail_path2"]; ?>" width="100" height="65"></div>
-					<div class="pure-u-1 pure-u-md-17-24">
-						<span style="float: right;"><?php echo $value["edm_publish_date"]; ?> 出刊</span>
-						<span class="volume">第<?php echo $value["edm_volume"]; ?>期</span>
-						<span class="title"><?php echo $value["edm_title"]; ?></span>
-						<a href="edm.php?id=<?php echo $value["edm_id"]; ?>" style="float: right;" target="_blank">閱讀內容</a>
-					</div>
-				</div>
-			</div>
 			<?php } ?>
-			<div class="pure-u-1 pure-u-md-1-2">
-				<div class="pure-g cell">
-					<div class="pure-u-1 pure-u-md-7-24"><img src="" width="100" height="65"></div>
-					<div class="pure-u-1 pure-u-md-17-24">
-						<span style="float: right;">2014/06/25 出刊</span>
-						<span class="volume">第516期</span>
-						<span class="title">紅外線攝影的好幫手-STC UV-IR CUT濾鏡運用分享</span>
-						<a href="#" style="float: right;">閱讀內容</a>
-					</div>
-				</div>
-			</div>
-			<div class="pure-u-1 pure-u-md-1-2">
-				<div class="pure-g cell">
-					<div class="pure-u-1 pure-u-md-7-24"><img src="" width="100" height="65"></div>
-					<div class="pure-u-1 pure-u-md-17-24">
-						<span style="float: right;">2014/06/25 出刊</span>
-						<span class="volume">第516期</span>
-						<span class="title">紅外線攝影的好幫手-STC UV-IR CUT濾鏡運用分享</span>
-						<a href="#" style="float: right;">閱讀內容</a>
-					</div>
-				</div>
-			</div>
-			<div class="pure-u-1 pure-u-md-1-2">
-				<div class="pure-g cell">
-					<div class="pure-u-1 pure-u-md-7-24"><img src="" width="100" height="65"></div>
-					<div class="pure-u-1 pure-u-md-17-24">
-						<span style="float: right;">2014/06/25 出刊</span>
-						<span class="volume">第516期</span>
-						<span class="title">紅外線攝影的好幫手-STC UV-IR CUT濾鏡運用分享</span>
-						<a href="#" style="float: right;">閱讀內容</a>
-					</div>
-				</div>
-			</div>
+			<span style="clear: both;"><span>
 		</div>
-		<hr style="margin: 14px 0; border: 1px dashed #d8d8d8;">
-		<div class="footer">
-			<div class="pure-g">
-				<div class="pure-u-1 pure-u-md-1-3">
-					<img src="img/logo_dcview_edm_f.gif">
-				</div>
-				<div class="pure-u-1 pure-u-md-2-3">
-					<div class="nav">
-						<a href="#">服務說明與客服中心</a>
-						<a href="#">整合行銷服務</a>
-						<a href="#">行銷合作</a>
-						<a href="#">廣告刊登</a>
-					</div>
-					<div style="clear: both;"></div>
-					<p>Copyright © 2002-2014 DCView All Rights Reserved.</p>
-				</div>
+	</div>
+	<div class="footer">
+		<div class="content02">
+			<a href="http://www.dcview.com/" target="_blank"><img src="img/logo_footer.png" width="207" height="80" alt="DCView數位視野" title="DCView數位視野"></a>
+			<div class="nav01">
+				<ul>
+					<li><a href="http://service.dcview.com/">服務說明與客戶中心</a></li>
+					<li><a href="http://service.dcview.com/sales/">整合行銷服務</a></li>
+					<li><a href="http://service.dcview.com/qa_list.php?classid=6">行銷合作</a></li>
+					<li class="last"><a href="http://service.dcview.com/sales/advertisement.php">廣告刊登</a></li>
+				</ul>
+				<span>Copyright © 2002-2014 DCView All Rights Reserved.</span>
 			</div>
 		</div>
 	</div>
