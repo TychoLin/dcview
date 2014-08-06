@@ -32,11 +32,11 @@ $urls = array();
 foreach ($_FILES["upload_imgs"]["error"] as $key => $error) {
 	if ($error == UPLOAD_ERR_OK) {
 		$tmp_name = $_FILES["upload_imgs"]["tmp_name"][$key];
+		// validate if uploaded file is image
 		if (!in_array(exif_imagetype($tmp_name), array_keys($allowed_imagetypes)))
 			continue;
 
 		$name = $_FILES["upload_imgs"]["name"][$key];
-		// validate if uploaded file is image
 		$extension = pathinfo($name, PATHINFO_EXTENSION);
 		$tmp_file_name = tempnam($upload_dir_path, $prefix);
 		$new_tmp_file_name = $tmp_file_name.".$extension";
