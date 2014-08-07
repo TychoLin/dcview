@@ -47,6 +47,7 @@ $total_page_number = ceil($total_record_number / LIMIT);
 		?>
 		</select>
 		<button type="button" id="delete_edm_button" style="display: none;">delete</button>
+		<a href="edm_list.php" target="_blank">view edm list</a>
 	</nav>
 	<table>
 		<tr>
