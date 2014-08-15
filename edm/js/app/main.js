@@ -1,0 +1,347 @@
+define(["jquery", "jquery-ui", "jquery.validate"], function ($) {
+	const limit = 10;
+
+	function nano(template, data) {
+		return template.replace(/\{([\w\.]*)\}/g, function(str, key) {
+			var keys = key.split("."), v = data[keys.shift()];
+			for (var i = 0, l = keys.length; i < l; i++)
+				v = v[keys[i]];
+			return (typeof v !== "undefined" && v !== null) ? v : "";
+		});
+	}
+
+	$.fn.clearForm = function () {
+		return this.each(function () {
+			var type = this.type, tag = this.tagName.toLowerCase();
+			if (tag == 'form')
+				return $(':input',this).clearForm();
+			if (type == 'text' || type == 'password' || tag == 'textarea' || type == 'hidden' || type == 'number' || type == 'date')
+				this.value = '';
+			else if (type == 'checkbox' || type == 'radio')
+				this.checked = false;
+			else if (tag == 'select')
+				this.selectedIndex = -1;
+		});
+	};
+
+	function create_draggable_images(urls) {
+		var count = 0;
+		$(urls).each(function (index, elem) {
+			var img = $("<img>");
+			img.load(function () {
+				var width = img.prop("width");
+				var height = img.prop("height");
+				if (width > 300 || height > 300) {
+					if (width > height) {
+						var resize_ratio = 300 / width;
+					} else {
+						var resize_ratio = 300 / height;
+					}
+
+					img.width(width * resize_ratio);
+					img.height(height * resize_ratio);
+				}
+
+				count++;
+				if (count == $(urls).length) {
+					// init image folder select
+					$("#image_upload_zone select").empty();
+					for (var i = 1; i <= Math.ceil($("#image_upload_zone .gallery div").length / limit); i++) {
+						$("#image_upload_zone select").append($("<option>").val(i).text(i));
+					}
+
+					$("#image_upload_zone .gallery div").show();
+					$("#image_upload_zone .gallery div").slice(limit).hide();
+					$("#image_upload_zone .gallery").show();
+				}
+			});
+			img.prop("src", elem);
+			$("<div>").append(img).draggable({revert: true}).appendTo($("#image_upload_zone .gallery"));
+		});
+	}
+
+	$(function () {
+		// init page select
+		var search = URI.parseQuery(window.location.search);
+		for (var name in search) {
+			$("#" + name + " option[value=" + search[name] + "]").prop("selected", true);
+		}
+
+		$("#page").change(function () {
+			var uri = new URI();
+			uri.setQuery({page: $("option:selected", this).val()});
+			window.location = uri.href();
+		});
+
+		$("#edm_list table tr td[edm_id]").click(function () {
+			$.get("handle_edm_ajax.php", {edm_id: $(this).attr("edm_id")}, function (data) {
+				// init edm data
+				$("#edm_form").html(nano($("#edm_reuse_form").html(), data.edm));
+				$("#edm_form").data("edm_id", data.edm.edm_id);
+				$(data.edm_infos).each(function (index, elem) {
+					var type = elem.edm_info_type;
+					$("#edm_info_type" + type + " .edm_info_forms").append(nano($("#edm_info_type" + type + "_form").clone().removeAttr("id")[0].outerHTML, elem)).sortable();
+				});
+				$("#image_upload_zone .gallery").empty();
+				create_draggable_images(data.urls);
+
+				$("#edm_list").toggle();
+				$("#edm_operation").toggle();
+			});
+		});
+
+		$("#delete_edm_button").on("click", function () {
+			if (!window.confirm("confirm to delete?")) {
+				return;
+			}
+
+			var edm_ids = [];
+			$("#edm_list td input:checked").each(function (index, elem) {
+				edm_ids.push($(elem).val());
+			});
+
+			$.post("handle_edm_ajax.php", {action: "delete", edm_ids: edm_ids}, function (data) {
+				if (data.status) {
+					alert("delete successfully");
+					window.location = "edm_manage.php";
+				}
+			});
+		});
+
+		$("#edm_list th input[type=checkbox]").on("click", function () {
+			if ($(this).prop("checked")) {
+				$("#edm_list td input[type=checkbox]").prop("checked", true);
+				$("#delete_edm_button").show();
+			} else {
+				$("#edm_list td input[type=checkbox]").prop("checked", false);
+			}
+		});
+
+		$("#edm_list td input[type=checkbox]").on("click", function () {
+			if ($("#edm_list td input:checked").length > 0) {
+				$("#delete_edm_button").show();
+			} else {
+				$("#delete_edm_button").hide();
+			}
+		});
+
+		$("#create_edm_button").click(function () {
+			// init new edm
+			$("#edm_reuse_form").clone().clearForm().contents().appendTo($("#edm_form"));
+			$("#edm_form img").prop("src", "");
+			$("#image_upload_zone .gallery").empty();
+
+			$("#edm_list").toggle();
+			$("#edm_operation").toggle();
+		});
+
+		$("#edm_operation nav button[name='close']").click(function () {
+			window.location = "edm_manage.php";
+		});
+
+		$("#edm_form").on("click", "button[name='save']", function () {
+			// validate fields
+			// if (!$("edm_form").valid()) {
+			// 	return;
+			// }
+
+			var post_data = {};
+			var hidden_elem = $(this).siblings("input[name='edm_id']");
+			if (hidden_elem.val() == "") {
+				post_data.action = "create";
+			} else {
+				post_data.action = "update";
+			}
+
+			jQuery.each($("#edm_form").serializeArray(), function (index, elem) {
+				post_data[elem.name] = elem.value;
+			});
+
+			$.post("handle_edm_ajax.php", post_data, function (data) {
+				hidden_elem.val(data.edm_id);
+				$("#edm_form").data("edm_id", data.edm_id);
+				alert("save successfully");
+			});
+		});
+
+		$("#edm_form").validate({
+			rules: {
+				title: {
+					required: true
+				},
+			},
+			messages: {
+				title: {
+					required: "必填欄位"
+				},
+			}
+		});
+
+		$("#upload_imgs").change(function (event) {
+			if ($("#edm_form").data("edm_id") === undefined) {
+				return;
+			}
+
+			var form_data = new FormData();
+
+			var files = $("#upload_imgs").prop("files");
+			$(files).each(function (index, elem) {
+				if (/image.*/.test(elem.type)) {
+					form_data.append("upload_imgs[]", elem);
+				}
+			});
+
+			form_data.append("edm_id", $("#edm_form").data("edm_id"));
+
+			$.ajax({
+				type: "POST",
+				url: "handle_upload_ajax.php",
+				data: form_data,
+				processData: false,
+				contentType: false,
+				xhr: function () {
+					var xhr = new window.XMLHttpRequest();
+					//Upload progress
+					xhr.upload.addEventListener("progress", function (evt) {
+						if (evt.lengthComputable) {
+							var percentComplete = Math.floor((evt.loaded / evt.total) * 100);
+							//Do something with upload progress
+							$("#upload_progress_bar").text(percentComplete + "%");
+						}
+					}, false);
+					//Download progress
+					xhr.addEventListener("progress", function (evt) {
+						if (evt.lengthComputable) {
+							var percentComplete = Math.floor((evt.loaded / evt.total) * 100);
+							//Do something with download progress
+						}
+					}, false);
+					return xhr;
+				},
+				success: create_draggable_images
+			});
+		});
+
+		$("#image_upload_zone").on("mouseenter", function () {
+			$(".dnd_zone div").droppable({
+				accept: ".gallery div",
+				drop: function (event) {
+					if ($("#edm_form").data("edm_id") === undefined) {
+						return;
+					}
+
+					var post_data = {edm_id: $("#edm_form").data("edm_id")};
+
+					if ($(event.target).parents("form").is("[id='edm_form']")) {
+						post_data.action = "update";
+						var index = $(".dnd_zone div").index($(event.target));
+						if (index == 0) {
+							post_data.thumbnail_path1 = $(event.toElement).prop("src");
+						} else {
+							post_data.thumbnail_path2 = $(event.toElement).prop("src");
+						}
+
+						$.post("handle_edm_ajax.php", post_data, function (data) {
+							// do something
+						});
+					} else {
+						var id = $(event.target).parents("div[id^='edm_info_type']").prop("id");
+						post_data.type = id.replace("edm_info_type", "");
+						var hidden_elem = $(event.target).parents("form").children("input[name='edm_info_id']");
+						if (hidden_elem.val() != "") {
+							post_data.action = "update";
+							post_data.edm_info_id = hidden_elem.val();
+							post_data.thumbnail_path = $(event.toElement).prop("src");
+
+							$.post("handle_edm_info_ajax.php", post_data, function (data) {
+								// do something
+							});
+						}
+					}
+
+					$(event.target).children("img").remove();
+					$(event.toElement).clone().appendTo($(event.target));
+				}
+			});
+		});
+
+		$("button[name='save']").filter(".edm_info").click(function () {
+			if ($("#edm_form").data("edm_id") === undefined) {
+				return;
+			}
+
+			var post_data = {};
+			var id = $(this).parent().prop("id");
+			post_data.type = id.replace("edm_info_type", "");
+			post_data.edm_id = $("#edm_form").data("edm_id");
+
+			jQuery.each($("#" + id + " form"), function (index, elem) {
+				var hidden_elem = $(elem).children("input[name='edm_info_id']");
+				if (hidden_elem.val() == "") {
+					post_data.action = "create";
+				} else {
+					post_data.action = "update";
+				}
+
+				jQuery.each($(elem).serializeArray(), function (index, elem) {
+					post_data[elem.name] = elem.value;
+				});
+
+				post_data.rank = index;
+				$.post("handle_edm_info_ajax.php", post_data, function (data) {
+					hidden_elem.val(data.edm_info_id);
+					alert("save successfully");
+				});
+			});
+		});
+
+		$("button[name='new']").filter(".edm_info").click(function () {
+			var id = $(this).parent().prop("id");
+			$("#" + id + "_form").clone().removeAttr("id").clearForm().appendTo($("#" + id + " .edm_info_forms")).find("img").prop("src", "");
+			$("#" + id + " .edm_info_forms").sortable();
+		});
+
+		$(".edm_info_forms").on("click", "button[name=delete]", function () {
+			var edm_info_id = $(this).parent().find("input[type=hidden]").val();
+
+			if (edm_info_id == "") {
+				$(this).parent().remove();
+				return;
+			}
+
+			if (!window.confirm("confirm to delete?")) {
+				return;
+			}
+
+			var form_elem = $(this).parent();
+			$.post("handle_edm_info_ajax.php", {action: "delete", edm_info_id: edm_info_id}, function (data) {
+				if (data.status) {
+					form_elem.remove();
+					alert("delete successfully");
+				}
+			});
+		});
+
+		$("#image_upload_zone").on("change", "select", function (event) {
+			var begin = ($(this).val() - 1) * limit;
+			var end = begin + limit;
+			$("#image_upload_zone .gallery div").hide();
+			$("#image_upload_zone .gallery div").slice(begin, end).show();
+		});
+
+		$("#image_empty_zone").droppable({
+			accept: ".gallery div",
+			drop: function (event) {
+				if (!window.confirm("confirm to delete?")) {
+					return;
+				}
+				
+				$.post("handle_edm_ajax.php", {action: "delete image", image_src: $(event.toElement).prop("src")}, function (data) {
+					if (data.status) {
+						$(event.toElement).parent().remove();
+					}
+				});
+			}
+		});
+	});
+});
