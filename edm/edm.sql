@@ -23,27 +23,9 @@ CREATE TABLE IF NOT EXISTS `tblEdm` (
   `edm_create_time` datetime NOT NULL,
   `edm_update_time` datetime NOT NULL,
   PRIMARY KEY (`edm_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table dcviewEdm.tblEdm: ~14 rows (approximately)
-DELETE FROM `tblEdm`;
-/*!40000 ALTER TABLE `tblEdm` DISABLE KEYS */;
-INSERT INTO `tblEdm` (`edm_id`, `edm_volume`, `edm_title`, `edm_summary`, `edm_publish_date`, `edm_thumbnail_path1`, `edm_thumbnail_path2`, `edm_create_time`, `edm_update_time`) VALUES
-	(1, 516, '紅外線攝影的好幫手-STC UV-IR CUT濾鏡運用分享', '', '2014-06-18', 'upload/edm/2014/06/20140618/i-dsR9mg8-M.jpg', 'upload/edm/2014/06/20140618/516s.jpg', '2014-07-16 18:05:29', '2014-07-16 18:05:29'),
-	(2, 515, 'Nikon V3 -輕巧極意,秒速顛峰', '', '2014-06-11', 'upload/edm/2014/06/20140611/i-zpphDdb-M.jpg', 'upload/edm/2014/06/20140611/515s.jpg', '2014-07-16 18:08:37', '2014-07-16 18:08:37'),
-	(88, 0, '', '', '2014-07-21', '', '', '2014-07-21 11:29:24', '2014-07-21 11:29:24'),
-	(89, 0, '', '', '2014-07-21', '', '', '2014-07-21 12:00:08', '2014-07-21 12:00:08'),
-	(90, 0, '', '', '2014-07-21', '', '', '2014-07-21 12:04:21', '2014-07-21 12:04:21'),
-	(91, 0, '', '', '2014-07-21', '', '', '2014-07-21 12:05:17', '2014-07-21 12:05:17'),
-	(92, 987654, 'test', '', '2014-07-21', '', '', '2014-07-21 16:08:11', '2014-07-21 16:08:11'),
-	(93, 987654, 'test', '', '2014-07-21', '', '', '2014-07-21 16:14:58', '2014-07-21 16:14:58'),
-	(94, 654, 'test', '', '2014-07-21', '', '', '2014-07-21 16:18:15', '2014-07-21 16:18:15'),
-	(95, 0, 'test', '', '2014-07-21', '', '', '2014-07-21 16:25:06', '2014-07-21 16:25:06'),
-	(96, 40, 'test', '', '2014-07-21', '', '', '2014-07-21 16:27:51', '2014-07-21 16:27:51'),
-	(97, 16, 'test', '', '2014-07-21', '', '', '2014-07-21 16:30:12', '2014-07-21 16:30:12'),
-	(98, 38, 'test', '', '2014-07-21', 'upload/edm/2014/07/20140721/edm_rP20Ru.jpg', 'upload/edm/2014/07/20140721/edm_qXUTqJ.jpg', '2014-07-21 16:33:35', '2014-07-21 16:33:35'),
-	(99, 0, '', '', '2014-07-22', 'upload/edm/2014/07/20140722/edm_86cTkM.jpg', 'upload/edm/2014/07/20140722/edm_51C20v.jpg', '2014-07-22 09:39:34', '2014-07-22 09:39:34');
-/*!40000 ALTER TABLE `tblEdm` ENABLE KEYS */;
+-- Data exporting was unselected.
 
 
 -- Dumping structure for table dcviewEdm.tblEdmInfo
@@ -53,18 +35,17 @@ CREATE TABLE IF NOT EXISTS `tblEdmInfo` (
   `edm_id` int(10) unsigned NOT NULL,
   `edm_info_type` int(10) unsigned NOT NULL,
   `edm_info_title` varchar(120) NOT NULL,
+  `edm_info_author` varchar(60) NOT NULL,
   `edm_info_summary` text NOT NULL,
   `edm_info_url` varchar(2000) NOT NULL,
   `edm_info_thumbnail_path` varchar(64) NOT NULL,
+  `edm_info_rank` tinyint(3) unsigned NOT NULL,
   `edm_info_create_time` datetime NOT NULL,
   `edm_info_update_time` datetime NOT NULL,
   PRIMARY KEY (`edm_info_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table dcviewEdm.tblEdmInfo: ~0 rows (approximately)
-DELETE FROM `tblEdmInfo`;
-/*!40000 ALTER TABLE `tblEdmInfo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tblEdmInfo` ENABLE KEYS */;
+-- Data exporting was unselected.
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
